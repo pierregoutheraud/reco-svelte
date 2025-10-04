@@ -4,7 +4,7 @@
   --font-*: initial;
   --font-title: DM Serif Display;
 
-  --color-main: var(--color-gray-100);
+  --color-main: var(--color-indigo-500);
 }
 
 /*
@@ -46,7 +46,6 @@
   *:after {
     box-sizing: inherit;
     margin: 0;
-    padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
