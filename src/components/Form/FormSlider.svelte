@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
+  import { Slider } from "bits-ui";
 
   interface FormContext {
     setValue: (stepTitle: string, value: unknown) => void;
@@ -18,94 +19,52 @@
   const formContext = getContext<FormContext>("form");
   const stepContext = getContext<{ id: string }>("form_step");
 
-  let rangeValues = $state<[number, number]>([
-    min,
-    Math.floor((min + max) / 2)
-  ]);
-  let singleValue = $state<number>(Math.floor((min + max) / 2));
+  let rangeValues = $state<[number, number]>([min, 2025]);
 
-  const updateValue = () => {
-    if (multiple) {
-      formContext.setValue(stepContext.id, rangeValues);
-    } else {
-      formContext.setValue(stepContext.id, singleValue);
-    }
+  const updateValue = (newValue: number[]) => {
+    rangeValues = newValue as [number, number];
+    formContext.setValue(stepContext.id, rangeValues);
   };
 
-  const handleSingleChange = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    singleValue = Number(target.value);
-    updateValue();
-  };
-
-  const handleMinChange = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    rangeValues[0] = Number(target.value);
-    if (rangeValues[0] > rangeValues[1]) {
-      rangeValues[1] = rangeValues[0];
-    }
-    updateValue();
-  };
-
-  const handleMaxChange = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    rangeValues[1] = Number(target.value);
-    if (rangeValues[1] < rangeValues[0]) {
-      rangeValues[0] = rangeValues[1];
-    }
-    updateValue();
-  };
-
-  const confirmSelection = () => {
-    if (multiple) {
-      formContext.setValue(stepContext.id, rangeValues);
-    } else {
-      formContext.setValue(stepContext.id, singleValue);
-    }
-    formContext.goToNextStep();
-  };
+  onMount(() => {
+    formContext.setValue(stepContext.id, rangeValues);
+  });
 </script>
 
-<div>
-  {#if multiple}
-    <div>
-      <label>
-        Min: {rangeValues[0]}
-        <input
-          type="range"
-          {min}
-          {max}
-          {step}
-          value={rangeValues[0]}
-          oninput={handleMinChange}
+<div class="h-full py-10 flex justify-center">
+  <Slider.Root
+    type="multiple"
+    {min}
+    {max}
+    {step}
+    bind:value={rangeValues}
+    onValueChange={updateValue}
+    orientation="vertical"
+    class="relative flex h-full touch-none select-none flex-col items-center self-center"
+    thumbPositioning="contain"
+  >
+    {#snippet children({ tickItems, thumbItems })}
+      <span
+        class="bg-indigo-100 relative h-full w-2 cursor-pointer overflow-hidden"
+      >
+        <Slider.Range class="bg-indigo-600 w-[20px]" />
+      </span>
+
+      {#each thumbItems as { index, value } (index)}
+        <Slider.Thumb
+          {index}
+          class="bg-main size-8 cursor-pointer outline-none"
         />
-      </label>
-      <label>
-        Max: {rangeValues[1]}
-        <input
-          type="range"
-          {min}
-          {max}
-          {step}
-          value={rangeValues[1]}
-          oninput={handleMaxChange}
-        />
-      </label>
-    </div>
-  {:else}
-    <div>
-      <label>
-        Value: {singleValue}
-        <input
-          type="range"
-          {min}
-          {max}
-          {step}
-          value={singleValue}
-          oninput={handleSingleChange}
-        />
-      </label>
-    </div>
-  {/if}
-  <button type="button" onclick={confirmSelection}> Confirm </button>
+        <Slider.ThumbLabel
+          {index}
+          position={index === 0 ? "right" : "left"}
+          class={[
+            "text-lg font-semibold mb-[-30px]",
+            index === 0 ? "ml-14" : "",
+            index === 1 ? "mr-14" : ""
+          ]}>{value}</Slider.ThumbLabel
+        >
+      {/each}
+    {/snippet}
+  </Slider.Root>
 </div>

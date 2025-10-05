@@ -10,7 +10,7 @@
     title="Era"
     question="Which era of movies do you want to dive into?"
   >
-    <FormSlider min={1900} max={2025} step={1} multiple />
+    <FormSlider min={1920} max={2025} step={1} multiple />
   </FormStep>
 
   <FormStep title="Mood" question="What's your mood tonight?">
