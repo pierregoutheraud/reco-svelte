@@ -1,40 +1,45 @@
+<script module>
+  export type FormStepContext = {
+    id: string;
+  };
+</script>
+
 <script lang="ts">
   import { getContext, setContext, onMount, onDestroy } from "svelte";
   import { ArrowLeft, ArrowRight } from "phosphor-svelte";
   import IconButton from "../Button/IconButton.svelte";
   import type { Snippet } from "svelte";
   import Button from "../Button/Button.svelte";
-
-  interface FormContext {
-    currentStepIndex: number;
-    totalSteps: number;
-    registerStep: (title: string) => number;
-    unregisterStep: (index: number) => void;
-    setValue: (stepTitle: string, value: unknown) => void;
-    getValue: (stepTitle: string) => unknown;
-    goToNextStep: () => void;
-    goToPreviousStep: () => void;
-  }
+  import type { FormContext } from "./Form.svelte";
 
   interface Props {
+    id: string;
     title: string;
     question: string;
-    children: Snippet;
+    children?: Snippet;
+    required?: boolean;
+    skippable?: boolean;
   }
 
-  let { title, question, children }: Props = $props();
+  let {
+    id,
+    title,
+    question,
+    children,
+    required = false,
+    skippable = false
+  }: Props = $props();
 
-  setContext("form_step", {
-    id: title
+  setContext<FormStepContext>("form_step", {
+    id
   });
   const formContext = getContext<FormContext>("form");
 
   let stepIndex = $state(-1);
   let isActive = $derived(formContext.currentStepIndex === stepIndex);
-  let isValid = $derived.by(() => {
-    const value = formContext.getValue(title);
-    return value !== undefined;
-  });
+  let data = $derived(formContext.getValue(id));
+  let hasData = $derived(!!data);
+  let canContinue = $derived(required ? hasData : true);
 
   // $inspect({
   //   title,
@@ -44,14 +49,14 @@
   // });
 
   onMount(() => {
-    stepIndex = formContext.registerStep(title);
+    stepIndex = formContext.registerStep(id);
   });
 
-  onDestroy(() => {
-    // if (stepIndex !== -1) {
-    //   formContext.unregisterStep(stepIndex);
-    // }
-  });
+  // onDestroy(() => {
+  //   if (stepIndex !== -1) {
+  //     formContext.unregisterStep(stepIndex);
+  //   }
+  // });
 </script>
 
 {#if isActive}
@@ -60,44 +65,45 @@
     <h2 class="text-lg/6 px-4 text-center">{question}</h2>
   </div>
 
-  {@render children()}
+  {@render children?.()}
 
-  <div class="flex">
-    <!-- {#if stepIndex > 0} -->
-    <!-- <button type="button" onclick={() => formContext.goToPreviousStep()}>
-      <ArrowLeft size={28} />
-    </button> -->
-    <!-- {/if} -->
+  <div
+    class="absolute bottom-0 left-0 right-0 flex justify-between w-full p-4 px-6 bg-background"
+  >
+    {#if stepIndex > 0}
+      <IconButton
+        component={ArrowLeft}
+        size={24}
+        onclick={() => formContext.goToPreviousStep()}
+      />
+    {/if}
 
-    <div class="flex justify-between w-full">
-      {#if stepIndex > 0}
-        <IconButton
-          component={ArrowLeft}
-          size={24}
-          onclick={() => formContext.goToPreviousStep()}
-        />
-      {/if}
-
-      {#if stepIndex < formContext.totalSteps - 1}
+    <div class="flex gap-2 ml-auto">
+      {#if skippable}
+        {#if hasData}
+          <IconButton
+            component={ArrowRight}
+            size={24}
+            disabled={!canContinue}
+            onclick={() => {
+              formContext.goToNextStep();
+            }}
+          />
+        {:else}
+          <Button onclick={() => formContext.goToNextStep()}>
+            <div class="flex gap-2">Skip <ArrowRight size={24} /></div>
+          </Button>
+        {/if}
+      {:else}
         <IconButton
           component={ArrowRight}
           size={24}
-          disabled={!isValid}
-          onclick={() => formContext.goToNextStep()}
-          class="ml-auto"
+          disabled={!canContinue}
+          onclick={() => {
+            formContext.goToNextStep();
+          }}
         />
-      {:else}
-        <Button disabled={!isValid}>OK</Button>
       {/if}
     </div>
-
-    <!-- <button
-      type="button"
-      onclick={() => formContext.goToNextStep()}
-      disabled={!isValid()}
-    >
-      {stepIndex < formContext.totalSteps - 1 ? "Next" : "Submit"}
-      <ArrowRight size={28} />
-    </button> -->
   </div>
 {/if}

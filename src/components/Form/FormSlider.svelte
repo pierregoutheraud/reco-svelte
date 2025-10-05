@@ -1,11 +1,8 @@
 <script lang="ts">
   import { getContext, onMount } from "svelte";
   import { Slider } from "bits-ui";
-
-  interface FormContext {
-    setValue: (stepTitle: string, value: unknown) => void;
-    goToNextStep: () => void;
-  }
+  import type { FormContext } from "./Form.svelte";
+  import type { FormStepContext } from "./FormStep.svelte";
 
   interface Props {
     min: number;
@@ -17,9 +14,11 @@
   let { min, max, step = 1, multiple = false }: Props = $props();
 
   const formContext = getContext<FormContext>("form");
-  const stepContext = getContext<{ id: string }>("form_step");
+  const stepContext = getContext<FormStepContext>("form_step");
 
-  let rangeValues = $state<[number, number]>([min, 2025]);
+  let rangeValues = $state<[number, number]>(
+    (formContext.data[stepContext.id] as [number, number]) ?? [min, 2025]
+  );
 
   const updateValue = (newValue: number[]) => {
     rangeValues = newValue as [number, number];
@@ -27,7 +26,9 @@
   };
 
   onMount(() => {
-    formContext.setValue(stepContext.id, rangeValues);
+    if (!formContext.getValue(stepContext.id)) {
+      formContext.setValue(stepContext.id, rangeValues);
+    }
   });
 </script>
 

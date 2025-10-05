@@ -1,6 +1,21 @@
+<script module lang="ts">
+  export interface FormContext {
+    currentStepIndex: number;
+    totalSteps: number;
+    data: Record<string, unknown>;
+    registerStep: (stepId: string) => number;
+    unregisterStep: (stepId: string) => void;
+    setValue: (stepId: string, value: unknown) => void;
+    getValue: (stepId: string) => unknown;
+    goToNextStep: () => void;
+    goToPreviousStep: () => void;
+  }
+</script>
+
 <script lang="ts">
   import { setContext } from "svelte";
   import type { Snippet } from "svelte";
+  import FormProgress from "./FormProgress.svelte";
 
   interface Props {
     children: Snippet;
@@ -10,7 +25,7 @@
   let { children, onComplete }: Props = $props();
 
   let currentStepIndex = $state(0);
-  let formData = $state<Record<string, unknown>>({});
+  let data = $state<Record<string, unknown>>({});
   let steps = $state<string[]>([]);
 
   const registerStep = (id: string) => {
@@ -31,29 +46,20 @@
     }
   };
 
-  const setValue = (stepTitle: string, value: unknown) => {
-    formData[stepTitle] = value;
+  const setValue = (stepId: string, value: unknown) => {
+    data[stepId] = value;
   };
 
-  const getValue = (stepTitle: string) => {
-    return formData[stepTitle];
+  const getValue = (stepId: string) => {
+    return data[stepId];
   };
 
   const goToNextStep = () => {
-    const currentStepTitle = steps[currentStepIndex];
-    const hasValue =
-      formData[currentStepTitle] !== undefined &&
-      formData[currentStepTitle] !== null;
-
     if (currentStepIndex < steps.length - 1) {
-      if (hasValue) {
-        currentStepIndex++;
-      }
+      currentStepIndex++;
     } else {
       // Last step, complete the form
-      if (hasValue) {
-        onComplete(formData);
-      }
+      onComplete(data);
     }
   };
 
@@ -74,13 +80,14 @@
     unregisterStep,
     setValue,
     getValue,
+    data,
     goToNextStep,
     goToPreviousStep
   });
 </script>
 
-<div
-  class="flex flex-col w-full h-full p-8 gap-6 border-4 border-white/30 overflow-scroll"
->
+<div class="flex flex-col w-full h-full p-8 gap-6 overflow-scroll pb-[200px]">
+  <FormProgress />
   {@render children()}
 </div>
+<!-- border-4 border-white/30  -->

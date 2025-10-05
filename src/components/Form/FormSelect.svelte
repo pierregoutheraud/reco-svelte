@@ -1,16 +1,13 @@
 <script lang="ts">
   import { getContext } from "svelte";
   import FormSelectOption from "./FormSelectOption.svelte";
+  import type { FormContext } from "./Form.svelte";
+  import type { FormStepContext } from "./FormStep.svelte";
 
   interface Option {
     label: string;
     description?: string;
     value: string;
-  }
-
-  interface FormContext {
-    setValue: (stepTitle: string, value: unknown) => void;
-    goToNextStep: () => void;
   }
 
   interface Props {
@@ -19,14 +16,14 @@
 
   let { options }: Props = $props();
 
-  const formContext = getContext<FormContext>("form");
-  const step = getContext<{ id: string }>("form_step");
+  const { data, setValue } = getContext<FormContext>("form");
+  const step = getContext<FormStepContext>("form_step");
 
-  let selectedValue = $state<string | null>(null);
+  let selectedValue = $derived(data[step.id]);
 
   const selectOption = (value: string) => {
-    selectedValue = value;
-    formContext.setValue(step.id, value);
+    // selectedValue = value;
+    setValue(step.id, value);
     // formContext.goToNextStep();
   };
 </script>
