@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+Use svelte 5 syntax.
+Do not use plain css, always use tailwindcss.
+Check out svelte or tailwindcss documentation using context7 mcp if you need to.

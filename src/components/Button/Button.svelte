@@ -1,19 +1,23 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { ClassValue } from "svelte/elements";
-
+  import type { Component } from "svelte";
   interface Props {
     children: Snippet;
     class?: ClassValue;
     disabled?: boolean;
     onclick?: () => void;
+    icon?: Component;
+    iconPosition?: "left" | "right";
   }
 
   let {
     children,
     class: className,
     disabled = false,
-    onclick
+    onclick,
+    icon: IconComponent,
+    iconPosition = "left"
   }: Props = $props();
 </script>
 
@@ -29,5 +33,14 @@
   ]}
   {onclick}
 >
-  {@render children?.()}
+  <div
+    class="flex gap-3 {iconPosition === 'left'
+      ? 'flex-row'
+      : 'flex-row-reverse'}"
+  >
+    {#if IconComponent}
+      <IconComponent size={24} />
+    {/if}
+    {@render children?.()}
+  </div>
 </button>
