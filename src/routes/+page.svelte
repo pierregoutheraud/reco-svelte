@@ -1,8 +1,10 @@
 <script lang="ts">
-  import MoviesForm from "../components/MoviesForm/MoviesForm.svelte";
+  import MoviesForm, {
+    type MoviesFormData
+  } from "../components/MoviesForm/MoviesForm.svelte";
   import RecommendPage from "../components/RecommendPage/RecommendPage.svelte";
 
-  let data = $state<Record<string, unknown> | undefined>(undefined);
+  let data = $state<MoviesFormData | undefined>(undefined);
 </script>
 
 {#if !data}

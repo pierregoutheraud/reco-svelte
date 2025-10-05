@@ -1,9 +1,15 @@
 <script module>
-  export type FormData = {
+  export type MoviesFormData = {
     era: [number, number];
-    mood: string;
-    discovery: string;
-    duration: string;
+    mood:
+      | "comedy"
+      | "drama"
+      | "action"
+      | "scifi_fantasy"
+      | "horror"
+      | "mystery";
+    discovery: "popular" | "hidden" | "surprise";
+    duration: "under_2_hours" | "it_doesnt_matter";
     favorite_movie?: string;
   };
 </script>
@@ -16,7 +22,7 @@
   import FormInput from "../Form/FormInput.svelte";
 
   interface Props {
-    onComplete: (data: Record<string, unknown>) => void;
+    onComplete: (data: MoviesFormData) => void;
   }
 
   let { onComplete }: Props = $props();

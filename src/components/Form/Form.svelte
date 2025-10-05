@@ -12,14 +12,14 @@
   }
 </script>
 
-<script lang="ts">
+<script lang="ts" generics="TData extends Record<string, unknown>">
   import { setContext } from "svelte";
   import type { Snippet } from "svelte";
   import FormProgress from "./FormProgress.svelte";
 
   interface Props {
     children: Snippet;
-    onComplete: (data: Record<string, unknown>) => void;
+    onComplete: (data: TData) => void;
   }
 
   let { children, onComplete }: Props = $props();
@@ -59,7 +59,7 @@
       currentStepIndex++;
     } else {
       // Last step, complete the form
-      onComplete(data);
+      onComplete(data as TData);
     }
   };
 

@@ -1,6 +1,8 @@
 <script lang="ts">
+  import type { MoviesFormData } from "../MoviesForm/MoviesForm.svelte";
+
   interface Props {
-    data: Record<string, unknown>;
+    data: MoviesFormData;
   }
 
   let { data }: Props = $props();

@@ -1,11 +1,6 @@
 1. Era: When should your movie be from?
 
-- Recent hits (2020s) — fresh and modern vibes
-- 2010s favorites — polished, binge-era classics
-- 2000s throwbacks — early CGI, iconic blockbusters
-- 90s nostalgia — heart, humor, and timeless stories
-- Old-school classics (before 1990) — golden age cinema
-- Any period
+- Slider between 1900 and 2025
 
 2. Mood: What's your mood tonight?
 
