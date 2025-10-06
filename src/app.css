@@ -46,7 +46,8 @@
     font-weight: 400;
     font-style: normal;
     height: 100%;
-    @apply text-gray-50 bg-gray-950;
+    /* @apply text-gray-50 bg-gray-950; */
+    @apply bg-gray-800 text-gray-50 flex justify-center items-center;
   }
 
   *,

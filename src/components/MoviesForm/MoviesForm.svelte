@@ -11,6 +11,7 @@
     discovery: "popular" | "hidden" | "surprise";
     duration: "under_2_hours" | "it_doesnt_matter";
     inspiration_movies_ids?: number[];
+    selected_movies?: MovieMinTMDB[];
   };
 </script>
 
@@ -21,6 +22,7 @@
   import FormSelect from "../Form/FormSelect.svelte";
   import FormInput from "../Form/FormInput.svelte";
   import FormSelectMovies from "../Form/FormSelectMovies/FormSelectMovies.svelte";
+  import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
 
   interface Props {
     onComplete: (data: MoviesFormData) => void;

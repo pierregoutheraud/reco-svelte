@@ -7,7 +7,7 @@
   import FormSelectedMovieItem from "./FormSelectedMovieItem.svelte";
   import FormSearchResultMovieItem from "./FormSearchResultMovieItem.svelte";
 
-  const { data, setValue } = getContext<FormContext>("form");
+  const { setValue } = getContext<FormContext>("form");
   const { id: stepId } = getContext<FormStepContext>("form_step");
 
   let searchQuery = $state("");

@@ -9,4 +9,6 @@
   let { children }: Props = $props();
 </script>
 
-{@render children?.()}
+<main class="w-full max-w-[500px] h-full max-h-[1000px] mx-auto bg-background">
+  {@render children?.()}
+</main>
