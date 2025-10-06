@@ -18,9 +18,9 @@
   let imdbId = $derived(movie.imdb_id);
 </script>
 
-<div class="w-full flex flex-col gap-6 items-center p-8">
+<div class="w-full flex flex-col gap-6 items-center p-4">
   {#if movie.poster_path}
-    <PosterTmdb posterPath={movie.poster_path} height={300} />
+    <PosterTmdb posterPath={movie.poster_path} height={260} />
   {/if}
 
   <div class="flex flex-col gap-0.5">
@@ -30,11 +30,14 @@
     </p>
   </div>
 
-  <p class="text-left text-sm">{movie.reason}</p>
-
   <MovieRatings movieId={movie.id} />
 
-  <Button
+  <p class="text-left text-sm bg-indigo-900 p-2">
+    {movie.reason}
+  </p>
+  <p class="text-left text-sm">{movie.overview}</p>
+
+  <!-- <Button
     icon={FilmSlate}
     class="!bg-imdb !text-black"
     onclick={() => {
@@ -42,7 +45,5 @@
     }}
   >
     View on IMDb
-  </Button>
-
-  <!-- <p>{movie.overview}</p> -->
+  </Button> -->
 </div>

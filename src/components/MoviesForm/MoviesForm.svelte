@@ -31,15 +31,6 @@
 
 <Form {onComplete}>
   <FormStep
-    id="inspiration_movies_ids"
-    title="Inspiration"
-    question="Select movies that you love and that should inspire the recommendations."
-    skippable
-  >
-    <FormSelectMovies />
-  </FormStep>
-
-  <FormStep
     id="hello"
     title="Hello!"
     question="Let's find a movie for you. This process will take less than 1 minute."
@@ -138,5 +129,14 @@
         }
       ]}
     />
+  </FormStep>
+
+  <FormStep
+    id="inspiration_movies_ids"
+    title="Inspiration"
+    question="Select movies that you love and that should inspire the recommendations."
+    skippable
+  >
+    <FormSelectMovies />
   </FormStep>
 </Form>

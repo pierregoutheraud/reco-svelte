@@ -11,7 +11,8 @@ export function getCrawlerRatingsColor(source: Maybe<CRAWLER_SOURCE>) {
       return { backgroundColor: "var(--color-imdb)", color: "black" };
     case CRAWLER_SOURCE.METACRITIC:
       return {
-        backgroundColor: "var(--color-metacritic)",
+        // backgroundColor: "var(--color-metacritic)",
+        backgroundColor: "var(--color-gray-200)",
         color: "black"
       };
     case CRAWLER_SOURCE.ROTTEN_TOMATOES:
@@ -25,7 +26,7 @@ export function getCrawlerRatingsColor(source: Maybe<CRAWLER_SOURCE>) {
         color: "black"
       };
     case CRAWLER_SOURCE.AVERAGE:
-      return { backgroundColor: "var(--color-main)", color: "black" };
+      return { backgroundColor: "var(--color-indigo-400)", color: "black" };
   }
 
   return { backgroundColor: "var(--color-main)", color: "black" };

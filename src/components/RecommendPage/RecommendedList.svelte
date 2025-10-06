@@ -38,11 +38,13 @@
   </CardsList>
 </div> -->
 
-<div class="flex flex-col gap-4 items-center">
+<div class="w-full">
   <Card movie={movies[currentMovieIndex]} />
 
+  <div class="w-full h-[200px]"></div>
+
   <div
-    class="flex gap-2 items-end fixed bottom-4 right-4 left-4 justify-between"
+    class="flex gap-2 items-end fixed bottom-0 left-0 right-0 p-4 justify-between bg-black/100"
   >
     <!-- <Button
       icon={ArrowLeft}

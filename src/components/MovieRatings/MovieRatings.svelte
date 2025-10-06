@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import mongoApi from "$lib/api/ratings";
   import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
   import type { CrawlerRatings } from "$lib/api/ratings.decl";
@@ -17,22 +16,26 @@
   let loading = $state(true);
   let error = $state(false);
 
-  onMount(async () => {
+  $effect(() => {
     loading = true;
     error = false;
-    try {
-      const fetchedRatings = await mongoApi.fetchRatings(movieId, mediaType);
-      if (fetchedRatings) {
-        ratings = fetchedRatings;
-      } else {
+
+    mongoApi
+      .fetchRatings(movieId, mediaType)
+      .then((fetchedRatings) => {
+        if (fetchedRatings) {
+          ratings = fetchedRatings;
+        } else {
+          error = true;
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching ratings:", err);
         error = true;
-      }
-    } catch (err) {
-      console.error("Error fetching ratings:", err);
-      error = true;
-    } finally {
-      loading = false;
-    }
+      })
+      .finally(() => {
+        loading = false;
+      });
   });
 
   function formatScore(score: number | null): string {
@@ -49,14 +52,16 @@
   }
 </script>
 
-{#if loading}
-  <div class="flex justify-center items-center py-4">
+<div class="h-[50px]">
+  {#if loading}
+    <!-- <div class="flex justify-center items-center py-4">
     <p class="text-gray-400 text-sm">Loading ratings...</p>
-  </div>
-{:else if error || !ratings}
-  <div class="flex justify-center items-center py-4">
+  </div> -->
+  {:else if error || !ratings}
+    <!-- <div class="flex justify-center items-center py-4">
     <p class="text-gray-500 text-sm">Ratings unavailable</p>
-  </div>
-{:else}
-  <Ratings {ratings} title="Movie title" releaseDate="2025-01-01" />
-{/if}
+  </div> -->
+  {:else}
+    <Ratings {ratings} title="Movie title" releaseDate="2025-01-01" />
+  {/if}
+</div>

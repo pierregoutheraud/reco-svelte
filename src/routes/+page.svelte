@@ -13,6 +13,8 @@
   //   duration: "under_2_hours",
   //   favorite_movie: "In the mood for love"
   // };
+
+  $inspect(data);
 </script>
 
 {#if !data}

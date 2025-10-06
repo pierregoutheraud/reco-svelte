@@ -1,13 +1,12 @@
 <script lang="ts">
   import { CRAWLER_SOURCE } from "$lib/api/ratings.decl";
   import { getCrawlerRatingsColor } from "../../helpers/ratings.helpers";
-  import ScoreTag from "./ScoreTag.svelte";
 
   interface Props {
     title?: string | undefined;
     scores?: {
       value: number;
-      divider: string;
+      divider?: string;
     }[];
     crawlerSource?: CRAWLER_SOURCE;
     onclick?: () => void;
@@ -25,37 +24,36 @@
   );
 </script>
 
-<div class="RatingItem" {onclick}>
-  {#if title}
-    <h3 class="whitespace-pre-line" style:color={backgroundColor}>{title}</h3>
-  {/if}
+<div
+  class="flex flex-col items-center gap-0.5 shrink-0 cursor-pointer"
+  {onclick}
+>
+  <!-- {#if title}
+    <h3
+      class="text-xs font-medium rounded-lg self-center whitespace-pre-line"
+      style:color={backgroundColor}
+    >
+      {title}
+    </h3>
+  {/if} -->
 
-  <div class="scores">
+  <div class="flex gap-2">
     {#each scores as score}
-      <ScoreTag value={score.value} divider={score.divider} {crawlerSource} />
+      <div
+        class="text-center p-1 pt-1.5 px-2"
+        style:background-color={backgroundColor}
+        style:color
+      >
+        <p class="text-xs">{title}</p>
+        <p class="text-base font-medium inline-flex items-baseline gap-0.5">
+          {score.value}
+          {#if score.divider}
+            <span class="text-xs font-normal opacity-60">
+              {score.divider}
+            </span>
+          {/if}
+        </p>
+      </div>
     {/each}
   </div>
 </div>
-
-<style>
-  .RatingItem {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
-
-  .RatingItem h3 {
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    align-self: center;
-  }
-
-  .scores {
-    display: flex;
-    gap: 8px;
-  }
-</style>

@@ -40,33 +40,14 @@
   }
 </script>
 
-<div
-  class="RatingsMongo no-scrollbar"
-  class:row={direction === "row"}
-  class:column={direction === "column"}
->
-  {#if ratings.average?.score}
-    <RatingItem
-      title="Average"
-      scores={[
-        {
-          value: ratings.average.score,
-          divider: "/10"
-        }
-      ]}
-      crawlerSource={CRAWLER_SOURCE.AVERAGE}
-      onclick={() => goToGoogle()}
-    />
-  {/if}
-
+<div class="flex gap-1 select-none no-scrollbar">
   {#if ratings.imdb?.score}
     <RatingItem
       onclick={() => goToWebsite(CRAWLER_SOURCE.IMDB)}
       title="IMDb"
       scores={[
         {
-          value: ratings.imdb.score,
-          divider: "/10"
+          value: ratings.imdb.score
         }
       ]}
       crawlerSource={CRAWLER_SOURCE.IMDB}
@@ -76,13 +57,11 @@
   {#if ratings.rotten_tomatoes?.averageScore}
     <RatingItem
       onclick={() => goToWebsite(CRAWLER_SOURCE.ROTTEN_TOMATOES)}
-      title="Rotten
-Tomatoes"
+      title={`RT`}
       crawlerSource={CRAWLER_SOURCE.ROTTEN_TOMATOES}
       scores={[
         {
-          value: ratings.rotten_tomatoes.averageScore,
-          divider: "%"
+          value: ratings.rotten_tomatoes.averageScore
         }
       ]}
     />
@@ -95,8 +74,7 @@ Tomatoes"
       crawlerSource={CRAWLER_SOURCE.METACRITIC}
       scores={[
         {
-          value: ratings.metacritic.averageScore,
-          divider: "%"
+          value: ratings.metacritic.averageScore
         }
       ]}
     />
@@ -115,22 +93,17 @@ Tomatoes"
       ]}
     />
   {/if}
+
+  {#if ratings.average?.score}
+    <RatingItem
+      title="Average"
+      scores={[
+        {
+          value: ratings.average.score
+        }
+      ]}
+      crawlerSource={CRAWLER_SOURCE.AVERAGE}
+      onclick={() => goToGoogle()}
+    />
+  {/if}
 </div>
-
-<style>
-  .RatingsMongo {
-    display: flex;
-    gap: 20px;
-    user-select: none;
-  }
-  .RatingsMongo.column {
-    flex-direction: column;
-    gap: 12px;
-    padding: 0 0px;
-    margin: 0 0px;
-  }
-
-  .RatingsMongo :global(.RatingBar) {
-    flex-shrink: 0;
-  }
-</style>
