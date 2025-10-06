@@ -21,7 +21,7 @@
 <button
   type="button"
   class={[
-    `w-full py-3 px-3 min-h-16 text-base bg-black text-white border border-white shadow-[0_4px_0_0_white] cursor-pointer`,
+    `w-full py-3 px-3 min-h-16 text-base bg-background text-white border border-white shadow-[0_4px_0_0_white] cursor-pointer`,
     // `transition-all duration-300`,
 
     // `hover:translate-y-[2px] hover:shadow-[0_2px_0_0_white]`,

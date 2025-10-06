@@ -75,7 +75,7 @@
         },
         {
           label: "Want to be scared",
-          description: "Thriller/Suspense/Horror",
+          description: "Suspense/Horror",
           value: "horror"
         },
         {

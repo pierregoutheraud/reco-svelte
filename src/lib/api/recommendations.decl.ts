@@ -27,5 +27,8 @@ export interface RecommendationRequest {
   discovery: "popular" | "hidden" | "surprise";
   duration: "under_2_hours" | "it_doesnt_matter";
   inspiration_movies_ids?: number[];
-  count?: number;
+  liked_movies_ids?: number[];
+  disliked_movies_ids?: number[];
+  watched_movies_ids?: number[];
+  recommendations_count?: number;
 }

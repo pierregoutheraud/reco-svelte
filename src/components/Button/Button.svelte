@@ -9,6 +9,7 @@
     onclick?: () => void;
     icon?: Component;
     iconPosition?: "left" | "right";
+    iconSize?: number;
   }
 
   let {
@@ -17,7 +18,8 @@
     disabled = false,
     onclick,
     icon: IconComponent,
-    iconPosition = "left"
+    iconPosition = "left",
+    iconSize = 24
   }: Props = $props();
 </script>
 
@@ -31,15 +33,16 @@
       "bg-gray-800 opacity-70 !cursor-not-allowed": disabled
     }
   ]}
+  {disabled}
   {onclick}
 >
   <div
-    class="flex gap-3 {iconPosition === 'left'
+    class="flex gap-2 {iconPosition === 'left'
       ? 'flex-row'
-      : 'flex-row-reverse'}"
+      : 'flex-row-reverse'} items-center"
   >
     {#if IconComponent}
-      <IconComponent size={24} />
+      <IconComponent size={iconSize} />
     {/if}
     {@render children?.()}
   </div>

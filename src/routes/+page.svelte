@@ -11,19 +11,19 @@
   //   mood: "mystery",
   //   discovery: "hidden",
   //   duration: "under_2_hours",
-  //   favorite_movie: "In the mood for love"
+  //   inspiration_movies_ids: [152601]
   // };
 
-  $inspect(data);
+  // $inspect(data);
 </script>
 
-{#if !data}
+{#if !!data}
+  <RecommendPage {data} />
+{:else}
   <MoviesForm
     onComplete={(d) => {
       console.log("onComplete", d);
       data = d;
     }}
   />
-{:else}
-  <RecommendPage {data} />
 {/if}

@@ -8,7 +8,9 @@
   import OptimisticProgressBar from "../OptimisticProgressBar/OptimisticProgressBar.svelte";
   import { ArrowsClockwise, Warning } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
-  import RecommendedList from "./RecommendedList.svelte";
+  import RecommendedList, {
+    type RecommendedFeedback
+  } from "./RecommendedList.svelte";
   import type { MovieMinTMDB, MovieTMDB } from "$lib/tmdb/tmdb.decl";
   import { fetchMovie, searchMovieByTitle } from "$lib/tmdb/tmdb";
   import type { Recommendation } from "$lib/api/recommendations.decl";
@@ -26,6 +28,10 @@
   let loading = $state(false);
   let error = $state<string | null>(null);
   let movies: MovieEnriched[] | undefined = $state(undefined);
+
+  onMount(() => {
+    loadRecommendations();
+  });
 
   async function fetchTmdbMovies(
     recommendations: Recommendation[]
@@ -55,16 +61,32 @@
     return results.filter((movie): movie is MovieEnriched => movie !== null);
   }
 
-  async function loadRecommendations() {
+  async function loadRecommendations(
+    {
+      dislikedMoviesIds,
+      likedMoviesIds,
+      watchedMoviesIds
+    }: RecommendedFeedback = {
+      dislikedMoviesIds: [],
+      likedMoviesIds: [],
+      watchedMoviesIds: []
+    }
+  ) {
     loading = true;
     error = null;
     movies = undefined;
 
     try {
-      const response = await fetchAiRecommendations({
-        ...data,
-        count: 10
-      });
+      const response = await fetchAiRecommendations(
+        {
+          ...data,
+          recommendations_count: 10,
+          disliked_movies_ids: dislikedMoviesIds ?? [],
+          liked_movies_ids: likedMoviesIds ?? [],
+          watched_movies_ids: watchedMoviesIds ?? []
+        },
+        { mock: false }
+      );
 
       if (!response || !response.success || !response.recommendations) {
         throw new Error("Oops, something went wrong.");
@@ -72,6 +94,7 @@
 
       console.log("✅ recommendations:", $state.snapshot(response));
       movies = await fetchTmdbMovies(response.recommendations);
+      console.log("✅ tmdb movies:", $state.snapshot(movies));
     } catch (err) {
       console.error("❌ Fetch error:", err);
       error =
@@ -81,9 +104,10 @@
     }
   }
 
-  onMount(() => {
-    loadRecommendations();
-  });
+  function handleComplete(data: RecommendedFeedback) {
+    console.log("handleComplete", data);
+    loadRecommendations(data);
+  }
 </script>
 
 <div class="flex h-full">
@@ -97,11 +121,12 @@
           "Reading between the frames...",
           "Curating your perfect lineup..."
         ]}
-        duration={60}
+        subtext="This process will take around 40 seconds."
+        duration={50}
       />
     </div>
   {:else if movies}
-    <RecommendedList {movies} />
+    <RecommendedList {movies} onComplete={handleComplete} />
   {:else if error}
     <div class="flex flex-col gap-6 items-center">
       <div class="flex flex-col gap-1 items-center">

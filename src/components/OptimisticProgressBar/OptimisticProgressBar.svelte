@@ -4,9 +4,10 @@
   interface Props {
     texts: string[];
     duration: number; // in seconds
+    subtext?: string;
   }
 
-  let { texts, duration }: Props = $props();
+  let { texts, duration, subtext }: Props = $props();
 
   let progress = $state(0);
   let currentTextIndex = $state(0);
@@ -64,4 +65,8 @@
       style="width: {progress}%"
     ></div>
   </div>
+
+  {#if subtext}
+    <p class="text-sm text-center text-gray-400">{subtext}</p>
+  {/if}
 </div>

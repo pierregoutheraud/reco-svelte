@@ -46,7 +46,8 @@ export async function tmdbCall<T>(
 export async function searchMovieByTitle(title: string, year?: number) {
   const dataSearch = await tmdbCall<SearchResultTMDB>("/search/movie", {
     query: title,
-    ...(year && { primary_release_year: year })
+    // ...(year && { primary_release_year: year })
+    ...(year && { year })
   });
 
   if (!dataSearch || !dataSearch.results?.length) {

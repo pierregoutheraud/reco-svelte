@@ -2,18 +2,31 @@
   import { fetchMovie } from "$lib/tmdb/tmdb";
   import Card from "../../components/Card/Card.svelte";
   import FormSelectOption from "../../components/Form/FormSelectOption.svelte";
+  import OptimisticProgressBar from "../../components/OptimisticProgressBar/OptimisticProgressBar.svelte";
   import type { MovieEnriched } from "../../components/RecommendPage/RecommendPage.svelte";
 
-  const movieId = 152601;
-  const moviePromise = fetchMovie(movieId).then((movie) => {
-    const movieEnriched: MovieEnriched = {
-      ...movie!,
-      reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    };
-    return movieEnriched;
-  });
+  // const movieId = 152601;
+  // const moviePromise = fetchMovie(movieId).then((movie) => {
+  //   const movieEnriched: MovieEnriched = {
+  //     ...movie!,
+  //     reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  //   };
+  //   return movieEnriched;
+  // });
 </script>
 
-{#await moviePromise then movie}
+<!-- {#await moviePromise then movie}
   <Card {movie} />
-{/await}
+{/await} -->
+
+<OptimisticProgressBar
+  texts={[
+    "Analyzing your taste...",
+    "Scanning decades of cinema...",
+    "Consulting the film archives...",
+    "Reading between the frames...",
+    "Curating your perfect lineup..."
+  ]}
+  subtext="This will take around 40 seconds."
+  duration={60}
+/>

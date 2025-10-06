@@ -1,60 +1,66 @@
+<script module>
+  export type RecommendedFeedback = {
+    dislikedMoviesIds: number[];
+    likedMoviesIds: number[];
+    watchedMoviesIds: number[];
+  };
+</script>
+
 <script lang="ts">
   import type { MovieEnriched } from "./RecommendPage.svelte";
-  import PosterTmdb from "../Poster/PosterTmdb.svelte";
-  import CardsList from "../CardsList/CardsList.svelte";
   import Card from "../Card/Card.svelte";
   import Button from "../Button/Button.svelte";
-  import { ArrowLeft, ArrowRight, ArrowsClockwise } from "phosphor-svelte";
-  import IconButton from "../Button/IconButton.svelte";
+  import { ArrowRight, ThumbsDown, ThumbsUp } from "phosphor-svelte";
 
   interface Props {
     movies: MovieEnriched[];
+    onComplete: (data: RecommendedFeedback) => void;
   }
 
-  let { movies }: Props = $props();
+  let { movies, onComplete }: Props = $props();
 
   let currentMovieIndex = $state(0);
+  let currentMovie = $derived(movies[currentMovieIndex]);
+  let dislikedMoviesIds = $state<number[]>([]);
+  let likedMoviesIds = $state<number[]>([]);
+  let watchedMoviesIds = $state<number[]>([]);
 
-  function nextMovie() {
+  function goToNextMovie() {
     currentMovieIndex++;
     if (currentMovieIndex >= movies.length) {
-      currentMovieIndex = 0;
+      onComplete({
+        dislikedMoviesIds,
+        likedMoviesIds,
+        watchedMoviesIds
+      });
     }
   }
 
-  function previousMovie() {
-    currentMovieIndex--;
-    if (currentMovieIndex < 0) {
-      currentMovieIndex = movies.length - 1;
-    }
+  function handleDisliked() {
+    dislikedMoviesIds.push(currentMovie.id);
+    goToNextMovie();
+  }
+
+  function handleLiked() {
+    likedMoviesIds.push(currentMovie.id);
+    goToNextMovie();
+  }
+
+  function handleNextMovie() {
+    watchedMoviesIds.push(currentMovie.id);
+    goToNextMovie();
   }
 </script>
 
-<!-- <div class="flex flex-col gap-4">
-  <CardsList items={movies}>
-    {#snippet children({ item })}
-      <Card movie={item} />
-    {/snippet}
-  </CardsList>
-</div> -->
-
 <div class="w-full">
-  <Card movie={movies[currentMovieIndex]} />
+  <Card movie={currentMovie} />
 
   <div class="w-full h-[200px]"></div>
 
   <div
-    class="flex gap-2 items-end fixed bottom-0 left-0 right-0 p-4 justify-between bg-black/100"
+    class="flex flex-col gap-4 fixed bottom-0 left-0 right-0 p-4 bg-background/90"
   >
     <!-- <Button
-      icon={ArrowLeft}
-      iconPosition="left"
-      onclick={() => {
-        previousMovie();
-      }}>Previous</Button
-    > -->
-
-    <Button
       icon={ArrowsClockwise}
       iconPosition="left"
       onclick={() => {
@@ -62,24 +68,43 @@
       }}
     >
       Try again
-    </Button>
+    </Button> -->
 
-    <Button
-      icon={ArrowRight}
-      iconPosition="right"
-      onclick={() => {
-        nextMovie();
-      }}
-    >
-      Next
-    </Button>
+    <div class="flex gap-2 justify-between">
+      <Button
+        icon={ThumbsDown}
+        iconPosition="right"
+        class="!bg-rose-500"
+        iconSize={24}
+        onclick={() => {
+          handleDisliked();
+        }}
+      >
+        Disliked
+      </Button>
 
-    <!-- <IconButton
-      component={ArrowRight}
-      size={28}
-      onclick={() => {
-        nextMovie();
-      }}
-    /> -->
+      <Button
+        icon={ThumbsUp}
+        iconPosition="right"
+        class="!bg-teal-500"
+        iconSize={24}
+        onclick={() => {
+          handleLiked();
+        }}
+      >
+        Liked
+      </Button>
+
+      <Button
+        icon={ArrowRight}
+        iconPosition="right"
+        iconSize={24}
+        onclick={() => {
+          handleNextMovie();
+        }}
+      >
+        Next
+      </Button>
+    </div>
   </div>
 </div>

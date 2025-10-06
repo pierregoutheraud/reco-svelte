@@ -60,7 +60,7 @@
           {index}
           position={index === 0 ? "right" : "left"}
           class={[
-            "text-lg font-semibold mb-[-30px]",
+            "text-xl font-semibold mb-[-30px]",
             index === 0 ? "ml-14" : "",
             index === 1 ? "mr-14" : ""
           ]}>{value}</Slider.ThumbLabel
