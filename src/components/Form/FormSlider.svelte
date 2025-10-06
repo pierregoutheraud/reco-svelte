@@ -44,7 +44,7 @@
     class="relative flex h-full touch-none select-none flex-col items-center self-center"
     thumbPositioning="contain"
   >
-    {#snippet children({ tickItems, thumbItems })}
+    {#snippet children({ thumbItems })}
       <span
         class="bg-indigo-100 relative h-full w-2 cursor-pointer overflow-hidden"
       >
@@ -54,17 +54,17 @@
       {#each thumbItems as { index, value } (index)}
         <Slider.Thumb
           {index}
-          class="bg-main size-8 cursor-pointer outline-none"
-        />
+          class="flex items-center justify-center size-12 cursor-pointer outline-none"
+        >
+          <div class="size-8 bg-main"></div>
+        </Slider.Thumb>
         <Slider.ThumbLabel
           {index}
-          position={index === 0 ? "right" : "left"}
-          class={[
-            "text-xl font-semibold mb-[-30px]",
-            index === 0 ? "ml-14" : "",
-            index === 1 ? "mr-14" : ""
-          ]}>{value}</Slider.ThumbLabel
+          position="left"
+          class={["text-xl font-semibold mb-[-30px] mr-14"]}
         >
+          {value}
+        </Slider.ThumbLabel>
       {/each}
     {/snippet}
   </Slider.Root>
