@@ -2,11 +2,8 @@ import type {
   RecommendationRequest,
   RecommendationResponse
 } from "$lib/api/recommendations.decl";
+import { BASE_API_URL } from "../../constants/api.constants";
 import { isDev } from "../../helpers/env.helpers";
-
-const BASE_URL = isDev()
-  ? "http://localhost:3000"
-  : "https://miru-bun-server.fly.dev";
 
 /**
  * Fetch movie recommendations from the API
@@ -19,7 +16,7 @@ export async function fetchAiRecommendations(
     return fetchAiRecommendationsMock();
   }
 
-  const response = await fetch(`${BASE_URL}/recommend`, {
+  const response = await fetch(`${BASE_API_URL}/recommend`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

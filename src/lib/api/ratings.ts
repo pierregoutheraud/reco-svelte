@@ -1,19 +1,15 @@
 import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
-import { isDev } from "../../helpers/env.helpers";
+import { BASE_API_URL } from "../../constants/api.constants";
 import type { CrawlerRatings, RatingsResponse } from "./ratings.decl";
 
 class MongoApi {
-  baseUrl = isDev()
-    ? "http://localhost:3000"
-    : "https://miru-bun-server.fly.dev";
-
   async fetch<T>(endpoint: string): Promise<T | null> {
     try {
       const headers: Record<string, string> = {
         "Content-Type": "application/json"
       };
 
-      const res = await fetch(`${this.baseUrl}${endpoint}`, { headers });
+      const res = await fetch(`${BASE_API_URL}${endpoint}`, { headers });
 
       if (!res.ok) {
         // Log error details, especially for CSRF failures
