@@ -143,3 +143,93 @@ export interface SearchResultTMDB<T = MovieMinTMDB> {
   total_pages: number;
   total_results: number;
 }
+
+export interface ShowTMDB {
+  id: number;
+  adult: boolean;
+  backdrop_path: string | null;
+  created_by: CreatedByTMDB[];
+  episode_run_time: number[];
+  first_air_date: string | null;
+  genres: GenreTMDB[];
+  external_ids: ExternalIds;
+  homepage: string;
+  in_production: boolean;
+  languages: string[];
+  last_air_date: string;
+  name: string;
+  imdb_id: string | null;
+  last_episode_to_air: EpisodeTMDB | null;
+  next_episode_to_air: EpisodeTMDB | null;
+  networks: NetworkTMDB[];
+  number_of_episodes: number;
+  number_of_seasons: number;
+  origin_country: string[];
+  origin_language: string;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  poster_path: string | null;
+  production_companies: ProductionCompanyTMDB[];
+  production_countries: ProductionCountryTMDB[];
+  seasons: SeasonTMDB[];
+  spoken_languages: SpokenLanguageTMDB[];
+  status: string;
+  tagline: string;
+  type: string;
+  vote_average: number;
+  vote_count: number;
+  credits: CreditsTMDB;
+}
+
+export interface CreatedByTMDB {
+  id: number;
+  credit_id: string;
+  name: string;
+  gender: number;
+  profile_path: string | null;
+}
+
+export interface ExternalIds {
+  imdb_id: string | null;
+  freebase_mid: string | null;
+  freebase_id: string | null;
+  tvdb_id: number | null;
+  tvrage_id: number | null;
+  wikidata_id: string | null;
+  facebook_id: string | null;
+  instagram_id: string | null;
+  twitter_id: string | null;
+}
+
+export interface EpisodeTMDB {
+  id: number;
+  name: string;
+  overview: string;
+  vote_average: number;
+  vote_count: number;
+  air_date: string;
+  episode_number: number;
+  production_code: string;
+  runtime: number;
+  season_number: number;
+  show_id: number;
+  still_path: string | null;
+}
+
+export interface NetworkTMDB {
+  id: number;
+  logo_path: string | null;
+  name: string;
+  origin_country: string;
+}
+
+export interface SeasonTMDB {
+  air_date: string | null;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string | null;
+  season_number: number;
+}

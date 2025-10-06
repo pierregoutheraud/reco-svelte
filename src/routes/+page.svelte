@@ -16,7 +16,12 @@
 </script>
 
 {#if !data}
-  <MoviesForm onComplete={(d) => (data = d)} />
+  <MoviesForm
+    onComplete={(d) => {
+      console.log("onComplete", d);
+      data = d;
+    }}
+  />
 {:else}
   <RecommendPage {data} />
 {/if}

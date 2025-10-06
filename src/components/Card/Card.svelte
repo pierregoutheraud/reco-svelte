@@ -3,6 +3,7 @@
   import Button from "../Button/Button.svelte";
   import PosterTmdb from "../Poster/PosterTmdb.svelte";
   import type { MovieEnriched } from "../RecommendPage/RecommendPage.svelte";
+  import MovieRatings from "../MovieRatings/MovieRatings.svelte";
 
   interface Props {
     movie: MovieEnriched;
@@ -21,13 +22,18 @@
   {#if movie.poster_path}
     <PosterTmdb posterPath={movie.poster_path} height={300} />
   {/if}
+
   <div class="flex flex-col gap-0.5">
     <h2 class="font-title text-3xl text-center">{movie.title}</h2>
     <p class="text-center text-sm text-gray-400">
       {movie.director} - {releaseYear}
     </p>
   </div>
+
   <p class="text-left text-sm">{movie.reason}</p>
+
+  <MovieRatings movieId={movie.id} />
+
   <Button
     icon={FilmSlate}
     class="!bg-imdb !text-black"

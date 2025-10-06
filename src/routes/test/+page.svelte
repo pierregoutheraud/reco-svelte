@@ -1,11 +1,19 @@
 <script lang="ts">
+  import { fetchMovie } from "$lib/tmdb/tmdb";
+  import Card from "../../components/Card/Card.svelte";
   import FormSelectOption from "../../components/Form/FormSelectOption.svelte";
+  import type { MovieEnriched } from "../../components/RecommendPage/RecommendPage.svelte";
 
-  let active = $state(false);
+  const movieId = 152601;
+  const moviePromise = fetchMovie(movieId).then((movie) => {
+    const movieEnriched: MovieEnriched = {
+      ...movie!,
+      reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    };
+    return movieEnriched;
+  });
 </script>
 
-<main class="flex flex-col gap-4 p-10">
-  <FormSelectOption label="Test" />
-  <FormSelectOption label="Test" hover />
-  <FormSelectOption label="Test" active />
-</main>
+{#await moviePromise then movie}
+  <Card {movie} />
+{/await}

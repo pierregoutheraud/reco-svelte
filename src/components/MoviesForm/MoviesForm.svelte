@@ -10,7 +10,7 @@
       | "mystery";
     discovery: "popular" | "hidden" | "surprise";
     duration: "under_2_hours" | "it_doesnt_matter";
-    favorite_movie?: string;
+    inspiration_movies_ids?: number[];
   };
 </script>
 
@@ -20,6 +20,7 @@
   import FormSlider from "../Form/FormSlider.svelte";
   import FormSelect from "../Form/FormSelect.svelte";
   import FormInput from "../Form/FormInput.svelte";
+  import FormSelectMovies from "../Form/FormSelectMovies/FormSelectMovies.svelte";
 
   interface Props {
     onComplete: (data: MoviesFormData) => void;
@@ -29,6 +30,15 @@
 </script>
 
 <Form {onComplete}>
+  <FormStep
+    id="inspiration_movies_ids"
+    title="Inspiration"
+    question="Select movies that you love and that should inspire the recommendations."
+    skippable
+  >
+    <FormSelectMovies />
+  </FormStep>
+
   <FormStep
     id="hello"
     title="Hello!"
@@ -128,14 +138,5 @@
         }
       ]}
     />
-  </FormStep>
-
-  <FormStep
-    id="favorite_movie"
-    title="Favorite movie"
-    question="What's your favorite movie?"
-    skippable
-  >
-    <FormInput />
   </FormStep>
 </Form>

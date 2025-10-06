@@ -4,7 +4,7 @@
   import CardsList from "../CardsList/CardsList.svelte";
   import Card from "../Card/Card.svelte";
   import Button from "../Button/Button.svelte";
-  import { ArrowLeft, ArrowRight } from "phosphor-svelte";
+  import { ArrowLeft, ArrowRight, ArrowsClockwise } from "phosphor-svelte";
   import IconButton from "../Button/IconButton.svelte";
 
   interface Props {
@@ -40,7 +40,10 @@
 
 <div class="flex flex-col gap-4 items-center">
   <Card movie={movies[currentMovieIndex]} />
-  <div class="flex gap-2 items-end fixed bottom-4 right-4">
+
+  <div
+    class="flex gap-2 items-end fixed bottom-4 right-4 left-4 justify-between"
+  >
     <!-- <Button
       icon={ArrowLeft}
       iconPosition="left"
@@ -50,12 +53,24 @@
     > -->
 
     <Button
+      icon={ArrowsClockwise}
+      iconPosition="left"
+      onclick={() => {
+        window.location.reload();
+      }}
+    >
+      Try again
+    </Button>
+
+    <Button
       icon={ArrowRight}
       iconPosition="right"
       onclick={() => {
         nextMovie();
-      }}>Next recommendation</Button
+      }}
     >
+      Next
+    </Button>
 
     <!-- <IconButton
       component={ArrowRight}

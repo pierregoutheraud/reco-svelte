@@ -4,7 +4,7 @@
   import Poster from "./Poster.svelte";
 
   interface Props {
-    posterPath: string;
+    posterPath: string | null | undefined;
     height?: number | undefined;
     width?: number | undefined;
     hasBoxShadow?: boolean;
@@ -26,22 +26,15 @@
   }
 
   let posterUrl = $derived(
-    getPosterUrl(
-      posterPath,
-      width
-        ? { width, height: undefined as never }
-        : { width: undefined as never, height: height! }
-    )
+    posterPath
+      ? getPosterUrl(
+          posterPath,
+          width
+            ? { width, height: undefined as never }
+            : { width: undefined as never, height: height! }
+        )
+      : null
   );
 </script>
 
-{#if posterUrl}
-  <Poster
-    {width}
-    {height}
-    url={posterUrl}
-    {hasBoxShadow}
-    {onclick}
-    {mediaType}
-  />
-{/if}
+<Poster {width} {height} url={posterUrl} {hasBoxShadow} {onclick} {mediaType} />

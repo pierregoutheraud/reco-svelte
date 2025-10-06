@@ -26,6 +26,6 @@ export interface RecommendationRequest {
   mood: "comedy" | "drama" | "action" | "scifi_fantasy" | "horror" | "mystery";
   discovery: "popular" | "hidden" | "surprise";
   duration: "under_2_hours" | "it_doesnt_matter";
-  favorite_movie?: string;
+  inspiration_movies_ids?: number[];
   count?: number;
 }

@@ -88,7 +88,7 @@
 
 <div class="flex h-full">
   {#if loading}
-    <div class="flex h-full items-center justify-center">
+    <div class="flex h-full w-full items-center justify-center">
       <OptimisticProgressBar
         texts={[
           "Analyzing your taste...",
@@ -97,7 +97,7 @@
           "Reading between the frames...",
           "Curating your perfect lineup..."
         ]}
-        duration={20}
+        duration={60}
       />
     </div>
   {:else if movies}

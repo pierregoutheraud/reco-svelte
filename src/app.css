@@ -8,6 +8,11 @@
   --color-background: var(--color-gray-950);
 
   --color-imdb: #f5c518;
+
+  --color-metacritic: #ffbd3f;
+  --color-imdb: #f5c518;
+  --color-rotten-tomatoes: #f44336;
+  --color-letterboxd: #02e054;
 }
 
 /*

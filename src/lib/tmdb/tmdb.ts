@@ -57,6 +57,23 @@ export async function searchMovieByTitle(title: string, year?: number) {
   return dataSearch.results[0];
 }
 
+export async function searchMoviesByTitle(
+  title: string,
+  year?: number,
+  limit = 5
+) {
+  const dataSearch = await tmdbCall<SearchResultTMDB>("/search/movie", {
+    query: title,
+    ...(year && { primary_release_year: year })
+  });
+
+  if (!dataSearch || !dataSearch.results?.length) {
+    return [];
+  }
+
+  return dataSearch.results.slice(0, limit);
+}
+
 export function getPosterUrl(
   path: string,
   size: { width?: number; height?: never } | { height?: number; width?: never }
