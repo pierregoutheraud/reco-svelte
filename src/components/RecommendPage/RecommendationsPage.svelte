@@ -5,9 +5,7 @@
   import OptimisticProgressBar from "../OptimisticProgressBar/OptimisticProgressBar.svelte";
   import { ArrowsClockwise, Warning } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
-  import RecommendedList, {
-    type RecommendedFeedback
-  } from "./RecommendationsList.svelte";
+  import RecommendedList from "./RecommendationsList.svelte";
   import type { MovieTMDB } from "$lib/tmdb/tmdb.decl";
   import { fetchMovie, searchMovieByTitle } from "$lib/tmdb/tmdb";
   import type { Recommendation } from "$lib/api/recommendations.decl";
@@ -59,11 +57,7 @@
     return results.filter((movie): movie is MovieEnriched => movie !== null);
   }
 
-  async function loadRecommendations(
-    { watchedMoviesIds }: Pick<RecommendedFeedback, "watchedMoviesIds"> = {
-      watchedMoviesIds: []
-    }
-  ) {
+  async function loadRecommendations() {
     loading = true;
     error = null;
     movies = undefined;
@@ -71,6 +65,10 @@
     // Use persisted preferences from store
     console.log("disliked from store:", moviePreferences.disliked);
     console.log("liked from store:", moviePreferences.liked);
+    console.log(
+      "already recommended from store:",
+      moviePreferences.alreadyRecommended
+    );
 
     try {
       const response = await fetchAiRecommendations(
@@ -79,7 +77,7 @@
           recommendations_count: 10,
           disliked_movies_ids: moviePreferences.disliked,
           liked_movies_ids: moviePreferences.liked,
-          watched_movies_ids: watchedMoviesIds ?? []
+          already_recommended_movies_ids: moviePreferences.alreadyRecommended
         },
         { mock: false }
       );
@@ -100,12 +98,12 @@
     }
   }
 
-  function handleComplete(data: RecommendedFeedback) {
-    console.log("handleComplete", data);
+  function handleComplete() {
+    console.log("handleComplete - reloading recommendations");
 
-    // No need to save liked/disliked here - already saved in RecommendationsList
-    // Just reload recommendations with the watched movies
-    loadRecommendations({ watchedMoviesIds: data.watchedMoviesIds });
+    // All preferences are already saved in the store via RecommendationsList
+    // Just reload recommendations
+    loadRecommendations();
   }
 </script>
 

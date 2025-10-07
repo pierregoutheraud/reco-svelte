@@ -1,57 +1,41 @@
-<script module>
-  export type RecommendedFeedback = {
-    dislikedMoviesIds: number[];
-    likedMoviesIds: number[];
-    watchedMoviesIds: number[];
-  };
-</script>
-
 <script lang="ts">
   import type { MovieEnriched } from "./RecommendationsPage.svelte";
   import Card from "../Card/Card.svelte";
   import Button from "../Button/Button.svelte";
   import { ArrowRight, ThumbsDown, ThumbsUp } from "phosphor-svelte";
-  import { onMount } from "svelte";
   import { moviePreferences } from "../../stores/moviePreferences.svelte";
 
   interface Props {
     movies: MovieEnriched[];
-    onComplete: (data: RecommendedFeedback) => void;
+    onComplete: () => void;
   }
 
   let { movies, onComplete }: Props = $props();
 
   let currentMovieIndex = $state(0);
   let currentMovie = $derived(movies[currentMovieIndex]);
-  let dislikedMoviesIds = $state<number[]>([]);
-  let likedMoviesIds = $state<number[]>([]);
-  let watchedMoviesIds = $state<number[]>([]);
 
   function goToNextMovie() {
+    // Mark this movie as already recommended (shown to user)
+    moviePreferences.addAlreadyRecommended(currentMovie.id);
+
     currentMovieIndex++;
     if (currentMovieIndex >= movies.length) {
-      onComplete({
-        dislikedMoviesIds,
-        likedMoviesIds,
-        watchedMoviesIds
-      });
+      onComplete();
     }
   }
 
   function handleDisliked() {
-    dislikedMoviesIds.push(currentMovie.id);
     moviePreferences.addDisliked(currentMovie.id);
     goToNextMovie();
   }
 
   function handleLiked() {
-    likedMoviesIds.push(currentMovie.id);
     moviePreferences.addLiked(currentMovie.id);
     goToNextMovie();
   }
 
   function handleNextMovie() {
-    watchedMoviesIds.push(currentMovie.id);
     goToNextMovie();
   }
 </script>

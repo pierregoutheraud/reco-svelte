@@ -29,6 +29,6 @@ export interface RecommendationRequest {
   inspiration_movies_ids?: number[];
   liked_movies_ids?: number[];
   disliked_movies_ids?: number[];
-  watched_movies_ids?: number[];
+  already_recommended_movies_ids?: number[];
   recommendations_count?: number;
 }

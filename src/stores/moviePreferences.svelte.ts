@@ -3,11 +3,16 @@ const STORAGE_KEY = "moviePreferences";
 interface MoviePreferences {
   dislikedMoviesIds: number[];
   likedMoviesIds: number[];
+  alreadyRecommendedMoviesIds: number[];
 }
 
 function loadFromStorage(): MoviePreferences {
   if (typeof window === "undefined") {
-    return { dislikedMoviesIds: [], likedMoviesIds: [] };
+    return {
+      dislikedMoviesIds: [],
+      likedMoviesIds: [],
+      alreadyRecommendedMoviesIds: []
+    };
   }
 
   try {
@@ -20,6 +25,11 @@ function loadFromStorage(): MoviePreferences {
           : [],
         likedMoviesIds: Array.isArray(parsed.likedMoviesIds)
           ? parsed.likedMoviesIds
+          : [],
+        alreadyRecommendedMoviesIds: Array.isArray(
+          parsed.alreadyRecommendedMoviesIds
+        )
+          ? parsed.alreadyRecommendedMoviesIds
           : []
       };
     }
@@ -27,7 +37,11 @@ function loadFromStorage(): MoviePreferences {
     console.error("Failed to load movie preferences from storage:", error);
   }
 
-  return { dislikedMoviesIds: [], likedMoviesIds: [] };
+  return {
+    dislikedMoviesIds: [],
+    likedMoviesIds: [],
+    alreadyRecommendedMoviesIds: []
+  };
 }
 
 function saveToStorage(preferences: MoviePreferences): void {
@@ -43,11 +57,13 @@ function saveToStorage(preferences: MoviePreferences): void {
 class MoviePreferencesStore {
   private dislikedMoviesIds = $state<number[]>([]);
   private likedMoviesIds = $state<number[]>([]);
+  private alreadyRecommendedMoviesIds = $state<number[]>([]);
 
   constructor() {
     const stored = loadFromStorage();
     this.dislikedMoviesIds = stored.dislikedMoviesIds;
     this.likedMoviesIds = stored.likedMoviesIds;
+    this.alreadyRecommendedMoviesIds = stored.alreadyRecommendedMoviesIds;
   }
 
   get disliked(): number[] {
@@ -56,6 +72,10 @@ class MoviePreferencesStore {
 
   get liked(): number[] {
     return this.likedMoviesIds;
+  }
+
+  get alreadyRecommended(): number[] {
+    return this.alreadyRecommendedMoviesIds;
   }
 
   addDisliked(movieId: number): void {
@@ -114,16 +134,38 @@ class MoviePreferencesStore {
     }
   }
 
+  addAlreadyRecommended(movieId: number): void {
+    if (!this.alreadyRecommendedMoviesIds.includes(movieId)) {
+      this.alreadyRecommendedMoviesIds.push(movieId);
+      this.save();
+    }
+  }
+
+  addMultipleAlreadyRecommended(movieIds: number[]): void {
+    let changed = false;
+    for (const id of movieIds) {
+      if (!this.alreadyRecommendedMoviesIds.includes(id)) {
+        this.alreadyRecommendedMoviesIds.push(id);
+        changed = true;
+      }
+    }
+    if (changed) {
+      this.save();
+    }
+  }
+
   clear(): void {
     this.dislikedMoviesIds = [];
     this.likedMoviesIds = [];
+    this.alreadyRecommendedMoviesIds = [];
     this.save();
   }
 
   private save(): void {
     saveToStorage({
       dislikedMoviesIds: this.dislikedMoviesIds,
-      likedMoviesIds: this.likedMoviesIds
+      likedMoviesIds: this.likedMoviesIds,
+      alreadyRecommendedMoviesIds: this.alreadyRecommendedMoviesIds
     });
   }
 }
