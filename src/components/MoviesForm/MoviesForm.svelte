@@ -107,7 +107,7 @@
     <div class="flex flex-col gap-4 self-center">
       <h1 class="text-3xl font-bold text-center">Hello!</h1>
       <h2 class="text-lg/6 px-4 text-center">
-        Let's find a movie for you. This process will take less than 1 minute.
+        Let's find a movie for you. This process will take less than 2 minutes.
       </h2>
     </div>
   </FormStep>
