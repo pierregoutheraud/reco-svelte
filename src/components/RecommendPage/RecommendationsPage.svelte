@@ -11,6 +11,7 @@
   import type { MovieTMDB } from "$lib/tmdb/tmdb.decl";
   import { fetchMovie, searchMovieByTitle } from "$lib/tmdb/tmdb";
   import type { Recommendation } from "$lib/api/recommendations.decl";
+  import { moviePreferences } from "../../stores/moviePreferences.svelte";
 
   export type MovieEnriched = MovieTMDB & {
     reason: string;
@@ -59,13 +60,7 @@
   }
 
   async function loadRecommendations(
-    {
-      dislikedMoviesIds,
-      likedMoviesIds,
-      watchedMoviesIds
-    }: RecommendedFeedback = {
-      dislikedMoviesIds: [],
-      likedMoviesIds: [],
+    { watchedMoviesIds }: Pick<RecommendedFeedback, "watchedMoviesIds"> = {
       watchedMoviesIds: []
     }
   ) {
@@ -73,13 +68,17 @@
     error = null;
     movies = undefined;
 
+    // Use persisted preferences from store
+    console.log("disliked from store:", moviePreferences.disliked);
+    console.log("liked from store:", moviePreferences.liked);
+
     try {
       const response = await fetchAiRecommendations(
         {
           ...data,
           recommendations_count: 10,
-          disliked_movies_ids: dislikedMoviesIds ?? [],
-          liked_movies_ids: likedMoviesIds ?? [],
+          disliked_movies_ids: moviePreferences.disliked,
+          liked_movies_ids: moviePreferences.liked,
           watched_movies_ids: watchedMoviesIds ?? []
         },
         { mock: false }
@@ -103,7 +102,10 @@
 
   function handleComplete(data: RecommendedFeedback) {
     console.log("handleComplete", data);
-    loadRecommendations(data);
+
+    // No need to save liked/disliked here - already saved in RecommendationsList
+    // Just reload recommendations with the watched movies
+    loadRecommendations({ watchedMoviesIds: data.watchedMoviesIds });
   }
 </script>
 

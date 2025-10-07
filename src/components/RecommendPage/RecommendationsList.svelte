@@ -12,6 +12,7 @@
   import Button from "../Button/Button.svelte";
   import { ArrowRight, ThumbsDown, ThumbsUp } from "phosphor-svelte";
   import { onMount } from "svelte";
+  import { moviePreferences } from "../../stores/moviePreferences.svelte";
 
   interface Props {
     movies: MovieEnriched[];
@@ -39,11 +40,13 @@
 
   function handleDisliked() {
     dislikedMoviesIds.push(currentMovie.id);
+    moviePreferences.addDisliked(currentMovie.id);
     goToNextMovie();
   }
 
   function handleLiked() {
     likedMoviesIds.push(currentMovie.id);
+    moviePreferences.addLiked(currentMovie.id);
     goToNextMovie();
   }
 

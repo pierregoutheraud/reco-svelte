@@ -14,6 +14,7 @@
   import { SvelteMap } from "svelte/reactivity";
   import { nonNullable } from "../../helpers/types.helpers";
   import throttle from "lodash.throttle";
+  import { moviePreferences } from "../../stores/moviePreferences.svelte";
 
   export type MovieEnriched = MovieTMDB & {
     reason: string;
@@ -92,13 +93,7 @@
   const onRecommendationsThrottled = throttle(onRecommendations, 500);
 
   async function loadRecommendations(
-    {
-      dislikedMoviesIds,
-      likedMoviesIds,
-      watchedMoviesIds
-    }: RecommendedFeedback = {
-      dislikedMoviesIds: [],
-      likedMoviesIds: [],
+    { watchedMoviesIds }: Pick<RecommendedFeedback, "watchedMoviesIds"> = {
       watchedMoviesIds: []
     }
   ) {
@@ -107,13 +102,17 @@
     enrichedMovies = undefined;
     recommendations = undefined;
 
+    // Use persisted preferences from store
+    console.log("disliked from store:", moviePreferences.disliked);
+    console.log("liked from store:", moviePreferences.liked);
+
     try {
       await streamAiRecommendations(
         {
           ...data,
           recommendations_count: 10,
-          disliked_movies_ids: dislikedMoviesIds ?? [],
-          liked_movies_ids: likedMoviesIds ?? [],
+          disliked_movies_ids: moviePreferences.disliked,
+          liked_movies_ids: moviePreferences.liked,
           watched_movies_ids: watchedMoviesIds ?? []
         },
         async (partialRecs) => {
@@ -135,7 +134,10 @@
 
   function handleComplete(data: RecommendedFeedback) {
     console.log("handleComplete", data);
-    loadRecommendations(data);
+
+    // No need to save liked/disliked here - already saved in RecommendationsList
+    // Just reload recommendations with the watched movies
+    loadRecommendations({ watchedMoviesIds: data.watchedMoviesIds });
   }
 </script>
 
