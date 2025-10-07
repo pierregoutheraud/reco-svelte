@@ -7,7 +7,7 @@
   import Button from "../Button/Button.svelte";
   import RecommendedList, {
     type RecommendedFeedback
-  } from "./RecommendedList.svelte";
+  } from "./RecommendationsList.svelte";
   import type { MovieTMDB } from "$lib/tmdb/tmdb.decl";
   import { fetchMovie, searchMovieByTitle } from "$lib/tmdb/tmdb";
   import type { Recommendation } from "$lib/api/recommendations.decl";

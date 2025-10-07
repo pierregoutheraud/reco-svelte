@@ -2,8 +2,8 @@
   import mongoApi from "$lib/api/ratings";
   import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
   import type { CrawlerRatings } from "$lib/api/ratings.decl";
-  import { CRAWLER_SOURCE } from "$lib/api/ratings.decl";
   import Ratings from "./Ratings.svelte";
+  import { watch } from "runed";
 
   interface Props {
     movieId: number;
@@ -12,31 +12,40 @@
 
   let { movieId, mediaType = TMDB_MEDIA_TYPE.MOVIE }: Props = $props();
 
-  let ratings = $state<CrawlerRatings | null>(null);
+  let ratings = $state<CrawlerRatings | null | undefined>(undefined);
   let loading = $state(true);
   let error = $state(false);
 
-  $effect(() => {
-    loading = true;
-    error = false;
+  watch(
+    () => movieId,
+    (currMovieId, prevMovieId) => {
+      // Skip if the movieId hasn't actually changed
+      if (ratings !== undefined && currMovieId === prevMovieId) {
+        return;
+      }
 
-    mongoApi
-      .fetchRatings(movieId, mediaType)
-      .then((fetchedRatings) => {
-        if (fetchedRatings) {
-          ratings = fetchedRatings;
-        } else {
+      loading = true;
+      error = false;
+
+      mongoApi
+        .fetchRatings(movieId, mediaType)
+        .then((fetchedRatings) => {
+          if (fetchedRatings) {
+            ratings = fetchedRatings;
+          } else {
+            error = true;
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching ratings:", err);
           error = true;
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching ratings:", err);
-        error = true;
-      })
-      .finally(() => {
-        loading = false;
-      });
-  });
+        })
+        .finally(() => {
+          loading = false;
+        });
+    },
+    { lazy: true }
+  );
 
   function formatScore(score: number | null): string {
     if (score === null) return "N/A";

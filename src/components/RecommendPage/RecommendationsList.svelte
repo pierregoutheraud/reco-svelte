@@ -7,10 +7,11 @@
 </script>
 
 <script lang="ts">
-  import type { MovieEnriched } from "./RecommendPage.svelte";
+  import type { MovieEnriched } from "./RecommendationsPage.svelte";
   import Card from "../Card/Card.svelte";
   import Button from "../Button/Button.svelte";
   import { ArrowRight, ThumbsDown, ThumbsUp } from "phosphor-svelte";
+  import { onMount } from "svelte";
 
   interface Props {
     movies: MovieEnriched[];
@@ -102,6 +103,7 @@
         onclick={() => {
           handleNextMovie();
         }}
+        disabled={currentMovieIndex >= movies.length - 1}
       >
         Next
       </Button>

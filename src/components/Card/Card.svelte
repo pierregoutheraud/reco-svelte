@@ -2,8 +2,9 @@
   import { ArrowLeft, ArrowRight, FilmSlate } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
   import PosterTmdb from "../Poster/PosterTmdb.svelte";
-  import type { MovieEnriched } from "../RecommendPage/RecommendPage.svelte";
+  import type { MovieEnriched } from "../RecommendPage/RecommendationsPage.svelte";
   import MovieRatings from "../MovieRatings/MovieRatings.svelte";
+  import { onMount } from "svelte";
 
   interface Props {
     movie: MovieEnriched;
@@ -14,8 +15,6 @@
   let releaseYear = $derived(
     movie.release_date ? new Date(movie.release_date).getFullYear() : null
   );
-
-  let imdbId = $derived(movie.imdb_id);
 </script>
 
 <div class="w-full flex flex-col gap-6 items-center p-4">
@@ -41,14 +40,4 @@
     <p class="font-semibold text-base">Overview:</p>
     <p class="text-sm">{movie.overview}</p>
   </div>
-
-  <!-- <Button
-    icon={FilmSlate}
-    class="!bg-imdb !text-black"
-    onclick={() => {
-      window.open(`https://www.imdb.com/title/${imdbId}`, "_blank");
-    }}
-  >
-    View on IMDb
-  </Button> -->
 </div>

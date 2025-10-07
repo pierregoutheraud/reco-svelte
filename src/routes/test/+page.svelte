@@ -3,7 +3,7 @@
   import Card from "../../components/Card/Card.svelte";
   import FormSelectOption from "../../components/Form/FormSelectOption.svelte";
   import OptimisticProgressBar from "../../components/OptimisticProgressBar/OptimisticProgressBar.svelte";
-  import type { MovieEnriched } from "../../components/RecommendPage/RecommendPage.svelte";
+  import type { MovieEnriched } from "../../components/RecommendPage/RecommendationsPage.svelte";
 
   // const movieId = 152601;
   // const moviePromise = fetchMovie(movieId).then((movie) => {

@@ -2,12 +2,12 @@
   import MoviesForm, {
     type MoviesFormData
   } from "../components/MoviesForm/MoviesForm.svelte";
-  import RecommendPage from "../components/RecommendPage/RecommendPage.svelte";
+  import RecommendationsStreamingPage from "../components/RecommendPage/RecommendationsStreamingPage.svelte";
 
   let data = $state<MoviesFormData | undefined>(undefined);
 
   // const data: MoviesFormData = {
-  //   era: [1990, 2010],
+  //   era: [1990, 2025],
   //   mood: "mystery",
   //   discovery: "hidden",
   //   duration: "under_2_hours",
@@ -16,7 +16,7 @@
 </script>
 
 {#if !!data}
-  <RecommendPage {data} />
+  <RecommendationsStreamingPage {data} />
 {:else}
   <MoviesForm
     onComplete={(d) => {

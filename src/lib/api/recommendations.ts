@@ -6,7 +6,7 @@ import { BASE_API_URL } from "../../constants/api.constants";
 import { isDev } from "../../helpers/env.helpers";
 
 /**
- * Fetch movie recommendations from the API
+ * Fetch movie recommendations from the API (non-streaming)
  */
 export async function fetchAiRecommendations(
   request: RecommendationRequest,
@@ -29,6 +29,69 @@ export async function fetchAiRecommendations(
   }
 
   return response.json();
+}
+
+/**
+ * Stream movie recommendations from the API
+ * Calls onUpdate with partial recommendations as they're generated
+ */
+export async function streamAiRecommendations(
+  request: RecommendationRequest,
+  onUpdate: (recommendations: RecommendationResponse["recommendations"]) => void
+): Promise<void> {
+  const response = await fetch(`${BASE_API_URL}/recommend/stream`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(request)
+  });
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status} ${response.statusText}`);
+  }
+
+  if (!response.body) {
+    throw new Error("No response body");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) break;
+
+      // Append new data to buffer
+      buffer += decoder.decode(value, { stream: true });
+
+      // Split by newlines to get complete JSON objects
+      const lines = buffer.split("\n");
+
+      // Keep the last incomplete line in the buffer
+      buffer = lines.pop() ?? "";
+
+      // Process each complete line
+      for (const line of lines) {
+        if (line.trim()) {
+          try {
+            const partialObject = JSON.parse(line);
+            // Call the update callback with the recommendations array
+            if (partialObject.recommendations) {
+              onUpdate(partialObject.recommendations);
+            }
+          } catch (error) {
+            console.error("Failed to parse JSON line:", line, error);
+          }
+        }
+      }
+    }
+  } finally {
+    reader.releaseLock();
+  }
 }
 
 export async function fetchAiRecommendationsMock(
