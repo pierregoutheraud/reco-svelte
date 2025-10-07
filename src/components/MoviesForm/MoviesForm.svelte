@@ -104,11 +104,12 @@
   </FormStep> -->
 
   <FormStep id="hello">
-    <div class="flex flex-col gap-4 self-center">
+    <div class="flex flex-col gap-4 self-center w-full px-6">
       <h1 class="text-3xl font-bold text-center">Hello!</h1>
-      <h2 class="text-lg/6 px-4 text-center">
-        Let's find a movie for you. This process will take less than 2 minutes.
-      </h2>
+      <p class="text-lg/6 text-center">Let's find a movie for you.</p>
+      <p class="text-lg/6 text-center">
+        This process will take less than 2 minutes.
+      </p>
     </div>
   </FormStep>
 

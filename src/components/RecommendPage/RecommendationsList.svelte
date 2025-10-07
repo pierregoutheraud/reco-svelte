@@ -103,7 +103,6 @@
         onclick={() => {
           handleNextMovie();
         }}
-        disabled={currentMovieIndex >= movies.length - 1}
       >
         Next
       </Button>
