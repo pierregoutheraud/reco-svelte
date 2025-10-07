@@ -1,9 +1,6 @@
 <script lang="ts">
   import type { MoviesFormData } from "../MoviesForm/MoviesForm.svelte";
-  import {
-    fetchAiRecommendations,
-    fetchAiRecommendationsMock
-  } from "$lib/api/recommendations";
+  import { fetchAiRecommendations } from "$lib/api/recommendations";
   import { onMount } from "svelte";
   import OptimisticProgressBar from "../OptimisticProgressBar/OptimisticProgressBar.svelte";
   import { ArrowsClockwise, Warning } from "phosphor-svelte";
@@ -11,7 +8,7 @@
   import RecommendedList, {
     type RecommendedFeedback
   } from "./RecommendedList.svelte";
-  import type { MovieMinTMDB, MovieTMDB } from "$lib/tmdb/tmdb.decl";
+  import type { MovieTMDB } from "$lib/tmdb/tmdb.decl";
   import { fetchMovie, searchMovieByTitle } from "$lib/tmdb/tmdb";
   import type { Recommendation } from "$lib/api/recommendations.decl";
 
@@ -128,7 +125,7 @@
   {:else if movies}
     <RecommendedList {movies} onComplete={handleComplete} />
   {:else if error}
-    <div class="flex flex-col gap-6 items-center">
+    <div class="flex flex-col gap-6 items-center self-center">
       <div class="flex flex-col gap-1 items-center">
         <Warning size={60} class="text-red-500" />
         <p class="text-red-500">{error}</p>

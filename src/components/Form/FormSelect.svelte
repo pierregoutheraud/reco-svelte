@@ -28,7 +28,7 @@
   };
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 flex-1">
   {#each options as option}
     <FormSelectOption
       label={option.label}

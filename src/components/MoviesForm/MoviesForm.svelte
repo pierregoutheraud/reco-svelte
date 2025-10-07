@@ -32,11 +32,85 @@
 </script>
 
 <Form {onComplete}>
-  <FormStep
-    id="hello"
-    title="Hello!"
-    question="Let's find a movie for you. This process will take less than 1 minute."
-  />
+  <!-- <FormStep
+    id="test"
+    title="Inspiration"
+    question="Select movies that you love and that should inspire the recommendations."
+    skippable
+  >
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
+      ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus
+      duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar
+      vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl
+      malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
+      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
+      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
+      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
+      himenaeos.
+    </p>
+  </FormStep> -->
+
+  <FormStep id="hello">
+    <div class="flex flex-col gap-4 self-center">
+      <h1 class="text-3xl font-bold text-center">Hello!</h1>
+      <h2 class="text-lg/6 px-4 text-center">
+        Let's find a movie for you. This process will take less than 1 minute.
+      </h2>
+    </div>
+  </FormStep>
 
   <FormStep
     id="era"

@@ -87,9 +87,8 @@
 </script>
 
 <div
-  class="flex flex-col relative w-full h-full p-6 gap-6 overflow-scroll pb-[200px] no-scrollbar"
+  class="flex flex-col relative w-full h-full p-4 gap-6 overflow-scroll no-scrollbar"
 >
   <FormProgress />
   {@render children()}
 </div>
-<!-- border-4 border-white/30  -->

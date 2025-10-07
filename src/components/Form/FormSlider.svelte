@@ -32,7 +32,7 @@
   });
 </script>
 
-<div class="h-full py-10 flex justify-center">
+<div class="flex-1 py-10 flex items-center justify-center">
   <Slider.Root
     type="multiple"
     {min}

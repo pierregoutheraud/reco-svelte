@@ -32,10 +32,15 @@
 
   <MovieRatings movieId={movie.id} />
 
-  <p class="text-left text-sm bg-indigo-900 p-2">
-    {movie.reason}
-  </p>
-  <p class="text-left text-sm">{movie.overview}</p>
+  <div class="flex flex-col gap-1 bg-indigo-900 p-4">
+    <p class="font-semibold text-base">Why we recommend this movie to you:</p>
+    <p class="text-sm">{movie.reason}</p>
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <p class="font-semibold text-base">Overview:</p>
+    <p class="text-sm">{movie.overview}</p>
+  </div>
 
   <!-- <Button
     icon={FilmSlate}

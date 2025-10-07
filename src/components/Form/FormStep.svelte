@@ -14,8 +14,8 @@
 
   interface Props {
     id: string;
-    title: string;
-    question: string;
+    title?: string;
+    question?: string;
     children?: Snippet;
     required?: boolean;
     skippable?: boolean;
@@ -60,27 +60,50 @@
 </script>
 
 {#if isActive}
-  <div class="flex flex-col gap-4">
-    <h1 class="text-3xl font-bold text-center">{title}</h1>
-    <h2 class="text-lg/6 px-4 text-center">{question}</h2>
-  </div>
-
-  {@render children?.()}
-
-  <div
-    class="absolute bottom-0 left-0 right-0 flex justify-between w-full p-4 px-6 bg-background"
-  >
-    {#if stepIndex > 0}
-      <IconButton
-        component={ArrowLeft}
-        size={24}
-        onclick={() => formContext.goToPreviousStep()}
-      />
+  <div class="flex flex-1 flex-col min-h-0 justify-between gap-4">
+    {#if title || question}
+      <header>
+        <div class="flex flex-col gap-4">
+          {#if title}
+            <h1 class="text-3xl font-bold text-center">{title}</h1>
+          {/if}
+          {#if question}
+            <h2 class="text-lg/6 px-4 text-center">{question}</h2>
+          {/if}
+        </div>
+      </header>
     {/if}
 
-    <div class="flex gap-2 ml-auto">
-      {#if skippable}
-        {#if hasData}
+    <div class="flex flex-1 overflow-auto">
+      {@render children?.()}
+    </div>
+
+    <div class="flex justify-between w-full bg-background">
+      {#if stepIndex > 0}
+        <IconButton
+          component={ArrowLeft}
+          size={24}
+          onclick={() => formContext.goToPreviousStep()}
+        />
+      {/if}
+
+      <div class="flex gap-2 ml-auto">
+        {#if skippable}
+          {#if hasData}
+            <IconButton
+              component={ArrowRight}
+              size={24}
+              disabled={!canContinue}
+              onclick={() => {
+                formContext.goToNextStep();
+              }}
+            />
+          {:else}
+            <Button onclick={() => formContext.goToNextStep()}>
+              <div class="flex gap-2">Skip <ArrowRight size={24} /></div>
+            </Button>
+          {/if}
+        {:else}
           <IconButton
             component={ArrowRight}
             size={24}
@@ -89,21 +112,8 @@
               formContext.goToNextStep();
             }}
           />
-        {:else}
-          <Button onclick={() => formContext.goToNextStep()}>
-            <div class="flex gap-2">Skip <ArrowRight size={24} /></div>
-          </Button>
         {/if}
-      {:else}
-        <IconButton
-          component={ArrowRight}
-          size={24}
-          disabled={!canContinue}
-          onclick={() => {
-            formContext.goToNextStep();
-          }}
-        />
-      {/if}
+      </div>
     </div>
   </div>
 {/if}

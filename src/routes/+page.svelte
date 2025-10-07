@@ -13,8 +13,6 @@
   //   duration: "under_2_hours",
   //   inspiration_movies_ids: [152601]
   // };
-
-  // $inspect(data);
 </script>
 
 {#if !!data}

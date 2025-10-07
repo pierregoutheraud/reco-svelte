@@ -69,7 +69,7 @@
   };
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 flex-1">
   <!-- Selected Movies -->
   {#if selectedMovies.length > 0}
     <div class="flex flex-col gap-2">

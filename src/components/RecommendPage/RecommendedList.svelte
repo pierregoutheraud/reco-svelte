@@ -58,7 +58,7 @@
   <div class="w-full h-[200px]"></div>
 
   <div
-    class="flex flex-col gap-4 absolute bottom-0 left-0 right-0 p-4 bg-background/90"
+    class="flex flex-col gap-4 sticky bottom-0 left-0 right-0 p-4 bg-background/90"
   >
     <!-- <Button
       icon={ArrowsClockwise}
