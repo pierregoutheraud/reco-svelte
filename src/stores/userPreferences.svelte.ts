@@ -198,6 +198,14 @@ class UserPreferencesStore {
     return this.movieHistory.find((h) => h.id === movieId);
   }
 
+  removeFromHistory(movieId: number): void {
+    const index = this.movieHistory.findIndex((h) => h.id === movieId);
+    if (index > -1) {
+      this.movieHistory.splice(index, 1);
+      this.save();
+    }
+  }
+
   addMultipleAlreadyRecommended(movieIds: number[]): void {
     let changed = false;
 

@@ -10,12 +10,20 @@
   interface Props {
     movies: MovieEnriched[];
     onComplete: () => void;
+    currentMovieId?: number;
   }
 
-  let { movies, onComplete }: Props = $props();
+  let { movies, onComplete, currentMovieId = $bindable() }: Props = $props();
 
   let currentMovieIndex = $state(0);
   let currentMovie = $derived(movies[currentMovieIndex]);
+
+  // Update the bindable currentMovieId when current movie changes
+  $effect(() => {
+    if (currentMovie) {
+      currentMovieId = currentMovie.id;
+    }
+  });
 
   function goToNextMovie() {
     // Mark this movie as already recommended (shown to user) with its reason

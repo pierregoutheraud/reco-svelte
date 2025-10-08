@@ -12,6 +12,7 @@
 
   let loading = $state(true);
   let movies = $state<MovieEnriched[]>([]);
+  let currentMovieId = $state<number | undefined>(undefined);
 
   onMount(async () => {
     await loadHistory();
@@ -52,10 +53,12 @@
     loadHistory();
   }
 
-  function clearHistory() {
+  function clearCurrentMovie() {
+    if (!currentMovieId) return;
+
     if (confirm(m.history_clear_confirmation())) {
-      userPreferences.clear();
-      movies = [];
+      userPreferences.removeFromHistory(currentMovieId);
+      movies = movies.filter((movie) => movie.id !== currentMovieId);
     }
   }
 </script>
@@ -71,7 +74,7 @@
     <h1 class="text-xl font-bold">{m.history_title()}</h1>
 
     {#if movies.length > 0}
-      <Button onclick={clearHistory} class="!bg-red-500">
+      <Button onclick={clearCurrentMovie} class="!bg-red-500">
         {m.history_clear_button()}
       </Button>
     {:else}
@@ -94,6 +97,10 @@
       </a>
     </div>
   {:else}
-    <RecommendationsList {movies} onComplete={handleComplete} />
+    <RecommendationsList
+      {movies}
+      onComplete={handleComplete}
+      bind:currentMovieId
+    />
   {/if}
 </div>

@@ -42,7 +42,7 @@
   "history_clear_button": "Effacer",
   "history_empty": "Aucun historique de recommandations pour le moment.",
   "history_get_recommendations_link": "Obtenir des recommandations",
-  "history_clear_confirmation": "Voulez-vous vraiment effacer tout votre historique de films ?",
+  "history_clear_confirmation": "Voulez-vous vraiment retirer ce film de votre historique ?",
   "recommendations_try_again": "Réessayer",
   "recommendations_disliked_button": "Je n'ai pas aimé",
   "recommendations_liked_button": "J'ai aimé",
