@@ -4,6 +4,7 @@
   import FormSelectOption from "../../components/Form/FormSelectOption.svelte";
   import OptimisticProgressBar from "../../components/OptimisticProgressBar/OptimisticProgressBar.svelte";
   import type { MovieEnriched } from "../../components/RecommendPage/RecommendationsPage.svelte";
+  import Button from "../../components/Button/Button.svelte";
 
   // const movieId = 152601;
   // const moviePromise = fetchMovie(movieId).then((movie) => {
@@ -19,7 +20,7 @@
   <Card {movie} />
 {/await} -->
 
-<OptimisticProgressBar
+<!-- <OptimisticProgressBar
   texts={[
     "Analyzing your taste...",
     "Scanning decades of cinema...",
@@ -29,4 +30,6 @@
   ]}
   subtext="This will take around 40 seconds."
   duration={60}
-/>
+/> -->
+
+<Button>Test</Button>

@@ -32,6 +32,7 @@
   class={[
     className,
     "flex items-center justify-center h-10 px-4 text-base cursor-pointer",
+    "active:opacity-80 transition-opacity duration-200",
     {
       "bg-main": !disabled,
       "bg-gray-800 opacity-70 !cursor-not-allowed": disabled
