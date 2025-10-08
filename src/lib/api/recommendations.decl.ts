@@ -23,7 +23,15 @@ export interface RecommendationResponse {
 
 export interface RecommendationRequest {
   era: [number, number];
-  mood: "comedy" | "drama" | "action" | "scifi_fantasy" | "horror" | "mystery";
+  mood:
+    | "comedy_feelgood"
+    | "drama_emotional"
+    | "action_adventure"
+    | "thriller_suspense"
+    | "horror"
+    | "scifi"
+    | "fantasy"
+    | "mystery_cerebral";
   discovery: "popular" | "hidden" | "surprise";
   duration: "under_2_hours" | "it_doesnt_matter";
   inspiration_movies_ids?: number[];

@@ -63,12 +63,16 @@
   <div class="flex flex-1 flex-col min-h-0 justify-between gap-4">
     {#if title || question}
       <header>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
           {#if title}
-            <h1 class="text-3xl font-bold text-center">{title}</h1>
+            <h1
+              class="text-3xl font-title font-bold text-center tracking-wider"
+            >
+              {title}
+            </h1>
           {/if}
           {#if question}
-            <h2 class="text-lg/6 px-4 text-center">{question}</h2>
+            <h2 class="text-base px-4 text-center">{question}</h2>
           {/if}
         </div>
       </header>

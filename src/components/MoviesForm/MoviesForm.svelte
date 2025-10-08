@@ -2,12 +2,14 @@
   export type MoviesFormData = {
     era: [number, number];
     mood:
-      | "comedy"
-      | "drama"
-      | "action"
-      | "scifi_fantasy"
+      | "comedy_feelgood"
+      | "drama_emotional"
+      | "action_adventure"
+      | "thriller_suspense"
       | "horror"
-      | "mystery";
+      | "scifi"
+      | "fantasy"
+      | "mystery_cerebral";
     discovery: "popular" | "hidden" | "surprise";
     duration: "under_2_hours" | "it_doesnt_matter";
     inspiration_movies_ids?: number[];
@@ -20,7 +22,6 @@
   import FormStep from "../Form/FormStep.svelte";
   import FormSlider from "../Form/FormSlider.svelte";
   import FormSelect from "../Form/FormSelect.svelte";
-  import FormInput from "../Form/FormInput.svelte";
   import FormSelectMovies from "../Form/FormSelectMovies/FormSelectMovies.svelte";
   import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
 
@@ -34,77 +35,6 @@
 </script>
 
 <Form {onComplete}>
-  <!-- <FormStep
-    id="test"
-    title="Inspiration"
-    question="Select movies that you love and that should inspire the recommendations."
-    skippable
-  >
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
-      ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus
-      duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar
-      vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl
-      malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-      faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-      pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor.
-      Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa
-      nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class
-      aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos
-      himenaeos.
-    </p>
-  </FormStep> -->
-
   <FormStep
     id="era"
     title="Era"
@@ -117,40 +47,50 @@
   <FormStep
     id="mood"
     title="Mood"
-    question="What's your mood tonight?"
+    question="What kind of mood are you going for?"
     required
   >
     <FormSelect
       options={[
         {
-          label: "Need a good laugh",
-          description: "Comedy/Light",
-          value: "comedy"
+          label: "A good laugh",
+          description: "Comedy / Feel-good / Rom-com",
+          value: "comedy_feelgood"
         },
         {
-          label: "Want to feel something deep",
-          description: "Drama/Emotional",
-          value: "drama"
+          label: "Heartfelt & moving",
+          description: "Drama / Emotional / Romance",
+          value: "drama_emotional"
         },
         {
-          label: "Craving excitement",
-          description: "Thriller/Action",
-          value: "action"
+          label: "Adrenaline rush",
+          description: "Action / Adventure / Big set-pieces",
+          value: "action_adventure"
         },
         {
-          label: "Looking to escape reality",
-          description: "Sci-Fi/Fantasy",
-          value: "scifi_fantasy"
+          label: "Something suspenseful",
+          description: "Thriller / Tension / High stakes",
+          value: "thriller_suspense"
         },
         {
-          label: "Want to be scared",
-          description: "Suspense/Horror",
+          label: "Scare me",
+          description: "Horror / Creepy / Disturbing",
           value: "horror"
         },
         {
-          label: "Something thought-provoking",
-          description: "Mystery/Cerebral",
-          value: "mystery"
+          label: "Big ideas",
+          description: "Sci-Fi / High-concept / Futuristic",
+          value: "scifi"
+        },
+        {
+          label: "Escape into another world",
+          description: "Fantasy / Mythic / Magical",
+          value: "fantasy"
+        },
+        {
+          label: "Clever & cerebral",
+          description: "Mystery / Psychological / Noir",
+          value: "mystery_cerebral"
         }
       ]}
     />

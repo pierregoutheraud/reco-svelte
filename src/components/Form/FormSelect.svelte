@@ -51,4 +51,6 @@
       {/if}
     </button> -->
   {/each}
+
+  <div class="h-12 w-full shrink-0"></div>
 </div>
