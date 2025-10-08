@@ -103,29 +103,6 @@
     </p>
   </FormStep> -->
 
-  <FormStep id="hello">
-    <div class="flex flex-col gap-4 self-center w-full px-6">
-      <h1 class="text-3xl font-bold text-center">Hello!</h1>
-      <p class="text-base text-center">Let's find a movie for you.</p>
-      <p class="text-base text-center">
-        This process will take less than 2 minutes.
-      </p>
-      <a
-        href="/history"
-        class="text-base text-center text-blue-500 underline underline-offset-3"
-      >
-        Recommendations history
-      </a>
-      <!-- <p class="text-base text-center">
-        Powered by <a
-          href="https://www.miru.live"
-          target="_blank"
-          class="text-blue-500 underline underline-offset-3">miru.live</a
-        >
-      </p> -->
-    </div>
-  </FormStep>
-
   <FormStep
     id="era"
     title="Era"
