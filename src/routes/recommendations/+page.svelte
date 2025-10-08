@@ -7,8 +7,6 @@
   // Retrieve form data from page state
   const formData = $derived(page.state.formData as MoviesFormData | undefined);
 
-  $inspect(formData);
-
   // const formDataMock: MoviesFormData = {
   //   era: [1990, 2025],
   //   mood: "mystery",

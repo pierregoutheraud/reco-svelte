@@ -11,8 +11,8 @@
 
   let progress = $state(0);
   let currentTextIndex = $state(0);
-  let intervalId: number | null = null;
-  let textIntervalId: number | null = null;
+  let intervalId: ReturnType<typeof setInterval> | null = null;
+  let textIntervalId: ReturnType<typeof setInterval> | null = null;
 
   const maxProgress = 95;
   const updateFrequency = 50; // Update every 50ms for smooth animation
