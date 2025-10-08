@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
 
 @theme {
   --font-*: initial;
@@ -46,7 +48,7 @@
     font-style: normal;
     height: 100%;
     /* @apply text-gray-50 bg-gray-950; */
-    @apply bg-gray-800 text-gray-50 flex justify-center items-center;
+    @apply flex items-center justify-center bg-gray-800 text-gray-50;
   }
 
   html,

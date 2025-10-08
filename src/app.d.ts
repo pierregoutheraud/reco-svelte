@@ -1,18 +1,11 @@
-// See https://kit.svelte.dev/docs/types#app
+// See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
-
-import type { MoviesFormData } from "./components/MoviesForm/MoviesForm.svelte";
-
 declare global {
   namespace App {
     // interface Error {}
-    interface Locals {
-      csrfToken: string;
-    }
+    // interface Locals {}
     // interface PageData {}
-    interface PageState {
-      formData?: MoviesFormData;
-    }
+    // interface PageState {}
     // interface Platform {}
   }
 }

@@ -1,20 +1,48 @@
 import { paraglideVitePlugin } from "@inlang/paraglide-js";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vitest/config";
 import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig, type UserConfig } from "vitest/config";
 
-export default defineConfig(async () => {
-  const paraglidePlugins = await paraglideVitePlugin({
-    project: "./project.inlang",
-    outdir: "./src/lib/paraglide",
-    strategy: ["cookie", "globalVariable", "baseLocale"]
-  });
-
-  const pluginsArray = Array.isArray(paraglidePlugins)
-    ? paraglidePlugins
-    : [paraglidePlugins];
-
-  return {
-    plugins: [sveltekit(), ...pluginsArray],
-    test: { include: ["src/**/*.{test,spec}.{js,ts}"] }
-  } as UserConfig;
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+    sveltekit(),
+    paraglideVitePlugin({
+      project: "./project.inlang",
+      outdir: "./src/lib/paraglide"
+    })
+  ],
+  optimizeDeps: {
+    // This fixes issues with vite where it reloads because it discover new dependencies
+    entries: ["src/routes/**/+*.{js,ts,svelte}", "src/hooks*.{js,ts}"]
+  },
+  test: {
+    expect: { requireAssertions: true },
+    projects: [
+      {
+        extends: "./vite.config.ts",
+        test: {
+          name: "client",
+          environment: "browser",
+          browser: {
+            enabled: true,
+            provider: "playwright",
+            instances: [{ browser: "chromium" }]
+          },
+          include: ["src/**/*.svelte.{test,spec}.{js,ts}"],
+          exclude: ["src/lib/server/**"],
+          setupFiles: ["./vitest-setup-client.ts"]
+        }
+      },
+      {
+        extends: "./vite.config.ts",
+        test: {
+          name: "server",
+          environment: "node",
+          include: ["src/**/*.{test,spec}.{js,ts}"],
+          exclude: ["src/**/*.svelte.{test,spec}.{js,ts}"]
+        }
+      }
+    ]
+  }
 });

@@ -105,7 +105,10 @@
             />
           {:else}
             <Button onclick={() => formContext.goToNextStep()}>
-              <div class="flex gap-2">{m.form_skip_button()} <ArrowRight size={24} /></div>
+              <div class="flex gap-2">
+                {m.form_skip_button()}
+                <ArrowRight size={24} />
+              </div>
             </Button>
           {/if}
         {:else}
