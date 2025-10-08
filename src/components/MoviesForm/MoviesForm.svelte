@@ -24,6 +24,7 @@
   import FormSelect from "../Form/FormSelect.svelte";
   import FormSelectMovies from "../Form/FormSelectMovies/FormSelectMovies.svelte";
   import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
+  import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
     onComplete: (data: MoviesFormData) => void;
@@ -37,8 +38,8 @@
 <Form {onComplete}>
   <FormStep
     id="era"
-    title="Era"
-    question="Which era of movies do you want to dive into?"
+    title={m.form_era_title()}
+    question={m.form_era_question()}
     required
   >
     <FormSlider min={1920} max={currentYear} step={1} multiple />
@@ -46,50 +47,50 @@
 
   <FormStep
     id="mood"
-    title="Mood"
-    question="What kind of mood are you going for?"
+    title={m.form_mood_title()}
+    question={m.form_mood_question()}
     required
   >
     <FormSelect
       options={[
         {
-          label: "A good laugh",
-          description: "Comedy / Feel-good / Rom-com",
+          label: m.form_mood_comedy_label(),
+          description: m.form_mood_comedy_description(),
           value: "comedy_feelgood"
         },
         {
-          label: "Heartfelt & moving",
-          description: "Drama / Emotional / Romance",
+          label: m.form_mood_drama_label(),
+          description: m.form_mood_drama_description(),
           value: "drama_emotional"
         },
         {
-          label: "Adrenaline rush",
-          description: "Action / Adventure / Big set-pieces",
+          label: m.form_mood_action_label(),
+          description: m.form_mood_action_description(),
           value: "action_adventure"
         },
         {
-          label: "Something suspenseful",
-          description: "Thriller / Tension / High stakes",
+          label: m.form_mood_thriller_label(),
+          description: m.form_mood_thriller_description(),
           value: "thriller_suspense"
         },
         {
-          label: "Scare me",
-          description: "Horror / Creepy / Disturbing",
+          label: m.form_mood_horror_label(),
+          description: m.form_mood_horror_description(),
           value: "horror"
         },
         {
-          label: "Big ideas",
-          description: "Sci-Fi / High-concept / Futuristic",
+          label: m.form_mood_scifi_label(),
+          description: m.form_mood_scifi_description(),
           value: "scifi"
         },
         {
-          label: "Escape into another world",
-          description: "Fantasy / Mythic / Magical",
+          label: m.form_mood_fantasy_label(),
+          description: m.form_mood_fantasy_description(),
           value: "fantasy"
         },
         {
-          label: "Clever & cerebral",
-          description: "Mystery / Psychological / Noir",
+          label: m.form_mood_mystery_label(),
+          description: m.form_mood_mystery_description(),
           value: "mystery_cerebral"
         }
       ]}
@@ -98,22 +99,22 @@
 
   <FormStep
     id="discovery"
-    title="Discovery"
-    question="What kind of pick do you want tonight?"
+    title={m.form_discovery_title()}
+    question={m.form_discovery_question()}
     required
   >
     <FormSelect
       options={[
         {
-          label: "Popular movies",
+          label: m.form_discovery_popular_label(),
           value: "popular"
         },
         {
-          label: "Hidden gems",
+          label: m.form_discovery_hidden_label(),
           value: "hidden"
         },
         {
-          label: "Surprise me",
+          label: m.form_discovery_surprise_label(),
           value: "surprise"
         }
       ]}
@@ -122,18 +123,18 @@
 
   <FormStep
     id="duration"
-    title="Duration"
-    question="How much time do you have?"
+    title={m.form_duration_title()}
+    question={m.form_duration_question()}
     required
   >
     <FormSelect
       options={[
         {
-          label: "Under 2 hours",
+          label: m.form_duration_under2h_label(),
           value: "under_2_hours"
         },
         {
-          label: "It doesn't matter",
+          label: m.form_duration_doesnt_matter_label(),
           value: "it_doesnt_matter"
         }
       ]}
@@ -142,8 +143,8 @@
 
   <FormStep
     id="inspiration_movies_ids"
-    title="Inspiration"
-    question="Select movies that you love and that should inspire the recommendations."
+    title={m.form_inspiration_title()}
+    question={m.form_inspiration_question()}
     skippable
   >
     <FormSelectMovies />

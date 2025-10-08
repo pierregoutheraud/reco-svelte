@@ -6,19 +6,19 @@
   import type { MovieEnriched } from "../../components/RecommendPage/RecommendationsPage.svelte";
   import Button from "../../components/Button/Button.svelte";
 
-  // const movieId = 152601;
-  // const moviePromise = fetchMovie(movieId).then((movie) => {
-  //   const movieEnriched: MovieEnriched = {
-  //     ...movie!,
-  //     reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-  //   };
-  //   return movieEnriched;
-  // });
+  const movieId = 152601;
+  const moviePromise = fetchMovie(movieId).then((movie) => {
+    const movieEnriched: MovieEnriched = {
+      ...movie!,
+      reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    };
+    return movieEnriched;
+  });
 </script>
 
-<!-- {#await moviePromise then movie}
+{#await moviePromise then movie}
   <Card {movie} />
-{/await} -->
+{/await}
 
 <!-- <OptimisticProgressBar
   texts={[
@@ -31,5 +31,3 @@
   subtext="This will take around 40 seconds."
   duration={60}
 /> -->
-
-<Button>Test</Button>

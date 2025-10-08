@@ -13,6 +13,8 @@
   import { nonNullable } from "../../helpers/types.helpers";
   import throttle from "lodash.throttle";
   import { userPreferences } from "../../stores/userPreferences.svelte";
+  import * as m from "$lib/paraglide/messages.js";
+  import { getLocale } from "$lib/paraglide/runtime";
 
   export type MovieEnriched = MovieTMDB & {
     reason: string;
@@ -97,13 +99,15 @@
     recommendations = undefined;
 
     try {
+      const locale = getLocale();
       await streamAiRecommendations(
         {
           ...data,
           recommendations_count: 10,
           disliked_movies_ids: userPreferences.disliked,
           liked_movies_ids: userPreferences.liked,
-          already_recommended_movies_ids: userPreferences.alreadyRecommended
+          already_recommended_movies_ids: userPreferences.alreadyRecommended,
+          locale
         },
         async (partialRecs) => {
           if (!partialRecs) {
@@ -116,7 +120,7 @@
     } catch (err) {
       console.error("❌ Streaming error:", err);
       error =
-        err instanceof Error ? err.message : "Failed to fetch recommendations";
+        err instanceof Error ? err.message : m.error_fetch_recommendations();
     } finally {
       loading = false;
     }
@@ -139,7 +143,7 @@
         <p class="text-red-500">{error}</p>
       </div>
       <Button onclick={() => loadRecommendations()} icon={ArrowsClockwise}>
-        Try again
+        {m.recommendations_try_again()}
       </Button>
     </div>
   {:else if enrichedMovies?.length}
@@ -148,13 +152,13 @@
     <div class="flex h-full w-full items-center justify-center">
       <OptimisticProgressBar
         texts={[
-          "Analyzing your taste...",
-          "Scanning decades of cinema...",
-          "Consulting the film archives...",
-          "Reading between the frames...",
-          "Curating your perfect lineup..."
+          m.recommendations_loading_1(),
+          m.recommendations_loading_2(),
+          m.recommendations_loading_3(),
+          m.recommendations_loading_4(),
+          m.recommendations_loading_5()
         ]}
-        subtext={`This process will take around 20 seconds.`}
+        subtext={m.recommendations_loading_subtext({ seconds: 30 })}
         duration={30}
       />
     </div>

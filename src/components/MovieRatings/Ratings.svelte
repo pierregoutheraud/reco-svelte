@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CRAWLER_SOURCE, type CrawlerRatings } from "$lib/api/ratings.decl";
   import RatingItem from "./RatingItem.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
     ratings: Partial<CrawlerRatings>;
@@ -99,7 +100,7 @@
 
   {#if ratings.average?.score}
     <RatingItem
-      title="Average"
+      title={m.ratings_average()}
       scores={[
         {
           value: ratings.average.score

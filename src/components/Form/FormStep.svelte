@@ -11,6 +11,7 @@
   import type { Snippet } from "svelte";
   import Button from "../Button/Button.svelte";
   import type { FormContext } from "./Form.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
     id: string;
@@ -104,7 +105,7 @@
             />
           {:else}
             <Button onclick={() => formContext.goToNextStep()}>
-              <div class="flex gap-2">Skip <ArrowRight size={24} /></div>
+              <div class="flex gap-2">{m.form_skip_button()} <ArrowRight size={24} /></div>
             </Button>
           {/if}
         {:else}

@@ -4,6 +4,7 @@
   import MovieRatings from "../MovieRatings/MovieRatings.svelte";
   import { FilmStrip } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
     movie: MovieEnriched;
@@ -31,12 +32,12 @@
   <MovieRatings movieId={movie.id} />
 
   <div class="flex flex-col gap-1 bg-indigo-900 p-4">
-    <p class="font-semibold text-base">Why we recommend this movie to you:</p>
+    <p class="font-semibold text-base">{m.movie_card_why_recommend()}</p>
     <p class="text-sm">{movie.reason}</p>
   </div>
 
   <div class="flex flex-col gap-1">
-    <p class="font-semibold text-base">Overview:</p>
+    <p class="font-semibold text-base">{m.movie_card_overview()}</p>
     <p class="text-sm">{movie.overview}</p>
   </div>
 
@@ -47,6 +48,6 @@
       window.open(`https://www.miru.live/movie/${movie.id}`, "_blank");
     }}
   >
-    View on miru
+    {m.movie_card_view_on_miru()}
   </Button>
 </div>

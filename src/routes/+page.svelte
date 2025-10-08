@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
   import Button from "../components/Button/Button.svelte";
   import { userPreferences } from "../stores/userPreferences.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   const hasHistory = $derived(userPreferences.history.length > 0);
 
@@ -14,27 +15,27 @@
   class="relative flex flex-1 h-full flex-col gap-4 items-center justify-center w-full px-8"
 >
   <h1 class="text-2xl font-bold text-center">
-    Let's find a movie<br />for you!
+    {@html m.home_title()}
   </h1>
 
   <p class="text-base text-center">
-    This process will take<br />less than 2 minutes.
+    {@html m.home_subtitle()}
   </p>
 
-  <Button onclick={handleStart}>Start</Button>
+  <Button onclick={handleStart}>{m.home_start_button()}</Button>
 
   {#if hasHistory}
-    <p class="text-sm text-gray-500">or</p>
+    <p class="text-sm text-gray-500">{m.home_or()}</p>
     <a
       href="/history"
       class="text-base text-center text-blue-500 underline underline-offset-3"
     >
-      Recommendations history
+      {m.home_history_link()}
     </a>
   {/if}
 
   <p class="absolute bottom-6 right-6 text-sm text-center text-gray-500">
-    Powered by
+    {m.home_powered_by()}
     <a
       href="https://www.miru.live"
       target="_blank"

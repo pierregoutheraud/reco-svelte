@@ -6,6 +6,7 @@
   import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
   import FormSelectedMovieItem from "./FormSelectedMovieItem.svelte";
   import FormSearchResultMovieItem from "./FormSearchResultMovieItem.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   const { setValue } = getContext<FormContext>("form");
   const { id: stepId } = getContext<FormStepContext>("form_step");
@@ -85,7 +86,7 @@
       type="text"
       class="w-full bg-white text-black p-3 outline-none placeholder:text-gray-400"
       autofocus
-      placeholder="Search for a movie"
+      placeholder={m.form_search_placeholder()}
       value={searchQuery}
       oninput={(e) => onSearchInput(e.currentTarget.value)}
     />
@@ -93,7 +94,7 @@
       <div
         class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
       >
-        Searching...
+        {m.form_search_searching()}
       </div>
     {/if}
   </div>
@@ -111,6 +112,8 @@
       {/each}
     </div>
   {:else if searchResults !== undefined && searchResults.length === 0 && !isSearching}
-    <div class="text-center text-white/40 py-4 text-sm">No movies found.</div>
+    <div class="text-center text-white/40 py-4 text-sm">
+      {m.form_search_no_results()}
+    </div>
   {/if}
 </div>

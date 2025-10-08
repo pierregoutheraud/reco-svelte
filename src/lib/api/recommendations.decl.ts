@@ -39,4 +39,5 @@ export interface RecommendationRequest {
   disliked_movies_ids?: number[];
   already_recommended_movies_ids?: number[];
   recommendations_count?: number;
+  locale?: "en" | "fr";
 }

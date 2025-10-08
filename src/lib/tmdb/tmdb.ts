@@ -6,6 +6,7 @@ import {
   type MovieTMDB,
   type SearchResultTMDB
 } from "./tmdb.decl";
+import { getLocale } from "$lib/paraglide/runtime.js";
 
 const tmdbQueue = new PQueue({
   intervalCap: 40,
@@ -17,7 +18,7 @@ const API_KEY = "1dafeeb8a6633e80399bd6c764873dd1";
 export async function tmdbCall<T>(
   endpoint: string,
   params: Record<string, string | number> = {},
-  language: string = "en"
+  language: string = getLocale()
 ): Promise<T | null> {
   return tmdbQueue.add(async () => {
     const urlParams = new URLSearchParams({
@@ -43,12 +44,20 @@ export async function tmdbCall<T>(
   });
 }
 
-export async function searchMovieByTitle(title: string, year?: number) {
-  const dataSearch = await tmdbCall<SearchResultTMDB>("/search/movie", {
-    query: title,
-    // ...(year && { primary_release_year: year })
-    ...(year && { year })
-  });
+export async function searchMovieByTitle(
+  title: string,
+  year?: number,
+  language?: string
+) {
+  const dataSearch = await tmdbCall<SearchResultTMDB>(
+    "/search/movie",
+    {
+      query: title,
+      // ...(year && { primary_release_year: year })
+      ...(year && { year })
+    },
+    language
+  );
 
   if (!dataSearch || !dataSearch.results?.length) {
     console.error("searchMoviesByTitle found 0 movies for:", title);
@@ -61,12 +70,17 @@ export async function searchMovieByTitle(title: string, year?: number) {
 export async function searchMoviesByTitle(
   title: string,
   year?: number,
-  limit = 5
+  limit = 5,
+  language?: string
 ) {
-  const dataSearch = await tmdbCall<SearchResultTMDB>("/search/movie", {
-    query: title,
-    ...(year && { primary_release_year: year })
-  });
+  const dataSearch = await tmdbCall<SearchResultTMDB>(
+    "/search/movie",
+    {
+      query: title,
+      ...(year && { primary_release_year: year })
+    },
+    language
+  );
 
   if (!dataSearch || !dataSearch.results?.length) {
     return [];

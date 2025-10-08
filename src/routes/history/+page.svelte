@@ -8,6 +8,7 @@
   import IconButton from "../../components/Button/IconButton.svelte";
   import { ArrowLeft, House } from "phosphor-svelte";
   import { goto } from "$app/navigation";
+  import * as m from "$lib/paraglide/messages.js";
 
   let loading = $state(true);
   let movies = $state<MovieEnriched[]>([]);
@@ -52,7 +53,7 @@
   }
 
   function clearHistory() {
-    if (confirm("Are you sure you want to clear all your movie history?")) {
+    if (confirm(m.history_clear_confirmation())) {
       userPreferences.clear();
       movies = [];
     }
@@ -67,10 +68,12 @@
         goto("/");
       }}
     />
-    <h1 class="text-xl font-bold">History</h1>
+    <h1 class="text-xl font-bold">{m.history_title()}</h1>
 
     {#if movies.length > 0}
-      <Button onclick={clearHistory} class="!bg-red-500">Clear</Button>
+      <Button onclick={clearHistory} class="!bg-red-500">
+        {m.history_clear_button()}
+      </Button>
     {:else}
       <div></div>
     {/if}
@@ -81,13 +84,13 @@
       class="flex flex-col gap-4 justify-center items-center self-center my-auto"
     >
       <p class="text-gray-500 text-base px-6 text-center">
-        No recommendations history yet.
+        {m.history_empty()}
       </p>
       <a
         href="/"
         class="text-base text-center text-blue-500 underline underline-offset-3"
       >
-        Get recommendations
+        {m.history_get_recommendations_link()}
       </a>
     </div>
   {:else}

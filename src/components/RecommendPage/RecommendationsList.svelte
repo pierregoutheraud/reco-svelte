@@ -5,6 +5,7 @@
   import { ArrowRight, ThumbsDown, ThumbsUp } from "phosphor-svelte";
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
     movies: MovieEnriched[];
@@ -70,7 +71,7 @@
           handleDisliked();
         }}
       >
-        Disliked
+        {m.recommendations_disliked_button()}
       </Button>
 
       <Button
@@ -82,7 +83,7 @@
           handleLiked();
         }}
       >
-        Liked
+        {m.recommendations_liked_button()}
       </Button>
     </div>
 

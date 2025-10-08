@@ -2,6 +2,7 @@
   import { X } from "phosphor-svelte";
   import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
   import PosterTmdb from "../../Poster/PosterTmdb.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
     movie: MovieMinTMDB;
@@ -11,7 +12,9 @@
   let { movie, onRemove }: Props = $props();
 
   let year = $derived(
-    movie.release_date ? new Date(movie.release_date).getFullYear() : "Unknown"
+    movie.release_date
+      ? new Date(movie.release_date).getFullYear()
+      : m.movie_year_unknown()
   );
 </script>
 

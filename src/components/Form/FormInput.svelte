@@ -4,6 +4,12 @@
   import type { FormContext } from "./Form.svelte";
   import type { FormStepContext } from "./FormStep.svelte";
 
+  type Props = {
+    placeholder: string;
+  };
+
+  const { placeholder }: Props = $props();
+
   const { data } = getContext<FormContext>("form");
   const step = getContext<FormStepContext>("form_step");
 </script>
@@ -13,7 +19,7 @@
     type="text"
     class="w-full bg-white text-black p-3 outline-none"
     autofocus
-    placeholder="In the mood for love"
+    {placeholder}
     bind:value={data[step.id]}
   />
 </div>
