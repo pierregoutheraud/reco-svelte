@@ -11,7 +11,7 @@
 </script>
 
 <div
-  class="flex flex-1 h-full flex-col gap-4 items-center justify-center w-full px-8"
+  class="relative flex flex-1 h-full flex-col gap-4 items-center justify-center w-full px-8"
 >
   <h1 class="text-2xl font-bold text-center">
     Let's find a movie<br />for you!
