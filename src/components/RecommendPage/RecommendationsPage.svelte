@@ -62,14 +62,6 @@
     error = null;
     movies = undefined;
 
-    // Use persisted preferences from store
-    console.log("disliked from store:", moviePreferences.disliked);
-    console.log("liked from store:", moviePreferences.liked);
-    console.log(
-      "already recommended from store:",
-      moviePreferences.alreadyRecommended
-    );
-
     try {
       const response = await fetchAiRecommendations(
         {
