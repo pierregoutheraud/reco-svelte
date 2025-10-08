@@ -14,7 +14,7 @@
 <div
   class="relative flex flex-1 h-full flex-col gap-4 items-center justify-center w-full px-8"
 >
-  <h1 class="text-2xl font-bold text-center">
+  <h1 class="text-3xl font-bold font-title tracking-wider text-center">
     {@html m.home_title()}
   </h1>
 
