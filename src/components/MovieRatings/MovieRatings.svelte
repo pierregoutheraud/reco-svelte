@@ -43,8 +43,7 @@
         .finally(() => {
           loading = false;
         });
-    },
-    { lazy: true }
+    }
   );
 
   function formatScore(score: number | null): string {

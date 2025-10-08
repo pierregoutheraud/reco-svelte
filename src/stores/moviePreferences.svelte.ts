@@ -1,9 +1,16 @@
-const STORAGE_KEY = "moviePreferences";
+const STORAGE_KEY = "USER_PREFERENCES";
+
+export interface MovieHistory {
+  id: number;
+  reason: string;
+  timestamp: number;
+}
 
 interface MoviePreferences {
   dislikedMoviesIds: number[];
   likedMoviesIds: number[];
   alreadyRecommendedMoviesIds: number[];
+  movieHistory: MovieHistory[];
 }
 
 function loadFromStorage(): MoviePreferences {
@@ -11,7 +18,8 @@ function loadFromStorage(): MoviePreferences {
     return {
       dislikedMoviesIds: [],
       likedMoviesIds: [],
-      alreadyRecommendedMoviesIds: []
+      alreadyRecommendedMoviesIds: [],
+      movieHistory: []
     };
   }
 
@@ -30,6 +38,9 @@ function loadFromStorage(): MoviePreferences {
           parsed.alreadyRecommendedMoviesIds
         )
           ? parsed.alreadyRecommendedMoviesIds
+          : [],
+        movieHistory: Array.isArray(parsed.movieHistory)
+          ? parsed.movieHistory
           : []
       };
     }
@@ -40,7 +51,8 @@ function loadFromStorage(): MoviePreferences {
   return {
     dislikedMoviesIds: [],
     likedMoviesIds: [],
-    alreadyRecommendedMoviesIds: []
+    alreadyRecommendedMoviesIds: [],
+    movieHistory: []
   };
 }
 
@@ -58,12 +70,14 @@ class MoviePreferencesStore {
   private dislikedMoviesIds = $state<number[]>([]);
   private likedMoviesIds = $state<number[]>([]);
   private alreadyRecommendedMoviesIds = $state<number[]>([]);
+  private movieHistory = $state<MovieHistory[]>([]);
 
   constructor() {
     const stored = loadFromStorage();
     this.dislikedMoviesIds = stored.dislikedMoviesIds;
     this.likedMoviesIds = stored.likedMoviesIds;
     this.alreadyRecommendedMoviesIds = stored.alreadyRecommendedMoviesIds;
+    this.movieHistory = stored.movieHistory;
   }
 
   get disliked(): number[] {
@@ -76,6 +90,10 @@ class MoviePreferencesStore {
 
   get alreadyRecommended(): number[] {
     return this.alreadyRecommendedMoviesIds;
+  }
+
+  get history(): MovieHistory[] {
+    return this.movieHistory;
   }
 
   addDisliked(movieId: number): void {
@@ -134,30 +152,75 @@ class MoviePreferencesStore {
     }
   }
 
-  addAlreadyRecommended(movieId: number): void {
-    if (!this.alreadyRecommendedMoviesIds.includes(movieId)) {
-      this.alreadyRecommendedMoviesIds.push(movieId);
-      this.save();
+  addAlreadyRecommended({
+    movieId,
+    reason
+  }: {
+    movieId: number;
+    reason?: string;
+  }): void {
+    if (this.alreadyRecommendedMoviesIds.includes(movieId)) {
+      return;
     }
+
+    this.alreadyRecommendedMoviesIds.push(movieId);
+
+    // Also save to history with reason if provided
+    if (reason) {
+      this.addToHistory(movieId, reason);
+    }
+
+    this.save();
+  }
+
+  private addToHistory(movieId: number, reason: string): void {
+    // Check if already in history
+    const existingIndex = this.movieHistory.findIndex((h) => h.id === movieId);
+
+    if (existingIndex > -1) {
+      // Update existing entry
+      this.movieHistory[existingIndex] = {
+        id: movieId,
+        reason,
+        timestamp: Date.now()
+      };
+    } else {
+      // Add new entry
+      this.movieHistory.push({
+        id: movieId,
+        reason,
+        timestamp: Date.now()
+      });
+    }
+  }
+
+  getMovieHistory(movieId: number): MovieHistory | undefined {
+    return this.movieHistory.find((h) => h.id === movieId);
   }
 
   addMultipleAlreadyRecommended(movieIds: number[]): void {
     let changed = false;
+
     for (const id of movieIds) {
-      if (!this.alreadyRecommendedMoviesIds.includes(id)) {
-        this.alreadyRecommendedMoviesIds.push(id);
-        changed = true;
+      if (this.alreadyRecommendedMoviesIds.includes(id)) {
+        continue;
       }
+      this.alreadyRecommendedMoviesIds.push(id);
+      changed = true;
     }
-    if (changed) {
-      this.save();
+
+    if (!changed) {
+      return;
     }
+
+    this.save();
   }
 
   clear(): void {
     this.dislikedMoviesIds = [];
     this.likedMoviesIds = [];
     this.alreadyRecommendedMoviesIds = [];
+    this.movieHistory = [];
     this.save();
   }
 
@@ -165,7 +228,8 @@ class MoviePreferencesStore {
     saveToStorage({
       dislikedMoviesIds: this.dislikedMoviesIds,
       likedMoviesIds: this.likedMoviesIds,
-      alreadyRecommendedMoviesIds: this.alreadyRecommendedMoviesIds
+      alreadyRecommendedMoviesIds: this.alreadyRecommendedMoviesIds,
+      movieHistory: this.movieHistory
     });
   }
 }

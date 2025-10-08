@@ -5,7 +5,7 @@
   import OptimisticProgressBar from "../OptimisticProgressBar/OptimisticProgressBar.svelte";
   import { ArrowsClockwise, Warning } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
-  import RecommendedList from "./RecommendationsList.svelte";
+  import RecommendationsList from "./RecommendationsList.svelte";
   import type { MovieTMDB } from "$lib/tmdb/tmdb.decl";
   import { fetchMovie, searchMovieByTitle } from "$lib/tmdb/tmdb";
   import type { Recommendation } from "$lib/api/recommendations.decl";
@@ -151,7 +151,7 @@
       </Button>
     </div>
   {:else if enrichedMovies?.length}
-    <RecommendedList movies={enrichedMovies} onComplete={handleComplete} />
+    <RecommendationsList movies={enrichedMovies} onComplete={handleComplete} />
   {:else if loading}
     <div class="flex h-full w-full items-center justify-center">
       <OptimisticProgressBar

@@ -7,9 +7,11 @@
     class?: ClassValue;
     disabled?: boolean;
     onclick?: () => void;
+
     icon?: Component;
     iconPosition?: "left" | "right";
     iconSize?: number;
+    iconWeight?: "fill" | "light" | "regular" | "bold" | "duotone";
   }
 
   let {
@@ -17,9 +19,11 @@
     class: className,
     disabled = false,
     onclick,
+
     icon: IconComponent,
     iconPosition = "left",
-    iconSize = 24
+    iconSize = 24,
+    iconWeight = "regular"
   }: Props = $props();
 </script>
 
@@ -39,10 +43,10 @@
   <div
     class="flex gap-2 {iconPosition === 'left'
       ? 'flex-row'
-      : 'flex-row-reverse'} items-center"
+      : 'flex-row-reverse'} items-center text-base"
   >
     {#if IconComponent}
-      <IconComponent size={iconSize} />
+      <IconComponent size={iconSize} weight={iconWeight} />
     {/if}
     {@render children?.()}
   </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fetchMovie } from "$lib/tmdb/tmdb";
-  import Card from "../../components/Card/Card.svelte";
+  import Card from "../../components/MovieCard/MovieCard.svelte";
   import FormSelectOption from "../../components/Form/FormSelectOption.svelte";
   import OptimisticProgressBar from "../../components/OptimisticProgressBar/OptimisticProgressBar.svelte";
   import type { MovieEnriched } from "../../components/RecommendPage/RecommendationsPage.svelte";

@@ -10,7 +10,7 @@
 </script>
 
 <main
-  class="w-full max-w-[500px] h-full max-h-[1000px] mx-auto bg-background overflow-auto"
+  class="w-full max-w-[500px] h-full max-h-[1000px] mx-auto bg-background overflow-auto overflow-x-hidden"
 >
   {@render children?.()}
 </main>

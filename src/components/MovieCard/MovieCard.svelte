@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { ArrowLeft, ArrowRight, FilmSlate } from "phosphor-svelte";
-  import Button from "../Button/Button.svelte";
   import PosterTmdb from "../Poster/PosterTmdb.svelte";
   import type { MovieEnriched } from "../RecommendPage/RecommendationsPage.svelte";
   import MovieRatings from "../MovieRatings/MovieRatings.svelte";
-  import { onMount } from "svelte";
+  import { FilmStrip } from "phosphor-svelte";
+  import Button from "../Button/Button.svelte";
 
   interface Props {
     movie: MovieEnriched;
@@ -40,4 +39,14 @@
     <p class="font-semibold text-base">Overview:</p>
     <p class="text-sm">{movie.overview}</p>
   </div>
+
+  <Button
+    icon={FilmStrip}
+    class="!bg-miru !text-black"
+    onclick={() => {
+      window.open(`https://www.miru.live/movie/${movie.id}`, "_blank");
+    }}
+  >
+    View on miru
+  </Button>
 </div>

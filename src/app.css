@@ -7,8 +7,7 @@
   --color-main: var(--color-indigo-500);
   --color-background: var(--color-gray-950);
 
-  --color-imdb: #f5c518;
-
+  --color-miru: #d8c2ff;
   --color-metacritic: #ffbd3f;
   --color-imdb: #f5c518;
   --color-rotten-tomatoes: #f44336;
@@ -48,6 +47,11 @@
     height: 100%;
     /* @apply text-gray-50 bg-gray-950; */
     @apply bg-gray-800 text-gray-50 flex justify-center items-center;
+  }
+
+  html,
+  body {
+    overflow: hidden;
   }
 
   *,

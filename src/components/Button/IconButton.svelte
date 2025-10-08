@@ -5,7 +5,7 @@
 
   interface Props {
     component: Component;
-    size: number;
+    size?: number;
     disabled?: boolean;
     class?: ClassValue;
     onclick?: () => void;

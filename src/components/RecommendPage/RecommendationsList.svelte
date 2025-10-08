@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { MovieEnriched } from "./RecommendationsPage.svelte";
-  import Card from "../Card/Card.svelte";
+  import Card from "../MovieCard/MovieCard.svelte";
   import Button from "../Button/Button.svelte";
   import { ArrowRight, ThumbsDown, ThumbsUp } from "phosphor-svelte";
   import { moviePreferences } from "../../stores/moviePreferences.svelte";
+  import IconButton from "../Button/IconButton.svelte";
 
   interface Props {
     movies: MovieEnriched[];
@@ -16,8 +17,11 @@
   let currentMovie = $derived(movies[currentMovieIndex]);
 
   function goToNextMovie() {
-    // Mark this movie as already recommended (shown to user)
-    moviePreferences.addAlreadyRecommended(currentMovie.id);
+    // Mark this movie as already recommended (shown to user) with its reason
+    moviePreferences.addAlreadyRecommended({
+      movieId: currentMovie.id,
+      reason: currentMovie.reason
+    });
 
     currentMovieIndex++;
     if (currentMovieIndex >= movies.length) {
@@ -40,14 +44,12 @@
   }
 </script>
 
-<div class="w-full relative">
-  <Card movie={currentMovie} />
+<div class="flex flex-1 min-h-0 flex-col w-full relative">
+  <div class="flex-1 overflow-y-auto">
+    <Card movie={currentMovie} />
+  </div>
 
-  <div class="w-full h-[200px]"></div>
-
-  <div
-    class="flex flex-col gap-4 sticky bottom-0 left-0 right-0 p-4 bg-background/90"
-  >
+  <div class="flex p-4 gap-2 justify-between bg-background/90">
     <!-- <Button
       icon={ArrowsClockwise}
       iconPosition="left"
@@ -58,7 +60,7 @@
       Try again
     </Button> -->
 
-    <div class="flex gap-2 justify-between">
+    <div class="flex gap-2">
       <Button
         icon={ThumbsDown}
         iconPosition="right"
@@ -82,17 +84,14 @@
       >
         Liked
       </Button>
-
-      <Button
-        icon={ArrowRight}
-        iconPosition="right"
-        iconSize={24}
-        onclick={() => {
-          handleNextMovie();
-        }}
-      >
-        Next
-      </Button>
     </div>
+
+    <IconButton
+      component={ArrowRight}
+      size={24}
+      onclick={() => {
+        handleNextMovie();
+      }}
+    />
   </div>
 </div>
