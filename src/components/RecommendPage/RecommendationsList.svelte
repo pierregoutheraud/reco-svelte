@@ -3,7 +3,7 @@
   import Card from "../MovieCard/MovieCard.svelte";
   import Button from "../Button/Button.svelte";
   import { ArrowRight, ThumbsDown, ThumbsUp } from "phosphor-svelte";
-  import { moviePreferences } from "../../stores/moviePreferences.svelte";
+  import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
 
   interface Props {
@@ -18,7 +18,7 @@
 
   function goToNextMovie() {
     // Mark this movie as already recommended (shown to user) with its reason
-    moviePreferences.addAlreadyRecommended({
+    userPreferences.addAlreadyRecommended({
       movieId: currentMovie.id,
       reason: currentMovie.reason
     });
@@ -30,12 +30,12 @@
   }
 
   function handleDisliked() {
-    moviePreferences.addDisliked(currentMovie.id);
+    userPreferences.addDisliked(currentMovie.id);
     goToNextMovie();
   }
 
   function handleLiked() {
-    moviePreferences.addLiked(currentMovie.id);
+    userPreferences.addLiked(currentMovie.id);
     goToNextMovie();
   }
 

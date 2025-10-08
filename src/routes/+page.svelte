@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import Button from "../components/Button/Button.svelte";
-  import { moviePreferences } from "../stores/moviePreferences.svelte";
+  import { userPreferences } from "../stores/userPreferences.svelte";
 
-  const hasHistory = $derived(moviePreferences.history.length > 0);
+  const hasHistory = $derived(userPreferences.history.length > 0);
 
   function handleStart() {
     goto("/form");

@@ -1,6 +1,6 @@
 1. Era: When should your movie be from?
 
-- Slider between 1900 and 2025
+- Slider between 1900 and current year
 
 2. Mood: What's your mood tonight?
 

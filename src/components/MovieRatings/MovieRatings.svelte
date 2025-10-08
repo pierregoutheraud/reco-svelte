@@ -70,6 +70,6 @@
     <p class="text-gray-500 text-sm">Ratings unavailable</p>
   </div> -->
   {:else}
-    <Ratings {ratings} title="Movie title" releaseDate="2025-01-01" />
+    <Ratings {ratings} />
   {/if}
 </div>

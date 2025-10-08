@@ -4,18 +4,21 @@
 
   interface Props {
     ratings: Partial<CrawlerRatings>;
-    title: string;
-    releaseDate: string | undefined | null;
-    direction?: "row" | "column";
+    title?: string;
+    releaseDate?: string | null;
   }
 
-  let { ratings, title, releaseDate, direction = "row" }: Props = $props();
+  let { ratings, title, releaseDate }: Props = $props();
 
   let releaseYear = $derived(
     releaseDate ? new Date(releaseDate).getFullYear() : null
   );
 
   function goToGoogle() {
+    if (!title) {
+      return;
+    }
+
     const text = `${title} ${releaseYear}`;
     const q = encodeURIComponent(text);
     const url = `https://www.google.com/search?q=${q}`;

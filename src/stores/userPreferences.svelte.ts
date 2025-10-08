@@ -6,14 +6,14 @@ export interface MovieHistory {
   timestamp: number;
 }
 
-interface MoviePreferences {
+interface UserPreferences {
   dislikedMoviesIds: number[];
   likedMoviesIds: number[];
   alreadyRecommendedMoviesIds: number[];
   movieHistory: MovieHistory[];
 }
 
-function loadFromStorage(): MoviePreferences {
+function loadFromStorage(): UserPreferences {
   if (typeof window === "undefined") {
     return {
       dislikedMoviesIds: [],
@@ -56,7 +56,7 @@ function loadFromStorage(): MoviePreferences {
   };
 }
 
-function saveToStorage(preferences: MoviePreferences): void {
+function saveToStorage(preferences: UserPreferences): void {
   if (typeof window === "undefined") return;
 
   try {
@@ -66,7 +66,7 @@ function saveToStorage(preferences: MoviePreferences): void {
   }
 }
 
-class MoviePreferencesStore {
+class UserPreferencesStore {
   private dislikedMoviesIds = $state<number[]>([]);
   private likedMoviesIds = $state<number[]>([]);
   private alreadyRecommendedMoviesIds = $state<number[]>([]);
@@ -234,4 +234,4 @@ class MoviePreferencesStore {
   }
 }
 
-export const moviePreferences = new MoviePreferencesStore();
+export const userPreferences = new UserPreferencesStore();

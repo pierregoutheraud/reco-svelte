@@ -12,7 +12,7 @@
   import { SvelteMap } from "svelte/reactivity";
   import { nonNullable } from "../../helpers/types.helpers";
   import throttle from "lodash.throttle";
-  import { moviePreferences } from "../../stores/moviePreferences.svelte";
+  import { userPreferences } from "../../stores/userPreferences.svelte";
 
   export type MovieEnriched = MovieTMDB & {
     reason: string;
@@ -101,9 +101,9 @@
         {
           ...data,
           recommendations_count: 10,
-          disliked_movies_ids: moviePreferences.disliked,
-          liked_movies_ids: moviePreferences.liked,
-          already_recommended_movies_ids: moviePreferences.alreadyRecommended
+          disliked_movies_ids: userPreferences.disliked,
+          liked_movies_ids: userPreferences.liked,
+          already_recommended_movies_ids: userPreferences.alreadyRecommended
         },
         async (partialRecs) => {
           if (!partialRecs) {

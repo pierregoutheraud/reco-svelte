@@ -29,6 +29,8 @@
   }
 
   let { onComplete }: Props = $props();
+
+  let currentYear = new Date().getFullYear();
 </script>
 
 <Form {onComplete}>
@@ -109,7 +111,7 @@
     question="Which era of movies do you want to dive into?"
     required
   >
-    <FormSlider min={1920} max={2025} step={1} multiple />
+    <FormSlider min={1920} max={currentYear} step={1} multiple />
   </FormStep>
 
   <FormStep

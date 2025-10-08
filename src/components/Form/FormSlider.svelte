@@ -17,7 +17,7 @@
   const stepContext = getContext<FormStepContext>("form_step");
 
   let rangeValues = $state<[number, number]>(
-    (formContext.data[stepContext.id] as [number, number]) ?? [min, 2025]
+    (formContext.data[stepContext.id] as [number, number]) ?? [min, max]
   );
 
   const updateValue = (newValue: number[]) => {
