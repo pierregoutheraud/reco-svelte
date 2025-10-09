@@ -5,20 +5,27 @@
   import OptimisticProgressBar from "../../components/OptimisticProgressBar/OptimisticProgressBar.svelte";
   import type { MovieEnriched } from "../../components/RecommendPage/RecommendationsPage.svelte";
   import Button from "../../components/Button/Button.svelte";
+  import { House } from "phosphor-svelte";
+  import IconButton from "../../components/Button/IconButton.svelte";
 
-  const movieId = 152601;
-  const moviePromise = fetchMovie(movieId).then((movie) => {
-    const movieEnriched: MovieEnriched = {
-      ...movie!,
-      reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    };
-    return movieEnriched;
-  });
+  // const movieId = 152601;
+  // const moviePromise = fetchMovie(movieId).then((movie) => {
+  //   const movieEnriched: MovieEnriched = {
+  //     ...movie!,
+  //     reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  //   };
+  //   return movieEnriched;
+  // });
 </script>
 
-{#await moviePromise then movie}
+<Button mode="ghost">Hello</Button>
+<Button>Hello</Button>
+<IconButton icon={House} mode="ghost" />
+<IconButton icon={House} />
+
+<!-- {#await moviePromise then movie}
   <Card {movie} />
-{/await}
+{/await} -->
 
 <!-- <OptimisticProgressBar
   texts={[

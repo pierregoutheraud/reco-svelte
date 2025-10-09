@@ -1,25 +1,31 @@
 <script lang="ts">
   import type { Component } from "svelte";
-  import Button from "./Button.svelte";
+  import Button, { type ButtonProps } from "./Button.svelte";
   import type { ClassValue } from "svelte/elements";
 
-  interface Props {
-    component: Component;
+  type Props = Pick<ButtonProps, "mode"> & {
+    icon: Component;
     size?: number;
     disabled?: boolean;
     class?: ClassValue;
     onclick?: () => void;
-  }
+  };
 
   let {
-    component: IconComponent,
+    icon: IconComponent,
     size = 26,
     disabled = false,
     class: className,
-    onclick
+    onclick,
+    ...buttonProps
   }: Props = $props();
 </script>
 
-<Button class={["!px-0 !w-10", className]} {disabled} {onclick}>
+<Button
+  class={["!px-0 !w-10", className]}
+  {disabled}
+  {onclick}
+  {...buttonProps}
+>
   <IconComponent {size} />
 </Button>

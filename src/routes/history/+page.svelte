@@ -66,7 +66,7 @@
 <div class="flex h-full flex-col">
   <header class="p-4 flex justify-between items-center">
     <IconButton
-      component={House}
+      icon={House}
       onclick={() => {
         goto("/");
       }}

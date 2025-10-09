@@ -86,7 +86,7 @@
     <div class="flex justify-between w-full bg-background">
       {#if stepIndex > 0}
         <IconButton
-          component={ArrowLeft}
+          icon={ArrowLeft}
           size={24}
           onclick={() => formContext.goToPreviousStep()}
         />
@@ -96,7 +96,7 @@
         {#if skippable}
           {#if hasData}
             <IconButton
-              component={ArrowRight}
+              icon={ArrowRight}
               size={24}
               disabled={!canContinue}
               onclick={() => {
@@ -113,7 +113,7 @@
           {/if}
         {:else}
           <IconButton
-            component={ArrowRight}
+            icon={ArrowRight}
             size={24}
             disabled={!canContinue}
             onclick={() => {

@@ -96,7 +96,7 @@
     </div>
 
     <IconButton
-      component={ArrowRight}
+      icon={ArrowRight}
       size={24}
       onclick={() => {
         handleNextMovie();
