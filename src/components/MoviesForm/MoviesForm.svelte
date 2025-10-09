@@ -3,7 +3,8 @@
     era: [number, number];
     mood:
       | "comedy_feelgood"
-      | "drama_emotional"
+      | "romance"
+      | "drama_serious"
       | "action_adventure"
       | "thriller_suspense"
       | "horror"
@@ -36,14 +37,14 @@
 </script>
 
 <Form {onComplete}>
-  <FormStep
+  <!-- <FormStep
     id="era"
     title={m.form_era_title()}
     question={m.form_era_question()}
     required
   >
     <FormSlider min={1920} max={currentYear} step={1} multiple />
-  </FormStep>
+  </FormStep> -->
 
   <FormStep
     id="mood"
@@ -59,9 +60,14 @@
           value: "comedy_feelgood"
         },
         {
+          label: m.form_mood_romance_label(),
+          description: m.form_mood_romance_description(),
+          value: "romance"
+        },
+        {
           label: m.form_mood_drama_label(),
           description: m.form_mood_drama_description(),
-          value: "drama_emotional"
+          value: "drama_serious"
         },
         {
           label: m.form_mood_action_label(),

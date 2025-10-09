@@ -22,9 +22,7 @@
   let selectedValue = $derived(data[step.id]);
 
   const selectOption = (value: string) => {
-    // selectedValue = value;
     setValue(step.id, value);
-    // formContext.goToNextStep();
   };
 </script>
 
@@ -37,19 +35,6 @@
       active={selectedValue === option.value}
       selected={selectedValue === option.value}
     />
-    <!-- <button
-      type="button"
-      class="border border-gray-200 w-full py-3 text-base border-b-5"
-      onclick={() => selectOption(option.value)}
-      disabled={selectedValue === option.value}
-    >
-      <p>{option.label}</p>
-      {#if option.description}
-        <p class="text-sm text-gray-400">
-          {option.description}
-        </p>
-      {/if}
-    </button> -->
   {/each}
 
   <div class="h-12 w-full shrink-0"></div>

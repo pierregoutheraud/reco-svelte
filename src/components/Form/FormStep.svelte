@@ -64,7 +64,7 @@
   <div class="flex flex-1 flex-col min-h-0 justify-between gap-4">
     {#if title || question}
       <header>
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-1">
           {#if title}
             <h1
               class="text-3xl font-title font-bold text-center tracking-wider"

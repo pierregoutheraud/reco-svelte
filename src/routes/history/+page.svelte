@@ -69,7 +69,7 @@
   <header class="relative p-4 flex justify-center items-center">
     <IconButton
       class="absolute left-4"
-      icon={House}
+      icon={ArrowLeft}
       onclick={() => {
         goto("/");
       }}
