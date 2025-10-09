@@ -56,29 +56,31 @@
   function clearCurrentMovie() {
     if (!currentMovieId) return;
 
-    if (confirm(m.history_clear_confirmation())) {
-      userPreferences.removeFromHistory(currentMovieId);
-      movies = movies.filter((movie) => movie.id !== currentMovieId);
-    }
+    // if (confirm(m.history_clear_confirmation())) {
+    //     return;
+    // }
+
+    userPreferences.removeFromHistory(currentMovieId);
+    movies = movies.filter((movie) => movie.id !== currentMovieId);
   }
 </script>
 
 <div class="flex h-full flex-col">
-  <header class="p-4 flex justify-between items-center">
+  <header class="relative p-4 flex justify-center items-center">
     <IconButton
+      class="absolute left-4"
       icon={House}
       onclick={() => {
         goto("/");
       }}
     />
+
     <h1 class="text-xl font-bold">{m.history_title()}</h1>
 
     {#if movies.length > 0}
-      <Button onclick={clearCurrentMovie} class="!bg-red-500">
+      <Button onclick={clearCurrentMovie} class="!bg-red-500 absolute right-4">
         {m.history_clear_button()}
       </Button>
-    {:else}
-      <div></div>
     {/if}
   </header>
 

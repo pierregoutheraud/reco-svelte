@@ -18,6 +18,14 @@
   let currentMovieIndex = $state(0);
   let currentMovie = $derived(movies[currentMovieIndex]);
 
+  // Check if the current movie is already liked or disliked
+  let isCurrentMovieLiked = $derived(
+    currentMovie && userPreferences.liked.includes(currentMovie.id)
+  );
+  let isCurrentMovieDisliked = $derived(
+    currentMovie && userPreferences.disliked.includes(currentMovie.id)
+  );
+
   // Update the bindable currentMovieId when current movie changes
   $effect(() => {
     if (currentMovie) {
@@ -75,6 +83,7 @@
         iconPosition="right"
         class="!bg-rose-500"
         iconSize={24}
+        iconWeight={isCurrentMovieDisliked ? "fill" : "regular"}
         onclick={() => {
           handleDisliked();
         }}
@@ -87,6 +96,7 @@
         iconPosition="right"
         class="!bg-teal-500"
         iconSize={24}
+        iconWeight={isCurrentMovieLiked ? "fill" : "regular"}
         onclick={() => {
           handleLiked();
         }}

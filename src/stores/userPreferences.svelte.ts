@@ -96,44 +96,49 @@ class UserPreferencesStore {
     return this.movieHistory;
   }
 
-  addDisliked(movieId: number): void {
+  addDisliked(movieId: number, save: boolean = true): void {
+    // Remove from liked list if it exists there
+    const likedIndex = this.likedMoviesIds.indexOf(movieId);
+    if (likedIndex > -1) {
+      this.likedMoviesIds.splice(likedIndex, 1);
+    }
+
     if (!this.dislikedMoviesIds.includes(movieId)) {
       this.dislikedMoviesIds.push(movieId);
+    }
+    if (save) {
       this.save();
     }
   }
 
-  addLiked(movieId: number): void {
+  addLiked(movieId: number, save: boolean = true): void {
+    // Remove from disliked list if it exists there
+    const dislikedIndex = this.dislikedMoviesIds.indexOf(movieId);
+    if (dislikedIndex > -1) {
+      this.dislikedMoviesIds.splice(dislikedIndex, 1);
+    }
+
     if (!this.likedMoviesIds.includes(movieId)) {
       this.likedMoviesIds.push(movieId);
+    }
+
+    if (save) {
       this.save();
     }
   }
 
   addMultipleDisliked(movieIds: number[]): void {
-    let changed = false;
     for (const id of movieIds) {
-      if (!this.dislikedMoviesIds.includes(id)) {
-        this.dislikedMoviesIds.push(id);
-        changed = true;
-      }
+      this.addDisliked(id, false);
     }
-    if (changed) {
-      this.save();
-    }
+    this.save();
   }
 
   addMultipleLiked(movieIds: number[]): void {
-    let changed = false;
     for (const id of movieIds) {
-      if (!this.likedMoviesIds.includes(id)) {
-        this.likedMoviesIds.push(id);
-        changed = true;
-      }
+      this.addLiked(id, false);
     }
-    if (changed) {
-      this.save();
-    }
+    this.save();
   }
 
   removeDisliked(movieId: number): void {
