@@ -10,7 +10,6 @@
   "form_era_question": "Dans quelle époque du cinéma souhaitez-vous plonger ?",
   "form_mood_title": "Ambiance",
   "form_mood_question": "Quelle ambiance recherchez-vous ?",
-
   "form_discovery_title": "Découverte",
   "form_discovery_question": "Quel type de sélection souhaitez-vous pour ce soir ?",
   "form_discovery_popular_label": "Films populaires",
@@ -23,7 +22,7 @@
   "form_inspiration_title": "Inspiration",
   "form_inspiration_question": "Sélectionnez quelques films qui inspireront les recommandations.",
   "form_skip_button": "Passer",
-  "history_title": "Historique",
+  "watchlater_title": "À voir plus tard",
   "history_clear_button": "Effacer",
   "history_empty": "Aucun historique de recommandations pour le moment.",
   "history_get_recommendations_link": "Obtenir des recommandations",
@@ -61,5 +60,6 @@
   "form_mood_scary_label": "Effrayant",
   "form_mood_scary_description": "Angoissant, glaçant ou dérangeant",
   "form_mood_wonder_worlds_label": "Mondes & Merveilles",
-  "form_mood_wonder_worlds_description": "Imaginatif, fantastique, plein de grandeur"
+  "form_mood_wonder_worlds_description": "Imaginatif, fantastique, plein de grandeur",
+  "home_watch_later_link": "List de films à voir plus tard"
 }

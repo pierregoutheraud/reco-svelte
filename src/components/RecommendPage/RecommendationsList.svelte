@@ -2,7 +2,7 @@
   import type { MovieEnriched } from "./RecommendationsPage.svelte";
   import Card from "../MovieCard/MovieCard.svelte";
   import Button from "../Button/Button.svelte";
-  import { ArrowRight, ThumbsDown, ThumbsUp } from "phosphor-svelte";
+  import { ArrowRight, ListPlus, ThumbsDown, ThumbsUp } from "phosphor-svelte";
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
   import * as m from "$lib/paraglide/messages.js";
@@ -25,6 +25,10 @@
   let isCurrentMovieDisliked = $derived(
     currentMovie && userPreferences.disliked.includes(currentMovie.id)
   );
+  let isCurrentMovieInWatchLater = $derived(
+    currentMovie &&
+      userPreferences.watchLater.some((item) => item.id === currentMovie.id)
+  );
 
   // Update the bindable currentMovieId when current movie changes
   $effect(() => {
@@ -33,12 +37,16 @@
     }
   });
 
+  $inspect({
+    watchLater: userPreferences.watchLater,
+    liked: userPreferences.liked,
+    disliked: userPreferences.disliked,
+    alreadyRecommended: userPreferences.alreadyRecommended
+  });
+
   function goToNextMovie() {
     // Mark this movie as already recommended (shown to user) with its reason
-    userPreferences.addAlreadyRecommended({
-      movieId: currentMovie.id,
-      reason: currentMovie.reason
-    });
+    userPreferences.addAlreadyRecommended(currentMovie.id);
 
     currentMovieIndex++;
     if (currentMovieIndex >= movies.length) {
@@ -48,16 +56,24 @@
 
   function handleDisliked() {
     userPreferences.addDisliked(currentMovie.id);
-    goToNextMovie();
+    // goToNextMovie();
   }
 
   function handleLiked() {
     userPreferences.addLiked(currentMovie.id);
-    goToNextMovie();
+    // goToNextMovie();
   }
 
   function handleNextMovie() {
     goToNextMovie();
+  }
+
+  function handleClickWatchLater() {
+    if (isCurrentMovieInWatchLater) {
+      userPreferences.removeFromWatchLater(currentMovie.id);
+    } else {
+      userPreferences.addToWatchLater(currentMovie.id, currentMovie.reason);
+    }
   }
 </script>
 
@@ -78,31 +94,34 @@
     </Button> -->
 
     <div class="flex gap-2">
-      <Button
+      <IconButton
         icon={ThumbsDown}
-        iconPosition="right"
         class="bg-rose-500"
-        iconSize={24}
-        iconWeight={isCurrentMovieDisliked ? "fill" : "regular"}
+        size={24}
+        weight={isCurrentMovieDisliked ? "fill" : "regular"}
         onclick={() => {
           handleDisliked();
         }}
-      >
-        {m.recommendations_disliked_button()}
-      </Button>
+      />
 
-      <Button
+      <IconButton
         icon={ThumbsUp}
-        iconPosition="right"
-        class="!bg-teal-500"
-        iconSize={24}
-        iconWeight={isCurrentMovieLiked ? "fill" : "regular"}
+        class="bg-teal-500"
+        size={24}
+        weight={isCurrentMovieLiked ? "fill" : "regular"}
         onclick={() => {
           handleLiked();
         }}
-      >
-        {m.recommendations_liked_button()}
-      </Button>
+      />
+
+      <IconButton
+        icon={ListPlus}
+        size={24}
+        weight={isCurrentMovieInWatchLater ? "fill" : "regular"}
+        onclick={() => {
+          handleClickWatchLater();
+        }}
+      />
     </div>
 
     <IconButton

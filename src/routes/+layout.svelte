@@ -28,7 +28,7 @@
     <IconButton
       icon={ClockCounterClockwise}
       onclick={() => {
-        goto("/history");
+        goto("/watchlater");
       }}
     />
   </footer> -->

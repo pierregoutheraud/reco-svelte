@@ -9,6 +9,7 @@
     disabled?: boolean;
     class?: ClassValue;
     onclick?: () => void;
+    weight?: "fill" | "light" | "regular" | "bold" | "duotone";
   };
 
   let {
@@ -17,6 +18,7 @@
     disabled = false,
     class: className,
     onclick,
+    weight = "regular",
     ...buttonProps
   }: Props = $props();
 </script>
@@ -27,5 +29,5 @@
   {onclick}
   {...buttonProps}
 >
-  <IconComponent {size} />
+  <IconComponent {size} {weight} />
 </Button>

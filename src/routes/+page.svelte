@@ -5,7 +5,7 @@
   import { userPreferences } from "../stores/userPreferences.svelte";
   import * as m from "$lib/paraglide/messages.js";
 
-  const hasHistory = $derived(userPreferences.history.length > 0);
+  // const hasWatchLater = $derived(userPreferences.watchLater.length > 0);
 
   function handleStart() {
     goto("/form");
@@ -25,12 +25,10 @@
 
   <Button onclick={handleStart}>{m.home_start_button()}</Button>
 
-  {#if hasHistory}
-    <p class="text-sm text-gray-500">{m.home_or()}</p>
-    <Link href="/history" class="text-base text-center">
-      {m.home_history_link()}
-    </Link>
-  {/if}
+  <p class="text-sm text-gray-500">{m.home_or()}</p>
+  <Link href="/watchlater" class="text-base text-center">
+    {m.home_watch_later_link()} ({userPreferences.watchLater.length})
+  </Link>
 
   <p class="absolute bottom-6 right-6 text-sm text-center text-gray-500">
     {m.home_powered_by()}

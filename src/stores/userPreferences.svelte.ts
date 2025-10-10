@@ -1,6 +1,6 @@
 const STORAGE_KEY = "USER_PREFERENCES";
 
-export interface MovieHistory {
+export interface WatchLaterItem {
   id: number;
   reason: string;
   timestamp: number;
@@ -10,7 +10,7 @@ interface UserPreferences {
   dislikedMoviesIds: number[];
   likedMoviesIds: number[];
   alreadyRecommendedMoviesIds: number[];
-  movieHistory: MovieHistory[];
+  watchLater: WatchLaterItem[];
 }
 
 function loadFromStorage(): UserPreferences {
@@ -19,7 +19,7 @@ function loadFromStorage(): UserPreferences {
       dislikedMoviesIds: [],
       likedMoviesIds: [],
       alreadyRecommendedMoviesIds: [],
-      movieHistory: []
+      watchLater: []
     };
   }
 
@@ -39,9 +39,7 @@ function loadFromStorage(): UserPreferences {
         )
           ? parsed.alreadyRecommendedMoviesIds
           : [],
-        movieHistory: Array.isArray(parsed.movieHistory)
-          ? parsed.movieHistory
-          : []
+        watchLater: Array.isArray(parsed.watchLater) ? parsed.watchLater : []
       };
     }
   } catch (error) {
@@ -52,7 +50,7 @@ function loadFromStorage(): UserPreferences {
     dislikedMoviesIds: [],
     likedMoviesIds: [],
     alreadyRecommendedMoviesIds: [],
-    movieHistory: []
+    watchLater: []
   };
 }
 
@@ -70,14 +68,14 @@ class UserPreferencesStore {
   private dislikedMoviesIds = $state<number[]>([]);
   private likedMoviesIds = $state<number[]>([]);
   private alreadyRecommendedMoviesIds = $state<number[]>([]);
-  private movieHistory = $state<MovieHistory[]>([]);
+  watchLater = $state<WatchLaterItem[]>([]);
 
   constructor() {
     const stored = loadFromStorage();
     this.dislikedMoviesIds = stored.dislikedMoviesIds;
     this.likedMoviesIds = stored.likedMoviesIds;
     this.alreadyRecommendedMoviesIds = stored.alreadyRecommendedMoviesIds;
-    this.movieHistory = stored.movieHistory;
+    this.watchLater = stored.watchLater;
   }
 
   get disliked(): number[] {
@@ -90,10 +88,6 @@ class UserPreferencesStore {
 
   get alreadyRecommended(): number[] {
     return this.alreadyRecommendedMoviesIds;
-  }
-
-  get history(): MovieHistory[] {
-    return this.movieHistory;
   }
 
   addDisliked(movieId: number, save: boolean = true): void {
@@ -157,56 +151,47 @@ class UserPreferencesStore {
     }
   }
 
-  addAlreadyRecommended({
-    movieId,
-    reason
-  }: {
-    movieId: number;
-    reason?: string;
-  }): void {
+  addAlreadyRecommended(movieId: number): void {
     if (this.alreadyRecommendedMoviesIds.includes(movieId)) {
       return;
     }
 
     this.alreadyRecommendedMoviesIds.push(movieId);
 
-    // Also save to history with reason if provided
-    if (reason) {
-      this.addToHistory(movieId, reason);
-    }
-
     this.save();
   }
 
-  private addToHistory(movieId: number, reason: string): void {
-    // Check if already in history
-    const existingIndex = this.movieHistory.findIndex((h) => h.id === movieId);
+  addToWatchLater(movieId: number, reason: string): void {
+    // Check if already in watch later
+    const existingIndex = this.watchLater.findIndex((h) => h.id === movieId);
 
     if (existingIndex > -1) {
       // Update existing entry
-      this.movieHistory[existingIndex] = {
+      this.watchLater[existingIndex] = {
         id: movieId,
         reason,
         timestamp: Date.now()
       };
     } else {
       // Add new entry
-      this.movieHistory.push({
+      this.watchLater.push({
         id: movieId,
         reason,
         timestamp: Date.now()
       });
     }
+
+    this.save();
   }
 
-  getMovieHistory(movieId: number): MovieHistory | undefined {
-    return this.movieHistory.find((h) => h.id === movieId);
+  getWatchLaterMovie(movieId: number): WatchLaterItem | undefined {
+    return this.watchLater.find((h) => h.id === movieId);
   }
 
-  removeFromHistory(movieId: number): void {
-    const index = this.movieHistory.findIndex((h) => h.id === movieId);
+  removeFromWatchLater(movieId: number): void {
+    const index = this.watchLater.findIndex((h) => h.id === movieId);
     if (index > -1) {
-      this.movieHistory.splice(index, 1);
+      this.watchLater.splice(index, 1);
       this.save();
     }
   }
@@ -233,7 +218,7 @@ class UserPreferencesStore {
     this.dislikedMoviesIds = [];
     this.likedMoviesIds = [];
     this.alreadyRecommendedMoviesIds = [];
-    this.movieHistory = [];
+    this.watchLater = [];
     this.save();
   }
 
@@ -242,7 +227,7 @@ class UserPreferencesStore {
       dislikedMoviesIds: this.dislikedMoviesIds,
       likedMoviesIds: this.likedMoviesIds,
       alreadyRecommendedMoviesIds: this.alreadyRecommendedMoviesIds,
-      movieHistory: this.movieHistory
+      watchLater: this.watchLater
     });
   }
 }

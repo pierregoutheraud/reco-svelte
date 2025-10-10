@@ -15,6 +15,7 @@
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import * as m from "$lib/paraglide/messages.js";
   import { getLocale } from "$lib/paraglide/runtime";
+  import { enrichedMoviesMock } from "./mock";
 
   export type MovieEnriched = MovieTMDB & {
     reason: string;
@@ -117,6 +118,8 @@
           onRecommendationsThrottled(partialRecs);
         }
       );
+
+      // enrichedMovies = enrichedMoviesMock;
     } catch (err) {
       console.error("❌ Streaming error:", err);
       error =

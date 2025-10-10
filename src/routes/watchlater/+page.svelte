@@ -15,23 +15,23 @@
   let currentMovieId = $state<number | undefined>(undefined);
 
   onMount(async () => {
-    await loadHistory();
+    await loadWatchLater();
   });
 
-  async function loadHistory() {
+  async function loadWatchLater() {
     loading = true;
 
-    // Get movie history with reasons
-    const historyWithReasons = userPreferences.history;
+    // Get watch later movies with reasons
+    const watchLaterWithReasons = userPreferences.watchLater;
 
     // Fetch movie data from TMDB for movies that have reasons
-    const moviePromises = historyWithReasons.map(async (historyEntry) => {
-      const movie = await fetchMovie(historyEntry.id);
+    const moviePromises = watchLaterWithReasons.map(async (watchLaterEntry) => {
+      const movie = await fetchMovie(watchLaterEntry.id);
       if (!movie) return null;
 
       return {
         ...movie,
-        reason: historyEntry.reason
+        reason: watchLaterEntry.reason
       };
     });
 
@@ -40,17 +40,17 @@
 
     // Sort by most recent
     movies = validMovies.sort((a, b) => {
-      const aHistory = userPreferences.getMovieHistory(a.id);
-      const bHistory = userPreferences.getMovieHistory(b.id);
-      return (bHistory?.timestamp ?? 0) - (aHistory?.timestamp ?? 0);
+      const aWatchLater = userPreferences.getWatchLaterMovie(a.id);
+      const bWatchLater = userPreferences.getWatchLaterMovie(b.id);
+      return (bWatchLater?.timestamp ?? 0) - (aWatchLater?.timestamp ?? 0);
     });
 
     loading = false;
   }
 
   function handleComplete() {
-    // When user finishes reviewing history, just reload
-    loadHistory();
+    // When user finishes reviewing watch later, just reload
+    loadWatchLater();
   }
 
   function clearCurrentMovie() {
@@ -60,7 +60,7 @@
     //     return;
     // }
 
-    userPreferences.removeFromHistory(currentMovieId);
+    userPreferences.removeFromWatchLater(currentMovieId);
     movies = movies.filter((movie) => movie.id !== currentMovieId);
   }
 </script>
@@ -75,15 +75,15 @@
       }}
     />
 
-    <h1 class="text-xl font-bold">{m.history_title()}</h1>
+    <h1 class="text-xl font-bold">{m.watchlater_title()}</h1>
 
-    {#if movies.length > 0}
+    <!-- {#if movies.length > 0}
       <IconButton
         class="!bg-red-500 absolute right-4"
         icon={Trash}
         onclick={clearCurrentMovie}
       />
-    {/if}
+    {/if} -->
   </header>
 
   {#if loading}{:else if movies.length === 0}
@@ -94,7 +94,7 @@
         {m.history_empty()}
       </p>
       <a
-        href="/"
+        href="/form"
         class="text-base text-center text-blue-500 underline underline-offset-3"
       >
         {m.history_get_recommendations_link()}
