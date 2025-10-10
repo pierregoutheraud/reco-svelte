@@ -23,7 +23,7 @@
   "form_skip_button": "Skip",
   "watchlater_title": "Watch later",
   "history_clear_button": "Clear",
-  "history_empty": "No recommendations history yet.",
+  "history_empty": "No movies in your watch later list yet.",
   "history_get_recommendations_link": "Get recommendations",
   "history_clear_confirmation": "Are you sure you want to remove this movie from your history?",
   "recommendations_try_again": "Try again",

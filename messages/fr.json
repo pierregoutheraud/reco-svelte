@@ -24,7 +24,7 @@
   "form_skip_button": "Passer",
   "watchlater_title": "À voir plus tard",
   "history_clear_button": "Effacer",
-  "history_empty": "Aucun historique de recommandations pour le moment.",
+  "history_empty": "Aucun film dans votre liste pour le moment.",
   "history_get_recommendations_link": "Obtenir des recommandations",
   "history_clear_confirmation": "Voulez-vous vraiment retirer ce film de votre historique ?",
   "recommendations_try_again": "Réessayer",
