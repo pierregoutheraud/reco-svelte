@@ -24,14 +24,13 @@ export interface RecommendationResponse {
 export interface RecommendationRequest {
   era: [number, number];
   mood:
-    | "comedy_feelgood"
-    | "drama_emotional"
-    | "action_adventure"
-    | "thriller_suspense"
-    | "horror"
-    | "scifi"
-    | "fantasy"
-    | "mystery_cerebral";
+    | "light_funny"
+    | "romantic"
+    | "thoughtful_deep"
+    | "action_packed"
+    | "tense_twisty"
+    | "scary"
+    | "wonder_worlds";
   discovery: "popular" | "hidden" | "surprise";
   duration: "under_2_hours" | "it_doesnt_matter";
   inspiration_movies_ids?: number[];

@@ -2,15 +2,13 @@
   export type MoviesFormData = {
     era: [number, number];
     mood:
-      | "comedy_feelgood"
-      | "romance"
-      | "drama_serious"
-      | "action_adventure"
-      | "thriller_suspense"
-      | "horror"
-      | "scifi"
-      | "fantasy"
-      | "mystery_cerebral";
+      | "light_funny"
+      | "romantic"
+      | "thoughtful_deep"
+      | "action_packed"
+      | "tense_twisty"
+      | "scary"
+      | "wonder_worlds";
     discovery: "popular" | "hidden" | "surprise";
     duration: "under_2_hours" | "it_doesnt_matter";
     inspiration_movies_ids?: number[];
@@ -55,49 +53,39 @@
     <FormSelect
       options={[
         {
-          label: m.form_mood_comedy_label(),
-          description: m.form_mood_comedy_description(),
-          value: "comedy_feelgood"
+          label: m.form_mood_light_funny_label(),
+          description: m.form_mood_light_funny_description(),
+          value: "light_funny"
         },
         {
-          label: m.form_mood_romance_label(),
-          description: m.form_mood_romance_description(),
-          value: "romance"
+          label: m.form_mood_romantic_label(),
+          description: m.form_mood_romantic_description(),
+          value: "romantic"
         },
         {
-          label: m.form_mood_drama_label(),
-          description: m.form_mood_drama_description(),
-          value: "drama_serious"
+          label: m.form_mood_thoughtful_deep_label(),
+          description: m.form_mood_thoughtful_deep_description(),
+          value: "thoughtful_deep"
         },
         {
-          label: m.form_mood_action_label(),
-          description: m.form_mood_action_description(),
-          value: "action_adventure"
+          label: m.form_mood_action_packed_label(),
+          description: m.form_mood_action_packed_description(),
+          value: "action_packed"
         },
         {
-          label: m.form_mood_thriller_label(),
-          description: m.form_mood_thriller_description(),
-          value: "thriller_suspense"
+          label: m.form_mood_tense_twisty_label(),
+          description: m.form_mood_tense_twisty_description(),
+          value: "tense_twisty"
         },
         {
-          label: m.form_mood_horror_label(),
-          description: m.form_mood_horror_description(),
-          value: "horror"
+          label: m.form_mood_scary_label(),
+          description: m.form_mood_scary_description(),
+          value: "scary"
         },
         {
-          label: m.form_mood_scifi_label(),
-          description: m.form_mood_scifi_description(),
-          value: "scifi"
-        },
-        {
-          label: m.form_mood_fantasy_label(),
-          description: m.form_mood_fantasy_description(),
-          value: "fantasy"
-        },
-        {
-          label: m.form_mood_mystery_label(),
-          description: m.form_mood_mystery_description(),
-          value: "mystery_cerebral"
+          label: m.form_mood_wonder_worlds_label(),
+          description: m.form_mood_wonder_worlds_description(),
+          value: "wonder_worlds"
         }
       ]}
     />
@@ -127,7 +115,7 @@
     />
   </FormStep>
 
-  <FormStep
+  <!-- <FormStep
     id="duration"
     title={m.form_duration_title()}
     question={m.form_duration_question()}
@@ -145,7 +133,7 @@
         }
       ]}
     />
-  </FormStep>
+  </FormStep> -->
 
   <FormStep
     id="inspiration_movies_ids"

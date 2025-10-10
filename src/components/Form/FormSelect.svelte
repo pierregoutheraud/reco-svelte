@@ -26,7 +26,7 @@
   };
 </script>
 
-<div class="flex flex-col gap-4 flex-1">
+<div class="flex flex-col gap-5 flex-1">
   {#each options as option}
     <FormSelectOption
       label={option.label}
@@ -37,5 +37,6 @@
     />
   {/each}
 
-  <div class="h-12 w-full shrink-0"></div>
+  <!-- In order to display the bottom shadow of the last option -->
+  <div class="h-[10px] w-full shrink-0"></div>
 </div>

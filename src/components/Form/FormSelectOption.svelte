@@ -39,7 +39,7 @@
   ]}
   {onclick}
 >
-  <p>{label}</p>
+  <p class="font-semibold">{label}</p>
   {#if sublabel}
     <p class={["text-sm text-gray-400", selected ? "text-white" : ""]}>
       {sublabel}
