@@ -66,7 +66,7 @@
     <Card movie={currentMovie} />
   </div>
 
-  <div class="flex p-4 gap-2 justify-between bg-background/90">
+  <div class="flex p-2 gap-2 justify-between bg-background/90">
     <!-- <Button
       icon={ArrowsClockwise}
       iconPosition="left"
@@ -81,7 +81,7 @@
       <Button
         icon={ThumbsDown}
         iconPosition="right"
-        class="!bg-rose-500"
+        class="bg-rose-500"
         iconSize={24}
         iconWeight={isCurrentMovieDisliked ? "fill" : "regular"}
         onclick={() => {

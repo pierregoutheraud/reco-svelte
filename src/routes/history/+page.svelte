@@ -6,7 +6,7 @@
   import RecommendationsList from "../../components/RecommendPage/RecommendationsList.svelte";
   import Button from "../../components/Button/Button.svelte";
   import IconButton from "../../components/Button/IconButton.svelte";
-  import { ArrowLeft, House } from "phosphor-svelte";
+  import { ArrowLeft, House, Trash } from "phosphor-svelte";
   import { goto } from "$app/navigation";
   import * as m from "$lib/paraglide/messages.js";
 
@@ -78,9 +78,11 @@
     <h1 class="text-xl font-bold">{m.history_title()}</h1>
 
     {#if movies.length > 0}
-      <Button onclick={clearCurrentMovie} class="!bg-red-500 absolute right-4">
-        {m.history_clear_button()}
-      </Button>
+      <IconButton
+        class="!bg-red-500 absolute right-4"
+        icon={Trash}
+        onclick={clearCurrentMovie}
+      />
     {/if}
   </header>
 

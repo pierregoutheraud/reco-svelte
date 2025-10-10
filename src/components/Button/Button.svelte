@@ -36,9 +36,8 @@
 <button
   type="button"
   class={[
-    className,
     "flex items-center justify-center h-10 px-4 text-base cursor-pointer",
-    "active:opacity-80 transition-opacity duration-200",
+    "active:opacity-80 transition-opacity duration-200 text-base",
     mode === "default" ? "bg-main hover:opacity-90" : "",
     mode === "ghost" ? "bg-transparent hover:bg-gray-800" : "",
     {
@@ -46,7 +45,8 @@
       "bg-gray-800 opacity-70 !cursor-not-allowed": disabled
       // "bg-main": mode === "default",
       // "bg-transparent": mode === "ghost"
-    }
+    },
+    className
   ]}
   {disabled}
   {onclick}
@@ -54,7 +54,7 @@
   <div
     class="flex gap-2 {iconPosition === 'left'
       ? 'flex-row'
-      : 'flex-row-reverse'} items-center text-base"
+      : 'flex-row-reverse'} items-center"
   >
     {#if IconComponent}
       <IconComponent size={iconSize} weight={iconWeight} />
