@@ -37,14 +37,14 @@
 </script>
 
 <Form {onComplete}>
-  <!-- <FormStep
+  <FormStep
     id="era"
     title={m.form_era_title()}
     question={m.form_era_question()}
     required
   >
     <FormSlider min={1920} max={currentYear} step={1} multiple />
-  </FormStep> -->
+  </FormStep>
 
   <FormStep
     id="mood"
