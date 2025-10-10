@@ -66,7 +66,7 @@
 </script>
 
 <div class="flex h-full flex-col">
-  <header class="relative p-4 flex justify-center items-center">
+  <!--<header class="relative p-4 flex justify-center items-center">
     <IconButton
       class="absolute left-4"
       icon={ArrowLeft}
@@ -77,14 +77,14 @@
 
     <h1 class="text-xl font-bold">{m.watchlater_title()}</h1>
 
-    <!-- {#if movies.length > 0}
+     {#if movies.length > 0}
       <IconButton
         class="!bg-red-500 absolute right-4"
         icon={Trash}
         onclick={clearCurrentMovie}
       />
-    {/if} -->
-  </header>
+    {/if}
+  </header>-->
 
   {#if loading}{:else if movies.length === 0}
     <div

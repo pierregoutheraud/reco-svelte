@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class="relative flex flex-1 h-full flex-col gap-4 items-center justify-center w-full px-8"
+  class="relative flex flex-1 h-full flex-col gap-6 items-center justify-center w-full px-8"
 >
   <h1 class="text-3xl font-bold font-title tracking-wider text-center">
     {@html m.home_title()}
@@ -25,12 +25,12 @@
 
   <Button onclick={handleStart}>{m.home_start_button()}</Button>
 
-  <p class="text-sm text-gray-500">{m.home_or()}</p>
+  <!-- <p class="text-sm text-gray-500">{m.home_or()}</p>
   <Link href="/watchlater" class="text-base text-center">
     {m.home_watch_later_link()} ({userPreferences.watchLater.length})
-  </Link>
+  </Link> -->
 
-  <p class="absolute bottom-6 right-6 text-sm text-center text-gray-500">
+  <p class="text-sm text-center text-gray-500">
     {m.home_powered_by()}
     <Link href="https://www.miru.live" target="_blank">miru.live</Link>
   </p>

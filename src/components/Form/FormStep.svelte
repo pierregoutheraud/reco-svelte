@@ -61,7 +61,7 @@
 </script>
 
 {#if isActive}
-  <div class="flex flex-1 flex-col min-h-0 justify-between gap-4">
+  <div class="flex flex-1 flex-col min-h-0 justify-between gap-2">
     {#if title || question}
       <header>
         <div class="flex flex-col gap-1">
@@ -83,7 +83,7 @@
       {@render children?.()}
     </div>
 
-    <div class="flex justify-between w-full bg-background">
+    <footer class="flex justify-between w-full bg-background">
       {#if stepIndex > 0}
         <IconButton
           icon={ArrowLeft}
@@ -122,6 +122,6 @@
           />
         {/if}
       </div>
-    </div>
+    </footer>
   </div>
 {/if}
