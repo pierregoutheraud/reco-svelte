@@ -54,7 +54,7 @@
   });
 </script>
 
-<div class="flex flex-col items-center justify-center gap-3">
+<div class="flex flex-col items-center justify-center gap-3 w-[300px]">
   <p class="text-base text-white text-center">
     {texts[currentTextIndex]}
   </p>

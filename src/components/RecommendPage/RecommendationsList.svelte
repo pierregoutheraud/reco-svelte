@@ -1,22 +1,21 @@
 <script lang="ts">
-  import type { MovieEnriched } from "./RecommendationsPage.svelte";
   import Card from "../MovieCard/MovieCard.svelte";
-  import Button from "../Button/Button.svelte";
   import { ArrowRight, ListPlus, ThumbsDown, ThumbsUp } from "phosphor-svelte";
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
-  import * as m from "$lib/paraglide/messages.js";
+  import type { MovieEnriched } from "../../stores/recommendationsStore.svelte";
 
   interface Props {
     movies: MovieEnriched[];
     onComplete: () => void;
+    onDelete?: () => void;
     currentMovieId?: number;
   }
 
   let { movies, onComplete, currentMovieId = $bindable() }: Props = $props();
 
   let currentMovieIndex = $state(0);
-  let currentMovie = $derived(movies[currentMovieIndex]);
+  let currentMovie = $derived(movies?.[currentMovieIndex]);
 
   // Check if the current movie is already liked or disliked
   let isCurrentMovieLiked = $derived(
@@ -77,13 +76,14 @@
   }
 </script>
 
-<div class="flex flex-1 min-h-0 flex-col w-full relative">
-  <div class="flex-1 overflow-y-auto">
-    <Card movie={currentMovie} />
-  </div>
+{#if currentMovie}
+  <div class="flex flex-1 min-h-0 flex-col w-full relative">
+    <div class="flex-1 overflow-y-auto">
+      <Card movie={currentMovie} />
+    </div>
 
-  <div class="flex p-2 gap-2 justify-between bg-background/90">
-    <!-- <Button
+    <div class="flex p-2 gap-2 justify-between bg-background/90">
+      <!-- <Button
       icon={ArrowsClockwise}
       iconPosition="left"
       onclick={() => {
@@ -93,43 +93,44 @@
       Try again
     </Button> -->
 
-    <div class="flex gap-2">
-      <IconButton
-        icon={ThumbsDown}
-        class="bg-rose-500"
-        size={24}
-        weight={isCurrentMovieDisliked ? "fill" : "regular"}
-        onclick={() => {
-          handleDisliked();
-        }}
-      />
+      <div class="flex gap-2">
+        <IconButton
+          icon={ThumbsDown}
+          class="bg-rose-500"
+          size={24}
+          weight={isCurrentMovieDisliked ? "fill" : "regular"}
+          onclick={() => {
+            handleDisliked();
+          }}
+        />
+
+        <IconButton
+          icon={ThumbsUp}
+          class="bg-teal-500"
+          size={24}
+          weight={isCurrentMovieLiked ? "fill" : "regular"}
+          onclick={() => {
+            handleLiked();
+          }}
+        />
+
+        <IconButton
+          icon={ListPlus}
+          size={24}
+          weight={isCurrentMovieInWatchLater ? "fill" : "regular"}
+          onclick={() => {
+            handleClickWatchLater();
+          }}
+        />
+      </div>
 
       <IconButton
-        icon={ThumbsUp}
-        class="bg-teal-500"
+        icon={ArrowRight}
         size={24}
-        weight={isCurrentMovieLiked ? "fill" : "regular"}
         onclick={() => {
-          handleLiked();
-        }}
-      />
-
-      <IconButton
-        icon={ListPlus}
-        size={24}
-        weight={isCurrentMovieInWatchLater ? "fill" : "regular"}
-        onclick={() => {
-          handleClickWatchLater();
+          handleNextMovie();
         }}
       />
     </div>
-
-    <IconButton
-      icon={ArrowRight}
-      size={24}
-      onclick={() => {
-        handleNextMovie();
-      }}
-    />
   </div>
-</div>
+{/if}

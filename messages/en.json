@@ -34,7 +34,7 @@
   "recommendations_loading_3": "Consulting the film archives...",
   "recommendations_loading_4": "Reading between the frames...",
   "recommendations_loading_5": "Curating your perfect lineup...",
-  "recommendations_loading_subtext": "This process will take around {seconds} seconds.",
+  "recommendations_loading_subtext": "This process will take less than {seconds} seconds.",
   "movie_card_why_recommend": "Why we recommend this movie to you:",
   "movie_card_overview": "Overview:",
   "movie_card_view_on_miru": "View on miru",

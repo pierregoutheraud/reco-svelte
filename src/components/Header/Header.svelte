@@ -1,21 +1,33 @@
 <script lang="ts">
-  import { ClockCounterClockwise, Popcorn } from "phosphor-svelte";
+  import { ClockCounterClockwise, Popcorn, Sparkle } from "phosphor-svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
+  import { recommendationsStore } from "../../stores/recommendationsStore.svelte";
 </script>
 
 <header class="w-full flex p-2 justify-center gap-4">
   <IconButton
-    icon={Popcorn}
-    mode={["/", "/form", "/recommendations"].includes(page.url.pathname)
-      ? "default"
-      : "ghost"}
+    icon={Sparkle}
+    mode={["/", "/form"].includes(page.url.pathname) ? "default" : "ghost"}
     onclick={() => {
-      goto("/");
+      goto("/form");
     }}
   />
+
+  {#if recommendationsStore.hasRecommendations() || page.url.pathname === "/recommendations"}
+    <IconButton
+      icon={Popcorn}
+      mode={["/recommendations"].includes(page.url.pathname)
+        ? "default"
+        : "ghost"}
+      onclick={() => {
+        goto("/recommendations");
+      }}
+    />
+  {/if}
+
   <div class="flex relative">
     {#if userPreferences.watchLater.length > 0}
       <span

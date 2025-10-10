@@ -42,7 +42,7 @@
     mode === "ghost" ? "bg-transparent hover:bg-gray-800" : "",
     {
       // "bg-main": !disabled,
-      "bg-gray-800 opacity-70 !cursor-not-allowed": disabled
+      "bg-gray-800 !opacity-30 !cursor-not-allowed": disabled
       // "bg-main": mode === "default",
       // "bg-transparent": mode === "ghost"
     },

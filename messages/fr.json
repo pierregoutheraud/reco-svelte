@@ -35,7 +35,7 @@
   "recommendations_loading_3": "Consultation des archives cinématographiques...",
   "recommendations_loading_4": "Lecture des scénarios...",
   "recommendations_loading_5": "Composition de votre sélection parfaite...",
-  "recommendations_loading_subtext": "Ce processus prendra environ {seconds} secondes.",
+  "recommendations_loading_subtext": "Ce processus prendra moins de {seconds} secondes.",
   "movie_card_why_recommend": "Pourquoi nous recommandons ce film :",
   "movie_card_overview": "Synopsis :",
   "movie_card_view_on_miru": "Voir sur miru",

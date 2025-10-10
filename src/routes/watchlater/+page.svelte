@@ -2,12 +2,8 @@
   import { onMount } from "svelte";
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import { fetchMovie } from "$lib/tmdb/tmdb";
-  import type { MovieEnriched } from "../../components/RecommendPage/RecommendationsStreamingPage.svelte";
+  import type { MovieEnriched } from "../../stores/recommendationsStore.svelte";
   import RecommendationsList from "../../components/RecommendPage/RecommendationsList.svelte";
-  import Button from "../../components/Button/Button.svelte";
-  import IconButton from "../../components/Button/IconButton.svelte";
-  import { ArrowLeft, House, Trash } from "phosphor-svelte";
-  import { goto } from "$app/navigation";
   import * as m from "$lib/paraglide/messages.js";
 
   let loading = $state(true);
