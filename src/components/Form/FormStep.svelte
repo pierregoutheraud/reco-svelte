@@ -79,7 +79,7 @@
       </header>
     {/if}
 
-    <div class="flex flex-1 overflow-auto">
+    <div class="flex flex-1 overflow-auto overflow-x-hidden w-full">
       {@render children?.()}
     </div>
 

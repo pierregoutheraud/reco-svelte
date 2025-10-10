@@ -58,7 +58,7 @@
       return;
     }
 
-    selectedMovies.push(movie);
+    selectedMovies.unshift(movie);
 
     // Clear search
     searchQuery = "";
@@ -70,10 +70,10 @@
   };
 </script>
 
-<div class="flex flex-col gap-4 flex-1">
+<div class="flex flex-col gap-4 flex-1 w-full">
   <!-- Selected Movies -->
   {#if selectedMovies.length > 0}
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 overflow-auto max-h-[190px] shrink-0">
       {#each selectedMovies as movie (movie.id)}
         <FormSelectedMovieItem {movie} onRemove={removeMovie} />
       {/each}

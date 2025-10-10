@@ -21,7 +21,7 @@
 <button
   type="button"
   class={[
-    "flex items-center gap-4 transition-all",
+    "flex items-center gap-4 transition-all pr-4",
     "hover:bg-white/10 active:translate-y-[2px]",
     isSelected ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
   ].join(" ")}
