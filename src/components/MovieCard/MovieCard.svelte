@@ -5,6 +5,7 @@
   import { FilmStrip } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
   import * as m from "$lib/paraglide/messages.js";
+  import { convertMinsToHrsMins } from "../../helpers/time.helpers";
 
   interface Props {
     movie: MovieEnriched;
@@ -14,6 +15,11 @@
 
   let releaseYear = $derived(
     movie.release_date ? new Date(movie.release_date).getFullYear() : null
+  );
+
+  let runtime = $derived(movie.runtime ? `${movie.runtime} min` : null);
+  let runtimeFormatted = $derived(
+    movie.runtime ? convertMinsToHrsMins(movie.runtime) : null
   );
 </script>
 
@@ -25,7 +31,7 @@
   <div class="flex flex-col gap-0.5">
     <h2 class="font-title text-3xl text-center">{movie.title}</h2>
     <p class="text-center text-sm text-gray-400">
-      {movie.director} - {releaseYear}
+      {movie.director} - {releaseYear} - {runtimeFormatted}
     </p>
   </div>
 
