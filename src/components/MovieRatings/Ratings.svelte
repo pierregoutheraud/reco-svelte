@@ -44,7 +44,7 @@
   }
 </script>
 
-<div class="flex gap-1 select-none no-scrollbar">
+<div class="flex w-full gap-1 select-none no-scrollbar">
   {#if ratings.imdb?.score}
     <RatingItem
       onclick={() => goToWebsite(CRAWLER_SOURCE.IMDB)}

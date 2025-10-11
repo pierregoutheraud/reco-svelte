@@ -25,7 +25,7 @@
 </script>
 
 <div
-  class="flex flex-col items-center gap-0.5 shrink-0 cursor-pointer"
+  class="flex flex-1 flex-col items-center shrink-0 cursor-pointer"
   {onclick}
 >
   <!-- {#if title}
@@ -37,10 +37,10 @@
     </h3>
   {/if} -->
 
-  <div class="flex gap-2">
+  <div class="flex gap-2 flex-1 w-full">
     {#each scores as score}
       <div
-        class="text-center p-1 pt-1.5 px-2"
+        class="text-center p-1 pt-1.5 px-2 w-full"
         style:background-color={backgroundColor}
         style:color
       >

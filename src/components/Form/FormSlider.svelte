@@ -56,7 +56,7 @@
           {index}
           class="flex items-center justify-center size-12 cursor-pointer outline-none"
         >
-          <div class="size-8 bg-main"></div>
+          <div class="h-4 w-8 bg-main"></div>
         </Slider.Thumb>
         <Slider.ThumbLabel
           {index}

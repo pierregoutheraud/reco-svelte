@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="absolute bottom-6 mx-auto flex gap-2 justify-center w-full pointer-events-none"
+  class="absolute bottom-6 mx-auto flex gap-1 justify-center w-full pointer-events-none"
 >
   {#each Array(formContext.totalSteps) as _, index}
     <div
@@ -15,7 +15,7 @@
         index < formContext.currentStepIndex
           ? "bg-main w-3"
           : index === formContext.currentStepIndex
-            ? "bg-main w-12"
+            ? "bg-main w-8"
             : "bg-main/40 w-4"
       ].join(" ")}
     ></div>

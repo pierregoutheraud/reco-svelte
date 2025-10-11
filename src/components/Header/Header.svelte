@@ -16,7 +16,7 @@
     }}
   />
 
-  {#if recommendationsStore.hasRecommendations() || page.url.pathname === "/recommendations"}
+  {#if recommendationsStore.hasRecommendations() || recommendationsStore.loading || page.url.pathname === "/recommendations"}
     <IconButton
       icon={Popcorn}
       mode={["/recommendations"].includes(page.url.pathname)

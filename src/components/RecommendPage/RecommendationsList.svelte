@@ -4,6 +4,7 @@
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
   import type { MovieEnriched } from "../../stores/recommendationsStore.svelte";
+  import Button from "../Button/Button.svelte";
 
   interface Props {
     movies: MovieEnriched[];
@@ -36,12 +37,12 @@
     }
   });
 
-  $inspect({
-    watchLater: userPreferences.watchLater,
-    liked: userPreferences.liked,
-    disliked: userPreferences.disliked,
-    alreadyRecommended: userPreferences.alreadyRecommended
-  });
+  // $inspect({
+  //   watchLater: userPreferences.watchLater,
+  //   liked: userPreferences.liked,
+  //   disliked: userPreferences.disliked,
+  //   alreadyRecommended: userPreferences.alreadyRecommended
+  // });
 
   function goToNextMovie() {
     // Mark this movie as already recommended (shown to user) with its reason
