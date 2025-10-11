@@ -45,6 +45,19 @@
 </script>
 
 <div class="flex w-full gap-1 select-none no-scrollbar">
+  {#if ratings.average?.score}
+    <RatingItem
+      title={m.ratings_average()}
+      scores={[
+        {
+          value: ratings.average.score
+        }
+      ]}
+      crawlerSource={CRAWLER_SOURCE.AVERAGE}
+      onclick={() => goToGoogle()}
+    />
+  {/if}
+
   {#if ratings.imdb?.score}
     <RatingItem
       onclick={() => goToWebsite(CRAWLER_SOURCE.IMDB)}
@@ -95,19 +108,6 @@
           divider: "/5"
         }
       ]}
-    />
-  {/if}
-
-  {#if ratings.average?.score}
-    <RatingItem
-      title={m.ratings_average()}
-      scores={[
-        {
-          value: ratings.average.score
-        }
-      ]}
-      crawlerSource={CRAWLER_SOURCE.AVERAGE}
-      onclick={() => goToGoogle()}
     />
   {/if}
 </div>
