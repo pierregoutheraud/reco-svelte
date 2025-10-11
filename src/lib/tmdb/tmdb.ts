@@ -165,3 +165,20 @@ export async function fetchPopularMovies(): Promise<MovieMinTMDB[] | null> {
 
   return resPopular.results;
 }
+
+export async function fetchSimilarMovies(
+  movieId: number,
+  language?: string
+): Promise<MovieMinTMDB[] | null> {
+  const resSimilar = await tmdbCall<SearchResultTMDB>(
+    `/movie/${movieId}/similar`,
+    {},
+    language
+  );
+
+  if (!resSimilar || !resSimilar.results) {
+    return null;
+  }
+
+  return resSimilar.results;
+}
