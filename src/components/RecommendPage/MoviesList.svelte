@@ -1,6 +1,12 @@
 <script lang="ts">
-  import Card from "../MovieCard/MovieCard.svelte";
-  import { ArrowRight, ListPlus, ThumbsDown, ThumbsUp } from "phosphor-svelte";
+  import MovieCard from "../MovieCard/MovieCard.svelte";
+  import {
+    ArrowRight,
+    ArrowsClockwise,
+    ListPlus,
+    ThumbsDown,
+    ThumbsUp
+  } from "phosphor-svelte";
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
   import type { MovieEnriched } from "../../stores/recommendationsStore.svelte";
@@ -8,9 +14,9 @@
 
   interface Props {
     movies: MovieEnriched[];
+    currentMovieId?: number;
     onComplete: () => void;
     onDelete?: () => void;
-    currentMovieId?: number;
   }
 
   let { movies, onComplete, currentMovieId = $bindable() }: Props = $props();
@@ -80,7 +86,7 @@
 {#if currentMovie}
   <div class="flex flex-1 min-h-0 flex-col w-full relative">
     <div class="flex-1 overflow-y-auto">
-      <Card movie={currentMovie} />
+      <MovieCard movie={currentMovie} />
     </div>
 
     <div class="flex p-2 gap-2 justify-between bg-background/90">
@@ -126,7 +132,9 @@
       </div>
 
       <IconButton
-        icon={ArrowRight}
+        icon={currentMovieIndex === movies.length - 1
+          ? ArrowsClockwise
+          : ArrowRight}
         size={24}
         onclick={() => {
           handleNextMovie();

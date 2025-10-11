@@ -3,7 +3,7 @@
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import { fetchMovie } from "$lib/tmdb/tmdb";
   import type { MovieEnriched } from "../../stores/recommendationsStore.svelte";
-  import RecommendationsList from "../../components/RecommendPage/RecommendationsList.svelte";
+  import RecommendationsList from "../../components/RecommendPage/MoviesList.svelte";
   import * as m from "$lib/paraglide/messages.js";
 
   let loading = $state(true);

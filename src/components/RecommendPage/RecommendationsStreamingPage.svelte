@@ -4,7 +4,7 @@
   import OptimisticProgressBar from "../OptimisticProgressBar/OptimisticProgressBar.svelte";
   import { ArrowsClockwise, Warning } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
-  import RecommendationsList from "./RecommendationsList.svelte";
+  import RecommendationsList from "./MoviesList.svelte";
   import { recommendationsStore } from "../../stores/recommendationsStore.svelte";
   import * as m from "$lib/paraglide/messages.js";
 
