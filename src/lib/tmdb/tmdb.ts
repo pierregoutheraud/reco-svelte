@@ -3,6 +3,7 @@ import {
   BACKDROP_SIZE,
   JOB,
   POSTER_SIZE,
+  type MovieMinTMDB,
   type MovieTMDB,
   type SearchResultTMDB
 } from "./tmdb.decl";
@@ -153,4 +154,14 @@ export async function fetchMovie(tmdbId: number, language?: string) {
     director
   };
   return movieTmdb;
+}
+
+export async function fetchPopularMovies(): Promise<MovieMinTMDB[] | null> {
+  const resPopular = await tmdbCall<SearchResultTMDB>("/movie/popular");
+
+  if (!resPopular) {
+    return null;
+  }
+
+  return resPopular.results;
 }

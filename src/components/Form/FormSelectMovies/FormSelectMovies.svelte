@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import type { FormContext } from "../Form.svelte";
   import type { FormStepContext } from "../FormStep.svelte";
-  import { searchMoviesByTitle } from "$lib/tmdb/tmdb";
+  import { fetchPopularMovies, searchMoviesByTitle } from "$lib/tmdb/tmdb";
   import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
   import FormSelectedMovieItem from "./FormSelectedMovieItem.svelte";
   import FormSearchResultMovieItem from "./FormSearchResultMovieItem.svelte";
@@ -23,6 +23,12 @@
     const movieIds = selectedMovies.map((m) => m.id);
     setValue(stepId, movieIds.length > 0 ? movieIds : undefined);
   });
+
+  // onMount(() => {
+  //   fetchPopularMovies().then((movies) => {
+  //     searchResults = movies || [];
+  //   });
+  // });
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
