@@ -5,19 +5,27 @@
     texts: string[];
     duration: number; // in seconds
     subtext?: string;
+    startFrom?: number; // elapsed seconds to start from
   }
 
-  let { texts, duration, subtext }: Props = $props();
-
-  let progress = $state(0);
-  let currentTextIndex = $state(0);
-  let intervalId: ReturnType<typeof setInterval> | null = null;
-  let textIntervalId: ReturnType<typeof setInterval> | null = null;
+  let { texts, duration, subtext, startFrom = 0 }: Props = $props();
 
   const maxProgress = 95;
   const updateFrequency = 50; // Update every 50ms for smooth animation
   const totalSteps = (duration * 1000) / updateFrequency;
   const progressPerStep = maxProgress / totalSteps;
+
+  // Calculate initial progress based on elapsed time
+  const initialProgress = Math.min((startFrom / duration) * maxProgress, maxProgress);
+
+  // Calculate which text to show based on elapsed time
+  const textDuration = duration / texts.length;
+  const initialTextIndex = Math.min(Math.floor(startFrom / textDuration), texts.length - 1);
+
+  let progress = $state(initialProgress);
+  let currentTextIndex = $state(initialTextIndex);
+  let intervalId: ReturnType<typeof setInterval> | null = null;
+  let textIntervalId: ReturnType<typeof setInterval> | null = null;
 
   onMount(() => {
     // Progress bar animation
@@ -32,7 +40,7 @@
     }, updateFrequency);
 
     // Text cycling - show each text once
-    const textDuration = (duration * 1000) / texts.length;
+    const textDurationMs = (duration * 1000) / texts.length;
     textIntervalId = setInterval(() => {
       if (currentTextIndex < texts.length - 1) {
         currentTextIndex = currentTextIndex + 1;
@@ -41,7 +49,7 @@
           clearInterval(textIntervalId);
         }
       }
-    }, textDuration);
+    }, textDurationMs);
   });
 
   onDestroy(() => {

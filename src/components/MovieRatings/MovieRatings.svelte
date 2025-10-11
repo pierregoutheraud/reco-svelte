@@ -61,13 +61,9 @@
 </script>
 
 {#if loading}
-  <!-- <div class="flex justify-center items-center py-4">
+  <div class="flex justify-center items-center h-[50px]">
     <p class="text-gray-400 text-sm">Loading ratings...</p>
-  </div> -->
-{:else if error || !ratings}
-  <!-- <div class="flex justify-center items-center py-4">
-    <p class="text-gray-500 text-sm">Ratings unavailable</p>
-  </div> -->
-{:else}
+  </div>
+{:else if ratings}
   <Ratings {ratings} />
 {/if}

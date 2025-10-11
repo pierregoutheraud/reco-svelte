@@ -20,8 +20,15 @@ class RecommendationsStore {
   enrichedMovies = $state<MovieEnriched[] | undefined>(undefined);
   recommendations = $state<Recommendation[] | undefined>(undefined);
   currentFormData = $state<MoviesFormData | undefined>(undefined);
+  loadingStartTime = $state<number | null>(null);
+  loadingDuration = 60; // seconds
 
   private tmdbMovies = new SvelteMap<string, MovieTMDB>();
+
+  get elapsedSeconds() {
+    if (!this.loadingStartTime) return 0;
+    return Math.floor((Date.now() - this.loadingStartTime) / 1000);
+  }
 
   private async fetchTmdbMovie(
     title: string,
@@ -87,6 +94,7 @@ class RecommendationsStore {
 
   async loadRecommendations(formData: MoviesFormData) {
     this.loading = true;
+    this.loadingStartTime = Date.now();
     this.error = null;
     this.enrichedMovies = undefined;
     this.recommendations = undefined;
@@ -117,6 +125,7 @@ class RecommendationsStore {
         err instanceof Error ? err.message : m.error_fetch_recommendations();
     } finally {
       this.loading = false;
+      this.loadingStartTime = null;
     }
   }
 
@@ -137,6 +146,7 @@ class RecommendationsStore {
 
   clear() {
     this.loading = false;
+    this.loadingStartTime = null;
     this.error = null;
     this.enrichedMovies = undefined;
     this.recommendations = undefined;

@@ -62,7 +62,8 @@
           m.recommendations_loading_5()
         ]}
         subtext={m.recommendations_loading_subtext({ seconds: 60 })}
-        duration={60}
+        duration={recommendationsStore.loadingDuration}
+        startFrom={recommendationsStore.elapsedSeconds}
       />
     </div>
   {/if}
