@@ -131,7 +131,7 @@
         />
       </div>
 
-      <IconButton
+      <!-- <IconButton
         icon={currentMovieIndex === movies.length - 1
           ? ArrowsClockwise
           : ArrowRight}
@@ -139,7 +139,22 @@
         onclick={() => {
           handleNextMovie();
         }}
-      />
+      /> -->
+
+      <Button
+        icon={currentMovieIndex === movies.length - 1
+          ? ArrowsClockwise
+          : ArrowRight}
+        iconPosition="right"
+        onclick={() => {
+          handleNextMovie();
+        }}
+      >
+        <div class="flex gap-1 items-baseline">
+          <span class="font-semibold">{currentMovieIndex + 1}</span>
+          <span class="text-sm">/{movies.length}</span>
+        </div>
+      </Button>
     </div>
   </div>
 {/if}

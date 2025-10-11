@@ -51,14 +51,13 @@
   {disabled}
   {onclick}
 >
-  <div
-    class="flex gap-2 {iconPosition === 'left'
-      ? 'flex-row'
-      : 'flex-row-reverse'} items-center"
-  >
-    {#if IconComponent}
+  <div class="flex gap-2 items-center">
+    {#if IconComponent && iconPosition === "left"}
       <IconComponent size={iconSize} weight={iconWeight} />
     {/if}
     {@render children?.()}
+    {#if IconComponent && iconPosition === "right"}
+      <IconComponent size={iconSize} weight={iconWeight} />
+    {/if}
   </div>
 </button>

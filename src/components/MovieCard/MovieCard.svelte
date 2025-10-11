@@ -33,11 +33,12 @@
     </p>
   </div>
 
-  <MovieRatings movieId={movie.id} />
-
-  <div class="flex flex-col gap-1 bg-indigo-900 p-4">
-    <p class="font-semibold text-base">{m.movie_card_why_recommend()}</p>
-    <p class="text-sm">{movie.reason}</p>
+  <div class="flex flex-col gap-2">
+    <MovieRatings movieId={movie.id} />
+    <div class="flex flex-col gap-1 bg-indigo-900 p-4">
+      <p class="font-semibold text-base">{m.movie_card_why_recommend()}</p>
+      <p class="text-sm">{movie.reason}</p>
+    </div>
   </div>
 
   <div class="flex flex-col gap-1">
