@@ -3,7 +3,6 @@ import type {
   RecommendationResponse
 } from "$lib/api/recommendations.decl";
 import { BASE_API_URL } from "../../constants/api.constants";
-import { isDev } from "../../helpers/env.helpers";
 
 /**
  * Fetch movie recommendations from the API (non-streaming)
@@ -94,9 +93,7 @@ export async function streamAiRecommendations(
   }
 }
 
-export async function fetchAiRecommendationsMock(
-  ...args: any[]
-): Promise<RecommendationResponse> {
+export async function fetchAiRecommendationsMock(): Promise<RecommendationResponse> {
   return {
     success: true,
     recommendations: [

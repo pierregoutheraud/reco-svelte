@@ -39,4 +39,5 @@ export interface RecommendationRequest {
   already_recommended_movies_ids?: number[];
   recommendations_count?: number;
   locale?: "en" | "fr";
+  reasoning_effort?: "minimal" | "low" | "medium" | "high";
 }

@@ -109,7 +109,8 @@ class RecommendationsStore {
           disliked_movies_ids: userPreferences.disliked,
           liked_movies_ids: userPreferences.liked,
           already_recommended_movies_ids: userPreferences.alreadyRecommended,
-          locale
+          locale,
+          reasoning_effort: "medium"
         },
         async (partialRecs) => {
           if (!partialRecs) {

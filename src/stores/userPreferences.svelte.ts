@@ -68,6 +68,7 @@ class UserPreferencesStore {
   private dislikedMoviesIds = $state<number[]>([]);
   private likedMoviesIds = $state<number[]>([]);
   private alreadyRecommendedMoviesIds = $state<number[]>([]);
+  private maxAlreadyRecommendedMoviesIds = 500;
   watchLater = $state<WatchLaterItem[]>([]);
 
   constructor() {
@@ -157,7 +158,7 @@ class UserPreferencesStore {
     }
 
     this.alreadyRecommendedMoviesIds.push(movieId);
-
+    this.trimAlreadyRecommended();
     this.save();
   }
 
@@ -211,6 +212,7 @@ class UserPreferencesStore {
       return;
     }
 
+    this.trimAlreadyRecommended();
     this.save();
   }
 
@@ -220,6 +222,18 @@ class UserPreferencesStore {
     this.alreadyRecommendedMoviesIds = [];
     this.watchLater = [];
     this.save();
+  }
+
+  private trimAlreadyRecommended(): void {
+    if (
+      this.alreadyRecommendedMoviesIds.length >
+      this.maxAlreadyRecommendedMoviesIds
+    ) {
+      // Keep last maxAlreadyRecommendedMoviesIds entries
+      this.alreadyRecommendedMoviesIds = this.alreadyRecommendedMoviesIds.slice(
+        -this.maxAlreadyRecommendedMoviesIds
+      );
+    }
   }
 
   private save(): void {

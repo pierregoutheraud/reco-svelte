@@ -144,7 +144,7 @@
         />
       </div>
 
-      <div class="flex gap-2">
+      <div class="flex gap-3 items-center">
         <IconButton
           icon={ArrowLeft}
           size={24}
@@ -154,20 +154,20 @@
           }}
         />
 
-        <Button
+        <p class="flex gap-0 items-baseline">
+          <span class="font-semibold">{currentMovieIndex + 1}</span>
+          <span class="text-sm text-gray-400">/{movies.length}</span>
+        </p>
+
+        <IconButton
           icon={currentMovieIndex === movies.length - 1
             ? ArrowsClockwise
             : ArrowRight}
-          iconPosition="right"
+          size={24}
           onclick={() => {
             handleNextMovie();
           }}
-        >
-          <div class="flex gap-0 items-baseline">
-            <span class="font-semibold">{currentMovieIndex + 1}</span>
-            <span class="text-sm">/{movies.length}</span>
-          </div>
-        </Button>
+        />
       </div>
     </div>
   </div>
