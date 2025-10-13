@@ -1,6 +1,7 @@
 <script lang="ts">
   import MovieCard from "../MovieCard/MovieCard.svelte";
   import {
+    ArrowLeft,
     ArrowRight,
     ArrowsClockwise,
     ListPlus,
@@ -60,6 +61,14 @@
     }
   }
 
+  function goToPreviousMovie() {
+    if (currentMovieIndex === 0) {
+      return;
+    }
+
+    currentMovieIndex--;
+  }
+
   function handleDisliked() {
     userPreferences.addDisliked(currentMovie.id);
     // goToNextMovie();
@@ -72,6 +81,10 @@
 
   function handleNextMovie() {
     goToNextMovie();
+  }
+
+  function handlePreviousMovie() {
+    goToPreviousMovie();
   }
 
   function handleClickWatchLater() {
@@ -131,30 +144,31 @@
         />
       </div>
 
-      <!-- <IconButton
-        icon={currentMovieIndex === movies.length - 1
-          ? ArrowsClockwise
-          : ArrowRight}
-        size={24}
-        onclick={() => {
-          handleNextMovie();
-        }}
-      /> -->
+      <div class="flex gap-2">
+        <IconButton
+          icon={ArrowLeft}
+          size={24}
+          disabled={currentMovieIndex === 0}
+          onclick={() => {
+            handlePreviousMovie();
+          }}
+        />
 
-      <Button
-        icon={currentMovieIndex === movies.length - 1
-          ? ArrowsClockwise
-          : ArrowRight}
-        iconPosition="right"
-        onclick={() => {
-          handleNextMovie();
-        }}
-      >
-        <div class="flex gap-1 items-baseline">
-          <span class="font-semibold">{currentMovieIndex + 1}</span>
-          <span class="text-sm">/{movies.length}</span>
-        </div>
-      </Button>
+        <Button
+          icon={currentMovieIndex === movies.length - 1
+            ? ArrowsClockwise
+            : ArrowRight}
+          iconPosition="right"
+          onclick={() => {
+            handleNextMovie();
+          }}
+        >
+          <div class="flex gap-0 items-baseline">
+            <span class="font-semibold">{currentMovieIndex + 1}</span>
+            <span class="text-sm">/{movies.length}</span>
+          </div>
+        </Button>
+      </div>
     </div>
   </div>
 {/if}
