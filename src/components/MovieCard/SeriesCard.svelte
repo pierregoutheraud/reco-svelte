@@ -1,7 +1,7 @@
 <script lang="ts">
   import PosterTmdb from "../Poster/PosterTmdb.svelte";
   import MediaRatings from "../MediaRatings/MediaRatings.svelte";
-  import { Television } from "phosphor-svelte";
+  import { ArrowSquareOut } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
   import * as m from "$lib/paraglide/messages.js";
   import type { MediaEnriched } from "../../stores/recommendationsStore.svelte";
@@ -68,7 +68,7 @@
   </div>
 
   <Button
-    icon={Television}
+    icon={ArrowSquareOut}
     class="!bg-miru !text-black"
     onclick={() => {
       window.open(

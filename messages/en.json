@@ -68,8 +68,8 @@
   "form_media_type_movies_description": "Feature films and movies",
   "form_media_type_series_label": "Series",
   "form_media_type_series_description": "TV shows and series",
-  "media_card_view_movie": "View Movie on Miru",
-  "media_card_view_series": "View Series on Miru",
+  "media_card_view_movie": "More details on Miru",
+  "media_card_view_series": "More details on Miru",
   "media_card_season": "season",
   "media_card_seasons": "seasons",
   "media_card_episodes": "episodes"

@@ -1,7 +1,7 @@
 <script lang="ts">
   import PosterTmdb from "../Poster/PosterTmdb.svelte";
   import MediaRatings from "../MediaRatings/MediaRatings.svelte";
-  import { FilmStrip } from "phosphor-svelte";
+  import { ArrowSquareOut } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
   import * as m from "$lib/paraglide/messages.js";
   import { convertMinsToHrsMins } from "../../helpers/time.helpers";
@@ -56,7 +56,7 @@
   </div>
 
   <Button
-    icon={FilmStrip}
+    icon={ArrowSquareOut}
     class="!bg-miru !text-black"
     onclick={() => {
       window.open(`https://www.miru.live/movie/${media.id}`, "_blank");

@@ -69,8 +69,8 @@
   "form_media_type_movies_description": "Longs-métrages et films",
   "form_media_type_series_label": "Séries",
   "form_media_type_series_description": "Séries TV et émissions",
-  "media_card_view_movie": "Voir le film sur Miru",
-  "media_card_view_series": "Voir la série sur Miru",
+  "media_card_view_movie": "Plus d'infos sur Miru",
+  "media_card_view_series": "Plus d'infos sur Miru",
   "media_card_season": "saison",
   "media_card_seasons": "saisons",
   "media_card_episodes": "épisodes"
