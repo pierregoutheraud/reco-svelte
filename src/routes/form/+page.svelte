@@ -1,9 +1,10 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import MoviesForm from "../../components/MoviesForm/MoviesForm.svelte";
-  import type { MoviesFormData } from "../../components/MoviesForm/MoviesForm.svelte";
+  import MediasForm, {
+    type MediasFormData
+  } from "../../components/MediasForm/MediasForm.svelte";
 
-  const handleComplete = (formData: MoviesFormData) => {
+  const handleComplete = (formData: MediasFormData) => {
     if (!formData) return;
 
     // Navigate to recommendations page with form data in state
@@ -13,4 +14,4 @@
   };
 </script>
 
-<MoviesForm onComplete={handleComplete} />
+<MediasForm onComplete={handleComplete} />

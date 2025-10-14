@@ -1,4 +1,4 @@
-export const enrichedMoviesMock = [
+export const enrichedMediasMock = [
   {
     adult: false,
     backdrop_path: "/mOYIUiSdoLWynoZIGDZSAAUZ3ss.jpg",

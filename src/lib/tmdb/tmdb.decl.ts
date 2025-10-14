@@ -49,6 +49,26 @@ export interface MovieMinTMDB {
   vote_count: number;
 }
 
+export interface ShowMinTMDB {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  media_type: TMDB_MEDIA_TYPE.SHOW;
+  origin_country: string[];
+  original_language: string;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  poster_path: string | null;
+  first_air_date?: string;
+  name: string;
+  vote_average: number;
+  vote_count: number;
+}
+
+export type MediaMinTMDB = MovieMinTMDB | ShowMinTMDB;
+
 export interface MovieTMDB {
   adult: boolean;
   backdrop_path: string | null;
@@ -233,3 +253,6 @@ export interface SeasonTMDB {
   poster_path: string | null;
   season_number: number;
 }
+
+// Union types for handling both movies and TV shows
+export type MediaTMDB = MovieTMDB | ShowTMDB;

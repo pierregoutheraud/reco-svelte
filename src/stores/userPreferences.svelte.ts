@@ -1,24 +1,38 @@
+import { tmdbIdToKey } from "../helpers/media.helpers";
+import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
+
 const STORAGE_KEY = "USER_PREFERENCES";
 
 export interface WatchLaterItem {
-  id: number;
+  key: string; // Format: "movie__123" or "tv__456"
   reason: string;
   timestamp: number;
 }
 
 interface UserPreferences {
-  dislikedMoviesIds: number[];
-  likedMoviesIds: number[];
-  alreadyRecommendedMoviesIds: number[];
+  dislikedMediaKeys: string[];
+  likedMediaKeys: string[];
+  alreadyRecommendedMediaKeys: string[];
   watchLater: WatchLaterItem[];
+}
+
+// Old interface for migration
+interface UserPreferencesLegacy {
+  dislikedMoviesIds?: number[];
+  likedMoviesIds?: number[];
+  alreadyRecommendedMoviesIds?: number[];
+  dislikedMediaKeys?: string[];
+  likedMediaKeys?: string[];
+  alreadyRecommendedMediaKeys?: string[];
+  watchLater?: (WatchLaterItem | { id: number; reason: string; timestamp: number })[];
 }
 
 function loadFromStorage(): UserPreferences {
   if (typeof window === "undefined") {
     return {
-      dislikedMoviesIds: [],
-      likedMoviesIds: [],
-      alreadyRecommendedMoviesIds: [],
+      dislikedMediaKeys: [],
+      likedMediaKeys: [],
+      alreadyRecommendedMediaKeys: [],
       watchLater: []
     };
   }
@@ -26,30 +40,49 @@ function loadFromStorage(): UserPreferences {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      const parsed = JSON.parse(stored);
+      const parsed: UserPreferencesLegacy = JSON.parse(stored);
+
+      // Migrate old number[] format to new string[] keys (assume all old data is movies)
+      const dislikedMediaKeys = parsed.dislikedMediaKeys
+        ? parsed.dislikedMediaKeys
+        : (parsed.dislikedMoviesIds || []).map(id => tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE));
+
+      const likedMediaKeys = parsed.likedMediaKeys
+        ? parsed.likedMediaKeys
+        : (parsed.likedMoviesIds || []).map(id => tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE));
+
+      const alreadyRecommendedMediaKeys = parsed.alreadyRecommendedMediaKeys
+        ? parsed.alreadyRecommendedMediaKeys
+        : (parsed.alreadyRecommendedMoviesIds || []).map(id => tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE));
+
+      // Migrate watchLater items
+      const watchLater = (parsed.watchLater || []).map(item => {
+        if ("key" in item) {
+          return item as WatchLaterItem;
+        }
+        // Old format with just id
+        return {
+          key: tmdbIdToKey(item.id, TMDB_MEDIA_TYPE.MOVIE),
+          reason: item.reason,
+          timestamp: item.timestamp
+        };
+      });
+
       return {
-        dislikedMoviesIds: Array.isArray(parsed.dislikedMoviesIds)
-          ? parsed.dislikedMoviesIds
-          : [],
-        likedMoviesIds: Array.isArray(parsed.likedMoviesIds)
-          ? parsed.likedMoviesIds
-          : [],
-        alreadyRecommendedMoviesIds: Array.isArray(
-          parsed.alreadyRecommendedMoviesIds
-        )
-          ? parsed.alreadyRecommendedMoviesIds
-          : [],
-        watchLater: Array.isArray(parsed.watchLater) ? parsed.watchLater : []
+        dislikedMediaKeys,
+        likedMediaKeys,
+        alreadyRecommendedMediaKeys,
+        watchLater
       };
     }
   } catch (error) {
-    console.error("Failed to load movie preferences from storage:", error);
+    console.error("Failed to load media preferences from storage:", error);
   }
 
   return {
-    dislikedMoviesIds: [],
-    likedMoviesIds: [],
-    alreadyRecommendedMoviesIds: [],
+    dislikedMediaKeys: [],
+    likedMediaKeys: [],
+    alreadyRecommendedMediaKeys: [],
     watchLater: []
   };
 }
@@ -60,61 +93,78 @@ function saveToStorage(preferences: UserPreferences): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
   } catch (error) {
-    console.error("Failed to save movie preferences to storage:", error);
+    console.error("Failed to save media preferences to storage:", error);
   }
 }
 
 class UserPreferencesStore {
-  private dislikedMoviesIds = $state<number[]>([]);
-  private likedMoviesIds = $state<number[]>([]);
-  private alreadyRecommendedMoviesIds = $state<number[]>([]);
-  private maxAlreadyRecommendedMoviesIds = 500;
+  private dislikedMediaKeys = $state<string[]>([]);
+  private likedMediaKeys = $state<string[]>([]);
+  private alreadyRecommendedMediaKeys = $state<string[]>([]);
+  private maxAlreadyRecommendedMediaKeys = 500;
   watchLater = $state<WatchLaterItem[]>([]);
 
   constructor() {
     const stored = loadFromStorage();
-    this.dislikedMoviesIds = stored.dislikedMoviesIds;
-    this.likedMoviesIds = stored.likedMoviesIds;
-    this.alreadyRecommendedMoviesIds = stored.alreadyRecommendedMoviesIds;
+    this.dislikedMediaKeys = stored.dislikedMediaKeys;
+    this.likedMediaKeys = stored.likedMediaKeys;
+    this.alreadyRecommendedMediaKeys = stored.alreadyRecommendedMediaKeys;
     this.watchLater = stored.watchLater;
   }
 
-  get disliked(): number[] {
-    return this.dislikedMoviesIds;
+  get dislikedKeys(): string[] {
+    return this.dislikedMediaKeys;
   }
 
-  get liked(): number[] {
-    return this.likedMoviesIds;
+  get likedKeys(): string[] {
+    return this.likedMediaKeys;
   }
 
-  get alreadyRecommended(): number[] {
-    return this.alreadyRecommendedMoviesIds;
+  get alreadyRecommendedKeys(): string[] {
+    return this.alreadyRecommendedMediaKeys;
   }
 
-  addDisliked(movieId: number, save: boolean = true): void {
+  // Backward compatibility: check if media ID is disliked (checks all media types)
+  isDisliked(mediaId: number): boolean {
+    return this.dislikedMediaKeys.some(key => key.includes(`__${mediaId}`));
+  }
+
+  isLiked(mediaId: number): boolean {
+    return this.likedMediaKeys.some(key => key.includes(`__${mediaId}`));
+  }
+
+  isAlreadyRecommended(mediaId: number): boolean {
+    return this.alreadyRecommendedMediaKeys.some(key => key.includes(`__${mediaId}`));
+  }
+
+  addDisliked(mediaId: number, mediaType: TMDB_MEDIA_TYPE, save: boolean = true): void {
+    const key = tmdbIdToKey(mediaId, mediaType);
+
     // Remove from liked list if it exists there
-    const likedIndex = this.likedMoviesIds.indexOf(movieId);
+    const likedIndex = this.likedMediaKeys.findIndex(k => k.includes(`__${mediaId}`));
     if (likedIndex > -1) {
-      this.likedMoviesIds.splice(likedIndex, 1);
+      this.likedMediaKeys.splice(likedIndex, 1);
     }
 
-    if (!this.dislikedMoviesIds.includes(movieId)) {
-      this.dislikedMoviesIds.push(movieId);
+    if (!this.dislikedMediaKeys.includes(key)) {
+      this.dislikedMediaKeys.push(key);
     }
     if (save) {
       this.save();
     }
   }
 
-  addLiked(movieId: number, save: boolean = true): void {
+  addLiked(mediaId: number, mediaType: TMDB_MEDIA_TYPE, save: boolean = true): void {
+    const key = tmdbIdToKey(mediaId, mediaType);
+
     // Remove from disliked list if it exists there
-    const dislikedIndex = this.dislikedMoviesIds.indexOf(movieId);
+    const dislikedIndex = this.dislikedMediaKeys.findIndex(k => k.includes(`__${mediaId}`));
     if (dislikedIndex > -1) {
-      this.dislikedMoviesIds.splice(dislikedIndex, 1);
+      this.dislikedMediaKeys.splice(dislikedIndex, 1);
     }
 
-    if (!this.likedMoviesIds.includes(movieId)) {
-      this.likedMoviesIds.push(movieId);
+    if (!this.likedMediaKeys.includes(key)) {
+      this.likedMediaKeys.push(key);
     }
 
     if (save) {
@@ -122,61 +172,51 @@ class UserPreferencesStore {
     }
   }
 
-  addMultipleDisliked(movieIds: number[]): void {
-    for (const id of movieIds) {
-      this.addDisliked(id, false);
-    }
-    this.save();
-  }
-
-  addMultipleLiked(movieIds: number[]): void {
-    for (const id of movieIds) {
-      this.addLiked(id, false);
-    }
-    this.save();
-  }
-
-  removeDisliked(movieId: number): void {
-    const index = this.dislikedMoviesIds.indexOf(movieId);
+  removeDisliked(mediaId: number): void {
+    const index = this.dislikedMediaKeys.findIndex(k => k.includes(`__${mediaId}`));
     if (index > -1) {
-      this.dislikedMoviesIds.splice(index, 1);
+      this.dislikedMediaKeys.splice(index, 1);
       this.save();
     }
   }
 
-  removeLiked(movieId: number): void {
-    const index = this.likedMoviesIds.indexOf(movieId);
+  removeLiked(mediaId: number): void {
+    const index = this.likedMediaKeys.findIndex(k => k.includes(`__${mediaId}`));
     if (index > -1) {
-      this.likedMoviesIds.splice(index, 1);
+      this.likedMediaKeys.splice(index, 1);
       this.save();
     }
   }
 
-  addAlreadyRecommended(movieId: number): void {
-    if (this.alreadyRecommendedMoviesIds.includes(movieId)) {
+  addAlreadyRecommended(mediaId: number, mediaType: TMDB_MEDIA_TYPE): void {
+    const key = tmdbIdToKey(mediaId, mediaType);
+
+    if (this.alreadyRecommendedMediaKeys.includes(key)) {
       return;
     }
 
-    this.alreadyRecommendedMoviesIds.push(movieId);
+    this.alreadyRecommendedMediaKeys.push(key);
     this.trimAlreadyRecommended();
     this.save();
   }
 
-  addToWatchLater(movieId: number, reason: string): void {
+  addToWatchLater(mediaId: number, mediaType: TMDB_MEDIA_TYPE, reason: string): void {
+    const key = tmdbIdToKey(mediaId, mediaType);
+
     // Check if already in watch later
-    const existingIndex = this.watchLater.findIndex((h) => h.id === movieId);
+    const existingIndex = this.watchLater.findIndex((h) => h.key === key);
 
     if (existingIndex > -1) {
       // Update existing entry
       this.watchLater[existingIndex] = {
-        id: movieId,
+        key,
         reason,
         timestamp: Date.now()
       };
     } else {
       // Add new entry
       this.watchLater.push({
-        id: movieId,
+        key,
         reason,
         timestamp: Date.now()
       });
@@ -185,62 +225,47 @@ class UserPreferencesStore {
     this.save();
   }
 
-  getWatchLaterMovie(movieId: number): WatchLaterItem | undefined {
-    return this.watchLater.find((h) => h.id === movieId);
+  getWatchLaterByKey(key: string): WatchLaterItem | undefined {
+    return this.watchLater.find((h) => h.key === key);
   }
 
-  removeFromWatchLater(movieId: number): void {
-    const index = this.watchLater.findIndex((h) => h.id === movieId);
+  getWatchLaterByMediaId(mediaId: number): WatchLaterItem | undefined {
+    return this.watchLater.find((h) => h.key.includes(`__${mediaId}`));
+  }
+
+  removeFromWatchLater(mediaId: number): void {
+    const index = this.watchLater.findIndex((h) => h.key.includes(`__${mediaId}`));
     if (index > -1) {
       this.watchLater.splice(index, 1);
       this.save();
     }
   }
 
-  addMultipleAlreadyRecommended(movieIds: number[]): void {
-    let changed = false;
-
-    for (const id of movieIds) {
-      if (this.alreadyRecommendedMoviesIds.includes(id)) {
-        continue;
-      }
-      this.alreadyRecommendedMoviesIds.push(id);
-      changed = true;
-    }
-
-    if (!changed) {
-      return;
-    }
-
-    this.trimAlreadyRecommended();
-    this.save();
-  }
-
   clear(): void {
-    this.dislikedMoviesIds = [];
-    this.likedMoviesIds = [];
-    this.alreadyRecommendedMoviesIds = [];
+    this.dislikedMediaKeys = [];
+    this.likedMediaKeys = [];
+    this.alreadyRecommendedMediaKeys = [];
     this.watchLater = [];
     this.save();
   }
 
   private trimAlreadyRecommended(): void {
     if (
-      this.alreadyRecommendedMoviesIds.length >
-      this.maxAlreadyRecommendedMoviesIds
+      this.alreadyRecommendedMediaKeys.length >
+      this.maxAlreadyRecommendedMediaKeys
     ) {
-      // Keep last maxAlreadyRecommendedMoviesIds entries
-      this.alreadyRecommendedMoviesIds = this.alreadyRecommendedMoviesIds.slice(
-        -this.maxAlreadyRecommendedMoviesIds
+      // Keep last maxAlreadyRecommendedMediaKeys entries
+      this.alreadyRecommendedMediaKeys = this.alreadyRecommendedMediaKeys.slice(
+        -this.maxAlreadyRecommendedMediaKeys
       );
     }
   }
 
   private save(): void {
     saveToStorage({
-      dislikedMoviesIds: this.dislikedMoviesIds,
-      likedMoviesIds: this.likedMoviesIds,
-      alreadyRecommendedMoviesIds: this.alreadyRecommendedMoviesIds,
+      dislikedMediaKeys: this.dislikedMediaKeys,
+      likedMediaKeys: this.likedMediaKeys,
+      alreadyRecommendedMediaKeys: this.alreadyRecommendedMediaKeys,
       watchLater: this.watchLater
     });
   }

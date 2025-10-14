@@ -1,20 +1,17 @@
 <script lang="ts">
-  import { fetchMovie } from "$lib/tmdb/tmdb";
-  import Card from "../../components/MovieCard/MovieCard.svelte";
-  import FormSelectOption from "../../components/Form/FormSelectOption.svelte";
-  import OptimisticProgressBar from "../../components/OptimisticProgressBar/OptimisticProgressBar.svelte";
-  import Button from "../../components/Button/Button.svelte";
-  import { House } from "phosphor-svelte";
-  import IconButton from "../../components/Button/IconButton.svelte";
-  import type { MovieEnriched } from "../../stores/recommendationsStore.svelte";
+  import { fetchMediaById } from "$lib/tmdb/tmdb";
+  import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
+  import MediaCard from "../../components/MovieCard/MediaCard.svelte";
+  import type { MediaEnriched } from "../../stores/recommendationsStore.svelte";
 
-  const movieId = 152601;
-  const moviePromise = fetchMovie(movieId).then((movie) => {
-    const movieEnriched: MovieEnriched = {
-      ...movie!,
+  const mediaId = 1399;
+  const mediaType = TMDB_MEDIA_TYPE.SHOW;
+  const mediaPromise = fetchMediaById(mediaId, mediaType).then((media) => {
+    const mediaEnriched: MediaEnriched = {
+      ...media!,
       reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
     };
-    return movieEnriched;
+    return mediaEnriched;
   });
 </script>
 
@@ -23,8 +20,8 @@
 <IconButton icon={House} mode="ghost" />
 <IconButton icon={House} /> -->
 
-{#await moviePromise then movie}
-  <Card {movie} />
+{#await mediaPromise then media}
+  <MediaCard {media} />
 {/await}
 
 <!-- <OptimisticProgressBar

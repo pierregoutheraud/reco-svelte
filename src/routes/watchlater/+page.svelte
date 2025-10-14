@@ -1,14 +1,16 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { userPreferences } from "../../stores/userPreferences.svelte";
-  import { fetchMovie } from "$lib/tmdb/tmdb";
-  import type { MovieEnriched } from "../../stores/recommendationsStore.svelte";
-  import RecommendationsList from "../../components/RecommendPage/MoviesList.svelte";
+  import { fetchMediaById } from "$lib/tmdb/tmdb";
+  import type { MediaEnriched } from "../../stores/recommendationsStore.svelte";
+  import MediasList from "../../components/RecommendPage/MediasList.svelte";
   import * as m from "$lib/paraglide/messages.js";
+  import { tmdbKeyToId } from "../../helpers/media.helpers";
+  import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
 
   let loading = $state(true);
-  let movies = $state<MovieEnriched[]>([]);
-  let currentMovieId = $state<number | undefined>(undefined);
+  let medias = $state<MediaEnriched[]>([]);
+  let currentMediaId = $state<number | undefined>(undefined);
 
   onMount(async () => {
     await loadWatchLater();
@@ -17,27 +19,29 @@
   async function loadWatchLater() {
     loading = true;
 
-    // Get watch later movies with reasons
+    // Get watch later media with reasons
     const watchLaterWithReasons = userPreferences.watchLater;
 
-    // Fetch movie data from TMDB for movies that have reasons
-    const moviePromises = watchLaterWithReasons.map(async (watchLaterEntry) => {
-      const movie = await fetchMovie(watchLaterEntry.id);
-      if (!movie) return null;
+    // Fetch media data from TMDB
+    const mediaPromises = watchLaterWithReasons.map(async (watchLaterEntry) => {
+      const { tmdbId, mediaType } = tmdbKeyToId(watchLaterEntry.key);
+
+      const media = await fetchMediaById(tmdbId, mediaType);
+      if (!media) return null;
 
       return {
-        ...movie,
+        ...media,
         reason: watchLaterEntry.reason
       };
     });
 
-    const results = await Promise.all(moviePromises);
-    const validMovies = results.filter((m): m is MovieEnriched => m !== null);
+    const results = await Promise.all(mediaPromises);
+    const validMedias = results.filter((m) => m !== null) as MediaEnriched[];
 
     // Sort by most recent
-    movies = validMovies.sort((a, b) => {
-      const aWatchLater = userPreferences.getWatchLaterMovie(a.id);
-      const bWatchLater = userPreferences.getWatchLaterMovie(b.id);
+    medias = validMedias.sort((a, b) => {
+      const aWatchLater = userPreferences.getWatchLaterByMediaId(a.id);
+      const bWatchLater = userPreferences.getWatchLaterByMediaId(b.id);
       return (bWatchLater?.timestamp ?? 0) - (aWatchLater?.timestamp ?? 0);
     });
 
@@ -49,44 +53,20 @@
     loadWatchLater();
   }
 
-  function clearCurrentMovie() {
-    if (!currentMovieId) return;
+  function clearCurrentMedia() {
+    if (!currentMediaId) return;
 
-    // if (confirm(m.history_clear_confirmation())) {
-    //     return;
-    // }
-
-    userPreferences.removeFromWatchLater(currentMovieId);
-    movies = movies.filter((movie) => movie.id !== currentMovieId);
+    userPreferences.removeFromWatchLater(currentMediaId);
+    medias = medias.filter((media) => media.id !== currentMediaId);
   }
 </script>
 
 <div class="flex h-full flex-col">
-  <!--<header class="relative p-4 flex justify-center items-center">
-    <IconButton
-      class="absolute left-4"
-      icon={ArrowLeft}
-      onclick={() => {
-        goto("/");
-      }}
-    />
-
-    <h1 class="text-xl font-bold">{m.watchlater_title()}</h1>
-
-     {#if movies.length > 0}
-      <IconButton
-        class="!bg-red-500 absolute right-4"
-        icon={Trash}
-        onclick={clearCurrentMovie}
-      />
-    {/if}
-  </header>-->
-
-  {#if loading}{:else if movies.length === 0}
+  {#if loading}{:else if medias.length === 0}
     <div
       class="flex flex-col gap-4 justify-center items-center self-center my-auto"
     >
-      <p class="text-gray-500 text-base px-6 text-center">
+      <p class="text-gray-500 text-base px-10 text-center">
         {m.history_empty()}
       </p>
       <a
@@ -97,10 +77,10 @@
       </a>
     </div>
   {:else}
-    <RecommendationsList
-      {movies}
+    <MediasList
+      {medias}
       onComplete={handleComplete}
-      bind:currentMovieId
+      bind:currentMovieId={currentMediaId}
     />
   {/if}
 </div>

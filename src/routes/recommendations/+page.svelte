@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
   import { goto } from "$app/navigation";
-  import type { MoviesFormData } from "../../components/MoviesForm/MoviesForm.svelte";
   import RecommendationsStreamingPage from "../../components/RecommendPage/RecommendationsStreamingPage.svelte";
   import { recommendationsStore } from "../../stores/recommendationsStore.svelte";
 
@@ -10,7 +9,7 @@
     page.state.formData || recommendationsStore.currentFormData
   );
 
-  // const formDataMock: MoviesFormData = {
+  // const formDataMock: MediasFormData = {
   //   era: [1990, 2025],
   //   mood: "mystery",
   //   discovery: "hidden",

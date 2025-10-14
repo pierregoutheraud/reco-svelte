@@ -1,21 +1,34 @@
 <script lang="ts">
-  import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
+  import type {
+    MediaMinTMDB,
+    MovieMinTMDB,
+    ShowMinTMDB
+  } from "$lib/tmdb/tmdb.decl";
   import PosterTmdb from "../../Poster/PosterTmdb.svelte";
   import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
-    movie: MovieMinTMDB;
+    movie: MediaMinTMDB;
     isSelected: boolean;
-    onSelect: (movie: MovieMinTMDB) => void;
+    onSelect: (movie: MediaMinTMDB) => void;
   }
 
   let { movie, isSelected, onSelect }: Props = $props();
 
-  let year = $derived(
-    movie.release_date
-      ? new Date(movie.release_date).getFullYear()
-      : m.movie_year_unknown()
-  );
+  const isMovie = (media: MediaMinTMDB): media is MovieMinTMDB =>
+    "title" in media;
+
+  const title = $derived(isMovie(movie) ? movie.title : movie.name);
+
+  const year = $derived.by(() => {
+    if (isMovie(movie) && movie.release_date) {
+      return new Date(movie.release_date).getFullYear();
+    }
+    if (!isMovie(movie) && movie.first_air_date) {
+      return new Date(movie.first_air_date).getFullYear();
+    }
+    return m.movie_year_unknown();
+  });
 </script>
 
 <button
@@ -31,7 +44,7 @@
   <PosterTmdb posterPath={movie.poster_path} height={120} />
 
   <div class="flex-1 text-left min-w-0">
-    <p class="font-semibold truncate">{movie.title}</p>
+    <p class="font-semibold truncate">{title}</p>
     <p class="text-sm text-white/60">{year}</p>
   </div>
 

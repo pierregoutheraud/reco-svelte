@@ -2,33 +2,42 @@
   import { getContext, onMount } from "svelte";
   import type { FormContext } from "../Form.svelte";
   import type { FormStepContext } from "../FormStep.svelte";
-  import { fetchPopularMovies, searchMoviesByTitle } from "$lib/tmdb/tmdb";
-  import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
-  import FormSelectedMovieItem from "./FormSelectedMovieItem.svelte";
-  import FormSearchResultMovieItem from "./FormSearchResultMovieItem.svelte";
+  import {
+    fetchPopularMovies,
+    searchMoviesByTitle,
+    fetchPopularShows,
+    searchShowsByTitle
+  } from "$lib/tmdb/tmdb";
+  import type { MediaMinTMDB } from "$lib/tmdb/tmdb.decl";
+  import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
   import * as m from "$lib/paraglide/messages.js";
+  import FormSearchResultMediaItem from "./FormSearchResultMediaItem.svelte";
+  import FormSelectedMediaItem from "./FormSelectedMediaItem.svelte";
+  import { tmdbIdToKey } from "../../../helpers/media.helpers";
 
-  const { setValue } = getContext<FormContext>("form");
+  const { setValue, getValue } = getContext<FormContext>("form");
   const { id: stepId } = getContext<FormStepContext>("form_step");
 
+  // Get media_type from form context
+  const mediaType = $derived(
+    (getValue("media_type") as TMDB_MEDIA_TYPE) || TMDB_MEDIA_TYPE.MOVIE
+  );
+  const isMovie = $derived(mediaType === TMDB_MEDIA_TYPE.MOVIE);
+  const mediaLabel = $derived(isMovie ? "movie" : "series");
+  const mediaLabelPlural = $derived(isMovie ? "movies" : "series");
+
   let searchQuery = $state("");
-  let searchResults = $state<MovieMinTMDB[] | undefined>(undefined);
+  let searchResults = $state<MediaMinTMDB[] | undefined>(undefined);
   let isSearching = $state(false);
-  let selectedMovies = $state<MovieMinTMDB[]>([]);
+  let selectedMedia = $state<MediaMinTMDB[]>([]);
   let debounceTimer: ReturnType<typeof setTimeout>;
 
-  // Update form data whenever selected movies change
+  // Update form data whenever selected media change
   $effect(() => {
-    // Store the TMDB IDs for the API
-    const movieIds = selectedMovies.map((m) => m.id);
-    setValue(stepId, movieIds.length > 0 ? movieIds : undefined);
+    // Store the media keys (format: "movie__123" or "tv__456") for the API
+    const mediaKeys = selectedMedia.map((m) => tmdbIdToKey(m.id, mediaType));
+    setValue(stepId, mediaKeys.length > 0 ? mediaKeys : undefined);
   });
-
-  // onMount(() => {
-  //   fetchPopularMovies().then((movies) => {
-  //     searchResults = movies || [];
-  //   });
-  // });
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
@@ -38,7 +47,9 @@
 
     isSearching = true;
     try {
-      const results = await searchMoviesByTitle(query);
+      const results = isMovie
+        ? await searchMoviesByTitle(query)
+        : await searchShowsByTitle(query);
       searchResults = results || [];
     } catch (error) {
       console.error("Search error:", error);
@@ -58,30 +69,30 @@
     }, 300);
   };
 
-  const selectMovie = (movie: MovieMinTMDB) => {
+  const selectMedia = (media: MediaMinTMDB) => {
     // Check if already selected
-    if (selectedMovies.some((m) => m.id === movie.id)) {
+    if (selectedMedia.some((m) => m.id === media.id)) {
       return;
     }
 
-    selectedMovies.unshift(movie);
+    selectedMedia.unshift(media);
 
     // Clear search
     searchQuery = "";
     searchResults = undefined;
   };
 
-  const removeMovie = (id: number) => {
-    selectedMovies = selectedMovies.filter((m) => m.id !== id);
+  const removeMedia = (id: number) => {
+    selectedMedia = selectedMedia.filter((m) => m.id !== id);
   };
 </script>
 
 <div class="flex flex-col gap-4 flex-1 w-full">
-  <!-- Selected Movies -->
-  {#if selectedMovies.length > 0}
+  <!-- Selected Media -->
+  {#if selectedMedia.length > 0}
     <div class="flex flex-col gap-2 overflow-auto max-h-[190px] shrink-0">
-      {#each selectedMovies as movie (movie.id)}
-        <FormSelectedMovieItem {movie} onRemove={removeMovie} />
+      {#each selectedMedia as media (media.id)}
+        <FormSelectedMediaItem movie={media} onRemove={removeMedia} />
       {/each}
     </div>
   {/if}
@@ -92,7 +103,7 @@
       type="text"
       class="w-full bg-white text-black p-3 outline-none placeholder:text-gray-400"
       autofocus
-      placeholder={m.form_search_placeholder()}
+      placeholder={isMovie ? m.form_search_placeholder_movies() : m.form_search_placeholder_series()}
       value={searchQuery}
       oninput={(e) => onSearchInput(e.currentTarget.value)}
     />
@@ -109,11 +120,11 @@
   {#if searchResults && searchResults.length > 0}
     <div class="flex flex-col gap-3">
       {#each searchResults as result (result.id)}
-        {@const isSelected = selectedMovies.some((m) => m.id === result.id)}
-        <FormSearchResultMovieItem
+        {@const isSelected = selectedMedia.some((m) => m.id === result.id)}
+        <FormSearchResultMediaItem
           movie={result}
           {isSelected}
-          onSelect={selectMovie}
+          onSelect={selectMedia}
         />
       {/each}
     </div>

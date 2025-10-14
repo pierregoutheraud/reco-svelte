@@ -1,3 +1,5 @@
+import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
+
 export interface Recommendation {
   title: string;
   year: number;
@@ -22,6 +24,7 @@ export interface RecommendationResponse {
 }
 
 export interface RecommendationRequest {
+  media_type: TMDB_MEDIA_TYPE.MOVIE | TMDB_MEDIA_TYPE.SHOW;
   era: [number, number];
   mood:
     | "light_funny"
@@ -33,10 +36,10 @@ export interface RecommendationRequest {
     | "wonder_worlds";
   discovery: "popular" | "hidden" | "surprise";
   duration: "under_2_hours" | "it_doesnt_matter";
-  inspiration_movies_ids?: number[];
-  liked_movies_ids?: number[];
-  disliked_movies_ids?: number[];
-  already_recommended_movies_ids?: number[];
+  inspiration_media_keys?: string[];
+  liked_medias_keys?: string[];
+  disliked_medias_keys?: string[];
+  already_recommended_medias_keys?: string[];
   recommendations_count?: number;
   locale?: "en" | "fr";
   reasoning_effort?: "minimal" | "low" | "medium" | "high";

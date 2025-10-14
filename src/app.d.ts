@@ -1,4 +1,4 @@
-import type { MoviesFormData } from "./components/MoviesForm/MoviesForm.svelte";
+import type { MediaFormData } from "../components/MediasForm/MediasForm.svelte";
 
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
@@ -8,7 +8,7 @@ declare global {
     // interface Locals {}
     // interface PageData {}
     interface PageState {
-      formData?: MoviesFormData;
+      formData?: MediaFormData;
     }
     // interface Platform {}
   }

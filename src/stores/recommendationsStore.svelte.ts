@@ -1,62 +1,77 @@
-import type { MovieTMDB } from "$lib/tmdb/tmdb.decl";
+import type { MediaTMDB, TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
 import type { Recommendation } from "$lib/api/recommendations.decl";
-import type { MoviesFormData } from "../components/MoviesForm/MoviesForm.svelte";
 import { SvelteMap } from "svelte/reactivity";
 import { streamAiRecommendations } from "$lib/api/recommendations";
-import { fetchMovie, searchMovieByTitle } from "$lib/tmdb/tmdb";
+import {
+  fetchMovieById,
+  searchMovieByTitle,
+  fetchShowById,
+  searchShowByTitle
+} from "$lib/tmdb/tmdb";
 import { nonNullable } from "../helpers/types.helpers";
 import { userPreferences } from "./userPreferences.svelte";
 import { getLocale } from "$lib/paraglide/runtime";
 import * as m from "$lib/paraglide/messages.js";
 import throttle from "lodash.throttle";
+import type { MediasFormData } from "../components/MediasForm/MediasForm.svelte";
+import { TMDB_MEDIA_TYPE as MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
 
-export type MovieEnriched = MovieTMDB & {
+export type MediaEnriched = MediaTMDB & {
   reason: string;
 };
 
 class RecommendationsStore {
   loading = $state(false);
   error = $state<string | null>(null);
-  enrichedMovies = $state<MovieEnriched[] | undefined>(undefined);
+  enrichedMedias = $state<MediaEnriched[] | undefined>(undefined);
   recommendations = $state<Recommendation[] | undefined>(undefined);
-  currentFormData = $state<MoviesFormData | undefined>(undefined);
+  currentFormData = $state<MediasFormData | undefined>(undefined);
   loadingStartTime = $state<number | null>(null);
   loadingDuration = 60; // seconds
 
-  private tmdbMovies = new SvelteMap<string, MovieTMDB>();
+  private tmdbMediaCache = new SvelteMap<string, MediaTMDB>();
 
   get elapsedSeconds() {
     if (!this.loadingStartTime) return 0;
     return Math.floor((Date.now() - this.loadingStartTime) / 1000);
   }
 
-  private async fetchTmdbMovie(
+  private async fetchTmdbMedia(
     title: string,
-    year?: number
-  ): Promise<MovieTMDB | null> {
-    if (this.tmdbMovies.has(title)) {
-      return this.tmdbMovies.get(title) ?? null;
+    year?: number,
+    mediaType: TMDB_MEDIA_TYPE = MEDIA_TYPE.MOVIE
+  ): Promise<MediaTMDB | null> {
+    const cacheKey = `${mediaType}:${title}:${year || ""}`;
+
+    if (this.tmdbMediaCache.has(cacheKey)) {
+      return this.tmdbMediaCache.get(cacheKey) ?? null;
     }
 
-    const movieMin = await searchMovieByTitle(title, year);
+    let media: MediaTMDB | null = null;
 
-    if (!movieMin) {
+    if (mediaType === MEDIA_TYPE.MOVIE) {
+      const movieMin = await searchMovieByTitle(title, year);
+      if (movieMin) {
+        media = await fetchMovieById(movieMin.id);
+      }
+    } else {
+      const showMin = await searchShowByTitle(title, year);
+      if (showMin) {
+        media = await fetchShowById(showMin.id);
+      }
+    }
+
+    if (!media) {
       return null;
     }
 
-    const movie = await fetchMovie(movieMin.id);
+    this.tmdbMediaCache.set(cacheKey, media);
 
-    if (!movie) {
-      return null;
-    }
-
-    this.tmdbMovies.set(title, movie);
-
-    return movie;
+    return media;
   }
 
   hasRecommendations() {
-    return this.recommendations?.length && this.enrichedMovies?.length;
+    return this.recommendations?.length && this.enrichedMedias?.length;
   }
 
   private onRecommendations(partialRecs: Recommendation[]) {
@@ -67,20 +82,23 @@ class RecommendationsStore {
 
     this.recommendations = newRecommendations;
 
+    const mediaType = this.currentFormData?.media_type || MEDIA_TYPE.MOVIE;
+
     this.recommendations.forEach((rec) => {
-      this.fetchTmdbMovie(rec.title, rec.year);
+      this.fetchTmdbMedia(rec.title, rec.year, mediaType);
     });
 
-    this.enrichedMovies = this.recommendations
+    this.enrichedMedias = this.recommendations
       .map((rec) => {
-        const movieTmdb = this.tmdbMovies.get(rec.title) ?? null;
+        const cacheKey = `${mediaType}:${rec.title}:${rec.year || ""}`;
+        const mediaTmdb = this.tmdbMediaCache.get(cacheKey) ?? null;
 
-        if (!movieTmdb) {
+        if (!mediaTmdb) {
           return null;
         }
 
         return {
-          ...movieTmdb,
+          ...mediaTmdb,
           reason: rec.reason
         };
       })
@@ -92,11 +110,11 @@ class RecommendationsStore {
     500
   );
 
-  async loadRecommendations(formData: MoviesFormData) {
+  async loadRecommendations(formData: MediasFormData) {
     this.loading = true;
     this.loadingStartTime = Date.now();
     this.error = null;
-    this.enrichedMovies = undefined;
+    this.enrichedMedias = undefined;
     this.recommendations = undefined;
     this.currentFormData = formData;
 
@@ -106,9 +124,9 @@ class RecommendationsStore {
         {
           ...formData,
           recommendations_count: 10,
-          disliked_movies_ids: userPreferences.disliked,
-          liked_movies_ids: userPreferences.liked,
-          already_recommended_movies_ids: userPreferences.alreadyRecommended,
+          disliked_medias_keys: userPreferences.dislikedKeys,
+          liked_medias_keys: userPreferences.likedKeys,
+          already_recommended_medias_keys: userPreferences.alreadyRecommendedKeys,
           locale,
           reasoning_effort: "medium"
         },
@@ -130,13 +148,13 @@ class RecommendationsStore {
     }
   }
 
-  shouldReload(formData: MoviesFormData): boolean {
+  shouldReload(formData: MediasFormData): boolean {
     // Check if we need to reload recommendations
     // Reload if: no current data, or formData changed
     if (
       !this.currentFormData ||
-      !this.enrichedMovies ||
-      this.enrichedMovies.length === 0
+      !this.enrichedMedias ||
+      this.enrichedMedias.length === 0
     ) {
       return true;
     }
@@ -149,10 +167,10 @@ class RecommendationsStore {
     this.loading = false;
     this.loadingStartTime = null;
     this.error = null;
-    this.enrichedMovies = undefined;
+    this.enrichedMedias = undefined;
     this.recommendations = undefined;
     this.currentFormData = undefined;
-    this.tmdbMovies = new SvelteMap<string, MovieTMDB>();
+    this.tmdbMediaCache = new SvelteMap<string, MediaTMDB>();
   }
 }
 

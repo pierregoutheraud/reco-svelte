@@ -61,7 +61,7 @@
 </script>
 
 {#if isActive}
-  <div class="flex flex-1 flex-col min-h-0 justify-between gap-2">
+  <div class="flex flex-1 flex-col min-h-0 justify-between gap-3">
     {#if title || question}
       <header>
         <div class="flex flex-col gap-1">

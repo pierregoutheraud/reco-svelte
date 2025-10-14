@@ -5,7 +5,9 @@ import {
   POSTER_SIZE,
   type MovieMinTMDB,
   type MovieTMDB,
-  type SearchResultTMDB
+  type ShowTMDB,
+  type SearchResultTMDB,
+  TMDB_MEDIA_TYPE
 } from "./tmdb.decl";
 import { getLocale } from "$lib/paraglide/runtime.js";
 
@@ -133,7 +135,7 @@ export function getImageUrl(
   return `https://image.tmdb.org/t/p/${size}${path}`;
 }
 
-export async function fetchMovie(tmdbId: number, language?: string) {
+export async function fetchMovieById(tmdbId: number, language?: string) {
   const movie = await tmdbCall<MovieTMDB | null>(
     `/movie/${tmdbId}`,
     {
@@ -155,6 +157,9 @@ export async function fetchMovie(tmdbId: number, language?: string) {
   };
   return movieTmdb;
 }
+
+// Alias for backward compatibility
+export const fetchMovie = fetchMovieById;
 
 export async function fetchPopularMovies(): Promise<MovieMinTMDB[] | null> {
   const resPopular = await tmdbCall<SearchResultTMDB>("/movie/popular");
@@ -181,4 +186,126 @@ export async function fetchSimilarMovies(
   }
 
   return resSimilar.results;
+}
+
+// ==================== TV SHOW FUNCTIONS ====================
+
+export async function searchShowByTitle(
+  title: string,
+  year?: number,
+  language?: string
+) {
+  const dataSearch = await tmdbCall<SearchResultTMDB>(
+    "/search/tv",
+    {
+      query: title,
+      ...(year && { first_air_date_year: year })
+    },
+    language
+  );
+
+  if (!dataSearch || !dataSearch.results?.length) {
+    console.error("searchShowByTitle found 0 shows for:", title);
+    return null;
+  }
+
+  return dataSearch.results[0];
+}
+
+export async function searchShowsByTitle(
+  title: string,
+  year?: number,
+  limit = 5,
+  language?: string
+) {
+  const dataSearch = await tmdbCall<SearchResultTMDB>(
+    "/search/tv",
+    {
+      query: title,
+      ...(year && { first_air_date_year: year })
+    },
+    language
+  );
+
+  if (!dataSearch || !dataSearch.results?.length) {
+    return [];
+  }
+
+  return dataSearch.results.slice(0, limit);
+}
+
+export async function fetchPopularShows() {
+  const resPopular = await tmdbCall<SearchResultTMDB>("/tv/popular");
+
+  if (!resPopular) {
+    return null;
+  }
+
+  return resPopular.results;
+}
+
+export async function fetchSimilarShows(showId: number, language?: string) {
+  const resSimilar = await tmdbCall<SearchResultTMDB>(
+    `/tv/${showId}/similar`,
+    {},
+    language
+  );
+
+  if (!resSimilar || !resSimilar.results) {
+    return null;
+  }
+
+  return resSimilar.results;
+}
+
+export async function fetchShowById(
+  tmdbId: number,
+  language?: string
+): Promise<ShowTMDB | null> {
+  try {
+    const show = await tmdbCall<Omit<ShowTMDB, "imdb_id">>(
+      `/tv/${tmdbId}`,
+      {
+        append_to_response: "credits,external_ids"
+      },
+      language
+    );
+
+    if (!show) {
+      return null;
+    }
+
+    return {
+      ...show,
+      imdb_id: show.external_ids.imdb_id || null
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchMediaById(
+  tmdbId: number,
+  mediaType: TMDB_MEDIA_TYPE,
+  language?: string
+): Promise<ShowTMDB | MovieTMDB | null> {
+  let media: MovieTMDB | ShowTMDB | null = null;
+
+  if (mediaType === TMDB_MEDIA_TYPE.MOVIE) {
+    media = await fetchMovieById(tmdbId, language);
+    if (!media) {
+      return null;
+    }
+    return media;
+  }
+
+  if (mediaType === TMDB_MEDIA_TYPE.SHOW) {
+    media = await fetchShowById(tmdbId, language);
+    if (!media) {
+      return null;
+    }
+    return media;
+  }
+
+  return null;
 }

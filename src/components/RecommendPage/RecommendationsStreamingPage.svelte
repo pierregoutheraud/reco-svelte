@@ -1,15 +1,15 @@
 <script lang="ts">
-  import type { MoviesFormData } from "../MoviesForm/MoviesForm.svelte";
   import { onMount } from "svelte";
   import OptimisticProgressBar from "../OptimisticProgressBar/OptimisticProgressBar.svelte";
   import { ArrowsClockwise, Warning } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
-  import RecommendationsList from "./MoviesList.svelte";
+  import MediasList from "./MediasList.svelte";
   import { recommendationsStore } from "../../stores/recommendationsStore.svelte";
   import * as m from "$lib/paraglide/messages.js";
+  import type { MediasFormData } from "../MediasForm/MediasForm.svelte";
 
   interface Props {
-    data: MoviesFormData;
+    data: MediasFormData;
   }
 
   let { data }: Props = $props();
@@ -46,9 +46,9 @@
         {m.recommendations_try_again()}
       </Button>
     </div>
-  {:else if recommendationsStore.enrichedMovies?.length}
-    <RecommendationsList
-      movies={recommendationsStore.enrichedMovies}
+  {:else if recommendationsStore.enrichedMedias?.length}
+    <MediasList
+      medias={recommendationsStore.enrichedMedias}
       onComplete={handleComplete}
     />
   {:else if recommendationsStore.loading}

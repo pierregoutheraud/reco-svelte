@@ -1,5 +1,9 @@
 <script module>
-  export type MoviesFormData = {
+  import type { MediaMinTMDB } from "$lib/tmdb/tmdb.decl";
+  import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
+
+  export type MediasFormData = {
+    media_type: TMDB_MEDIA_TYPE.MOVIE | TMDB_MEDIA_TYPE.SHOW;
     era: [number, number];
     mood:
       | "light_funny"
@@ -11,8 +15,7 @@
       | "wonder_worlds";
     discovery: "popular" | "hidden" | "surprise";
     duration: "under_2_hours" | "it_doesnt_matter";
-    inspiration_movies_ids?: number[];
-    selected_movies?: MovieMinTMDB[];
+    inspiration_media_keys?: string[];
   };
 </script>
 
@@ -21,12 +24,11 @@
   import FormStep from "../Form/FormStep.svelte";
   import FormSlider from "../Form/FormSlider.svelte";
   import FormSelect from "../Form/FormSelect.svelte";
-  import FormSelectMovies from "../Form/FormSelectMovies/FormSelectMovies.svelte";
-  import type { MovieMinTMDB } from "$lib/tmdb/tmdb.decl";
   import * as m from "$lib/paraglide/messages.js";
+  import FormSelectMedias from "../Form/FormSelectMedias/FormSelectMedias.svelte";
 
   interface Props {
-    onComplete: (data: MoviesFormData) => void;
+    onComplete: (data: MediasFormData) => void;
   }
 
   let { onComplete }: Props = $props();
@@ -35,6 +37,26 @@
 </script>
 
 <Form {onComplete}>
+  <FormStep
+    id="media_type"
+    title={m.form_media_type_title()}
+    question={m.form_media_type_question()}
+    required
+  >
+    <FormSelect
+      options={[
+        {
+          label: m.form_media_type_movies_label(),
+          value: TMDB_MEDIA_TYPE.MOVIE
+        },
+        {
+          label: m.form_media_type_series_label(),
+          value: TMDB_MEDIA_TYPE.SHOW
+        }
+      ]}
+    />
+  </FormStep>
+
   <FormStep
     id="era"
     title={m.form_era_title()}
@@ -136,11 +158,11 @@
   </FormStep> -->
 
   <FormStep
-    id="inspiration_movies_ids"
+    id="inspiration_media_keys"
     title={m.form_inspiration_title()}
     question={m.form_inspiration_question()}
     skippable
   >
-    <FormSelectMovies />
+    <FormSelectMedias />
   </FormStep>
 </Form>

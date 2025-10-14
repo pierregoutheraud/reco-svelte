@@ -4,23 +4,24 @@
   import type { CrawlerRatings } from "$lib/api/ratings.decl";
   import Ratings from "./Ratings.svelte";
   import { watch } from "runed";
+  import AnimatedDots from "../AnimatedDots/AnimatedDots.svelte";
 
   interface Props {
-    movieId: number;
+    mediaId: number;
     mediaType?: TMDB_MEDIA_TYPE;
   }
 
-  let { movieId, mediaType = TMDB_MEDIA_TYPE.MOVIE }: Props = $props();
+  let { mediaId, mediaType = TMDB_MEDIA_TYPE.MOVIE }: Props = $props();
 
   let ratings = $state<CrawlerRatings | null | undefined>(undefined);
   let loading = $state(true);
   let error = $state(false);
 
   watch(
-    () => movieId,
-    (currMovieId, prevMovieId) => {
-      // Skip if the movieId hasn't actually changed
-      if (ratings !== undefined && currMovieId === prevMovieId) {
+    () => mediaId,
+    (currMediaId, prevMediaId) => {
+      // Skip if the mediaId hasn't actually changed
+      if (ratings !== undefined && currMediaId === prevMediaId) {
         return;
       }
 
@@ -28,7 +29,7 @@
       error = false;
 
       mongoApi
-        .fetchRatings(movieId, mediaType)
+        .fetchRatings(mediaId, mediaType)
         .then((fetchedRatings) => {
           if (fetchedRatings) {
             ratings = fetchedRatings;
@@ -61,8 +62,8 @@
 </script>
 
 {#if loading}
-  <div class="flex justify-center items-center h-[50px]">
-    <p class="text-gray-400 text-sm">Loading ratings...</p>
+  <div class="flex justify-center items-center h-[50px] bg-gray-900">
+    <p class="text-gray-400 text-sm">Loading ratings<AnimatedDots /></p>
   </div>
 {:else if ratings}
   <Ratings {ratings} />

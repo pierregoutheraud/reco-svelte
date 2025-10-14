@@ -1,58 +1,67 @@
 <script lang="ts">
   import PosterTmdb from "../Poster/PosterTmdb.svelte";
-  import MovieRatings from "../MovieRatings/MovieRatings.svelte";
+  import MediaRatings from "../MediaRatings/MediaRatings.svelte";
   import { FilmStrip } from "phosphor-svelte";
   import Button from "../Button/Button.svelte";
   import * as m from "$lib/paraglide/messages.js";
   import { convertMinsToHrsMins } from "../../helpers/time.helpers";
-  import type { MovieEnriched } from "../../stores/recommendationsStore.svelte";
+  import type { MediaEnriched } from "../../stores/recommendationsStore.svelte";
+  import type { MovieTMDB } from "$lib/tmdb/tmdb.decl";
+  import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
 
   interface Props {
-    movie: MovieEnriched;
+    media: MediaEnriched & MovieTMDB;
   }
 
-  let { movie }: Props = $props();
+  let { media }: Props = $props();
 
-  let releaseYear = $derived(
-    movie.release_date ? new Date(movie.release_date).getFullYear() : null
+  const releaseYear = $derived(
+    media.release_date ? new Date(media.release_date).getFullYear() : null
   );
-  let runtimeFormatted = $derived(
-    movie.runtime ? convertMinsToHrsMins(movie.runtime) : null
+
+  const runtimeFormatted = $derived.by(() =>
+    media.runtime ? convertMinsToHrsMins(media.runtime) : null
   );
 </script>
 
 <div class="w-full flex flex-col gap-6 items-center p-4">
-  {#if movie.poster_path}
-    <PosterTmdb posterPath={movie.poster_path} height={200} />
+  {#if media.poster_path}
+    <PosterTmdb posterPath={media.poster_path} height={200} />
   {/if}
 
   <div class="flex flex-col gap-0.5">
-    <h2 class="font-title text-3xl text-center">{movie.title}</h2>
+    <h2 class="font-title text-3xl text-center">{media.title}</h2>
     <p class="text-center text-sm text-gray-400">
-      {movie.director} - {releaseYear} - {runtimeFormatted}
+      {#if media.director}
+        {media.director} -
+      {/if}
+      {releaseYear}
+      {#if runtimeFormatted}
+        - {runtimeFormatted}
+      {/if}
     </p>
   </div>
 
   <div class="flex flex-col gap-2">
-    <MovieRatings movieId={movie.id} />
+    <MediaRatings mediaId={media.id} mediaType={TMDB_MEDIA_TYPE.MOVIE} />
     <div class="flex flex-col gap-1 bg-indigo-900 p-4">
       <p class="font-semibold text-base">{m.movie_card_why_recommend()}</p>
-      <p class="text-sm">{movie.reason}</p>
+      <p class="text-sm">{media.reason}</p>
     </div>
   </div>
 
   <div class="flex flex-col gap-1">
     <p class="font-semibold text-base">{m.movie_card_overview()}</p>
-    <p class="text-sm">{movie.overview}</p>
+    <p class="text-sm">{media.overview}</p>
   </div>
 
   <Button
     icon={FilmStrip}
     class="!bg-miru !text-black"
     onclick={() => {
-      window.open(`https://www.miru.live/movie/${movie.id}`, "_blank");
+      window.open(`https://www.miru.live/movie/${media.id}`, "_blank");
     }}
   >
-    {m.movie_card_view_on_miru()}
+    {m.media_card_view_movie()}
   </Button>
 </div>
