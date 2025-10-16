@@ -26,6 +26,7 @@
   import FormSelect from "../Form/FormSelect.svelte";
   import * as m from "$lib/paraglide/messages.js";
   import FormSelectMedias from "../Form/FormSelectMedias/FormSelectMedias.svelte";
+  import type { FormContext } from "../Form/Form.svelte";
 
   interface Props {
     onComplete: (data: MediasFormData) => void;
@@ -160,7 +161,12 @@
   <FormStep
     id="inspiration_media_keys"
     title={m.form_inspiration_title()}
-    question={m.form_inspiration_question()}
+    question={(formContext) => {
+      const mediaType = formContext.getValue("media_type");
+      return mediaType === TMDB_MEDIA_TYPE.SHOW
+        ? m.form_inspiration_question_series()
+        : m.form_inspiration_question_movies();
+    }}
     skippable
   >
     <FormSelectMedias />

@@ -16,7 +16,7 @@
   interface Props {
     id: string;
     title?: string;
-    question?: string;
+    question?: string | ((formContext: FormContext) => string);
     children?: Snippet;
     required?: boolean;
     skippable?: boolean;
@@ -41,6 +41,9 @@
   let data = $derived(formContext.getValue(id));
   let hasData = $derived(!!data);
   let canContinue = $derived(required ? hasData : true);
+  let computedQuestion = $derived(
+    typeof question === "function" ? question(formContext) : question
+  );
 
   // $inspect({
   //   title,
@@ -61,7 +64,7 @@
 </script>
 
 {#if isActive}
-  <div class="flex flex-1 flex-col min-h-0 justify-between gap-3">
+  <div class="flex flex-1 flex-col min-h-0 justify-between gap-5">
     {#if title || question}
       <header>
         <div class="flex flex-col gap-1">
@@ -72,14 +75,14 @@
               {title}
             </h1>
           {/if}
-          {#if question}
-            <h2 class="text-base px-4 text-center">{question}</h2>
+          {#if computedQuestion}
+            <h2 class="text-base px-4 text-center">{computedQuestion}</h2>
           {/if}
         </div>
       </header>
     {/if}
 
-    <div class="flex flex-1 overflow-auto overflow-x-hidden w-full">
+    <div class="flex flex-1 overflow-auto overflow-x-hidden w-full px-4">
       {@render children?.()}
     </div>
 
