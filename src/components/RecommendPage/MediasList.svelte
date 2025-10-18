@@ -4,6 +4,7 @@
     ArrowLeft,
     ArrowRight,
     ArrowsClockwise,
+    BookmarkSimple,
     ListPlus,
     ThumbsDown,
     ThumbsUp
@@ -118,11 +119,12 @@
       <MediaCard media={currentMedia} />
     </div>
 
-    <div class="flex p-3 px-4 gap-2 justify-between bg-background/90">
+    <div class="flex p-3 px-4 gap-2 justify-between bg-background">
       <div class="flex gap-2">
         <IconButton
           icon={ThumbsDown}
-          class="bg-rose-500"
+          class="text-rose-500"
+          mode="ghost"
           size={24}
           weight={isCurrentMediaDisliked ? "fill" : "regular"}
           onclick={() => {
@@ -132,7 +134,8 @@
 
         <IconButton
           icon={ThumbsUp}
-          class="bg-teal-500"
+          class="text-teal-500"
+          mode="ghost"
           size={24}
           weight={isCurrentMediaLiked ? "fill" : "regular"}
           onclick={() => {
@@ -141,7 +144,8 @@
         />
 
         <IconButton
-          icon={ListPlus}
+          icon={BookmarkSimple}
+          mode="ghost"
           size={24}
           weight={isCurrentMediaInWatchLater ? "fill" : "regular"}
           onclick={() => {
@@ -153,6 +157,7 @@
       <div class="flex gap-3 items-center">
         <IconButton
           icon={ArrowLeft}
+          mode="ghost"
           size={24}
           disabled={currentMovieIndex === 0}
           onclick={() => {
@@ -166,6 +171,7 @@
         </p>
 
         <IconButton
+          mode="ghost"
           icon={currentMovieIndex === medias.length - 1
             ? ArrowsClockwise
             : ArrowRight}

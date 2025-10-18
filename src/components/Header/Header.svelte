@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { ClockCounterClockwise, Popcorn, Sparkle } from "phosphor-svelte";
+  import {
+    Bookmarks,
+    BookmarkSimple,
+    ClockCounterClockwise,
+    Popcorn,
+    Sparkle
+  } from "phosphor-svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
   import { userPreferences } from "../../stores/userPreferences.svelte";
@@ -29,15 +35,15 @@
   {/if}
 
   <div class="flex relative">
-    {#if userPreferences.watchLater.length > 0}
+    <!-- {#if userPreferences.watchLater.length > 0}
       <span
-        class="absolute z-50 top-0 right-[-5px] size-5 text-center text-sm bg-teal-500"
+        class="absolute z-50 top-0 right-[0px] size-5 text-center text-sm bg-teal-500"
       >
         {userPreferences.watchLater.length}
       </span>
-    {/if}
+    {/if} -->
     <IconButton
-      icon={ClockCounterClockwise}
+      icon={Bookmarks}
       mode={page.url.pathname === "/watchlater" ? "default" : "ghost"}
       onclick={() => {
         goto("/watchlater");
