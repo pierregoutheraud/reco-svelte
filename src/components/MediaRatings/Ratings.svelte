@@ -44,7 +44,7 @@
   }
 </script>
 
-<div class="flex w-full gap-1 select-none no-scrollbar">
+<div class="flex w-full gap-4 select-none no-scrollbar">
   {#if ratings.average?.score}
     <RatingItem
       title={m.ratings_average()}
@@ -74,7 +74,7 @@
   {#if ratings.rotten_tomatoes?.averageScore}
     <RatingItem
       onclick={() => goToWebsite(CRAWLER_SOURCE.ROTTEN_TOMATOES)}
-      title={`RT`}
+      title="Rotten"
       crawlerSource={CRAWLER_SOURCE.ROTTEN_TOMATOES}
       scores={[
         {
