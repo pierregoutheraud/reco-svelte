@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MediaCard from "../MovieCard/MediaCard.svelte";
+  import MediaCard from "../Card/MediaCard.svelte";
   import {
     ArrowLeft,
     ArrowRight,

@@ -62,7 +62,7 @@
 </script>
 
 {#if loading}
-  <div class="flex justify-center items-center h-[50px] bg-gray-900">
+  <div class="flex justify-center items-center h-[44px]">
     <p class="text-gray-400 text-sm">Loading ratings<AnimatedDots /></p>
   </div>
 {:else if ratings}

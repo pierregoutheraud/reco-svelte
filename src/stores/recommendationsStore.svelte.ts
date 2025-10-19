@@ -8,7 +8,7 @@ import {
   fetchShowById,
   searchShowByTitle
 } from "$lib/tmdb/tmdb";
-import { nonNullable } from "../helpers/types.helpers";
+import { isTruthy } from "../helpers/types.helpers";
 import { userPreferences } from "./userPreferences.svelte";
 import { getLocale } from "$lib/paraglide/runtime";
 import * as m from "$lib/paraglide/messages.js";
@@ -102,7 +102,7 @@ class RecommendationsStore {
           reason: rec.reason
         };
       })
-      .filter(nonNullable);
+      .filter(isTruthy);
   }
 
   private onRecommendationsThrottled = throttle(
@@ -126,7 +126,8 @@ class RecommendationsStore {
           recommendations_count: 10,
           disliked_medias_keys: userPreferences.dislikedKeys,
           liked_medias_keys: userPreferences.likedKeys,
-          already_recommended_medias_keys: userPreferences.alreadyRecommendedKeys,
+          already_recommended_medias_keys:
+            userPreferences.alreadyRecommendedKeys,
           locale,
           reasoning_effort: "medium"
         },

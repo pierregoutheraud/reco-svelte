@@ -1,19 +1,31 @@
 <script lang="ts">
   import {
+    ArrowLeft,
     Bookmarks,
-    BookmarkSimple,
     ClockCounterClockwise,
     Popcorn,
     Sparkle
   } from "phosphor-svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
-  import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
   import { recommendationsStore } from "../../stores/recommendationsStore.svelte";
+
+  $inspect(page.url.pathname);
 </script>
 
 <header class="w-full flex p-2 justify-center gap-4">
+  {#if page.url.pathname.includes("/movie/") || page.url.pathname.includes("/tv/")}
+    <IconButton
+      class="absolute left-2"
+      icon={ArrowLeft}
+      mode="ghost"
+      onclick={() => {
+        window.history.back();
+      }}
+    />
+  {/if}
+
   <IconButton
     icon={Sparkle}
     mode={["/", "/form"].includes(page.url.pathname) ? "default" : "ghost"}
@@ -50,4 +62,12 @@
       }}
     />
   </div>
+
+  <IconButton
+    icon={ClockCounterClockwise}
+    mode={page.url.pathname === "/history" ? "default" : "ghost"}
+    onclick={() => {
+      goto("/history");
+    }}
+  />
 </header>

@@ -18,7 +18,7 @@ export function isDefined<T>(value: T | undefined): value is T {
   return typeof value !== "undefined";
 }
 
-export function nonNullable<T>(value: T): value is NonNullable<T> {
+export function isTruthy<T>(value: T): value is NonNullable<T> {
   return value !== null && value !== undefined && typeof value !== "undefined";
 }
 

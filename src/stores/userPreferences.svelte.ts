@@ -1,5 +1,5 @@
 import { tmdbIdToKey } from "../helpers/media.helpers";
-import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
+import { TMDB_MEDIA_TYPE, type MediaKey } from "$lib/tmdb/tmdb.decl";
 
 const STORAGE_KEY = "USER_PREFERENCES";
 
@@ -10,9 +10,9 @@ export interface WatchlistItem {
 }
 
 interface UserPreferences {
-  dislikedMediaKeys: string[];
-  likedMediaKeys: string[];
-  alreadyRecommendedMediaKeys: string[];
+  dislikedMediaKeys: MediaKey[];
+  likedMediaKeys: MediaKey[];
+  alreadyRecommendedMediaKeys: MediaKey[];
   watchlist: WatchlistItem[];
 }
 
@@ -21,10 +21,13 @@ interface UserPreferencesLegacy {
   dislikedMoviesIds?: number[];
   likedMoviesIds?: number[];
   alreadyRecommendedMoviesIds?: number[];
-  dislikedMediaKeys?: string[];
-  likedMediaKeys?: string[];
-  alreadyRecommendedMediaKeys?: string[];
-  watchLater?: (WatchlistItem | { id: number; reason: string; timestamp: number })[];
+  dislikedMediaKeys?: MediaKey[];
+  likedMediaKeys?: MediaKey[];
+  alreadyRecommendedMediaKeys?: MediaKey[];
+  watchLater?: (
+    | WatchlistItem
+    | { id: number; reason: string; timestamp: number }
+  )[];
   watchlist?: WatchlistItem[];
 }
 
@@ -46,28 +49,36 @@ function loadFromStorage(): UserPreferences {
       // Migrate old number[] format to new string[] keys (assume all old data is movies)
       const dislikedMediaKeys = parsed.dislikedMediaKeys
         ? parsed.dislikedMediaKeys
-        : (parsed.dislikedMoviesIds || []).map(id => tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE));
+        : (parsed.dislikedMoviesIds || []).map((id) =>
+            tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE)
+          );
 
       const likedMediaKeys = parsed.likedMediaKeys
         ? parsed.likedMediaKeys
-        : (parsed.likedMoviesIds || []).map(id => tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE));
+        : (parsed.likedMoviesIds || []).map((id) =>
+            tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE)
+          );
 
       const alreadyRecommendedMediaKeys = parsed.alreadyRecommendedMediaKeys
         ? parsed.alreadyRecommendedMediaKeys
-        : (parsed.alreadyRecommendedMoviesIds || []).map(id => tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE));
+        : (parsed.alreadyRecommendedMoviesIds || []).map((id) =>
+            tmdbIdToKey(id, TMDB_MEDIA_TYPE.MOVIE)
+          );
 
       // Migrate watchlist items (support both old "watchLater" and new "watchlist" keys)
-      const watchlist = (parsed.watchlist || parsed.watchLater || []).map(item => {
-        if ("key" in item) {
-          return item as WatchlistItem;
+      const watchlist = (parsed.watchlist || parsed.watchLater || []).map(
+        (item) => {
+          if ("key" in item) {
+            return item as WatchlistItem;
+          }
+          // Old format with just id
+          return {
+            key: tmdbIdToKey(item.id, TMDB_MEDIA_TYPE.MOVIE),
+            reason: item.reason,
+            timestamp: item.timestamp
+          };
         }
-        // Old format with just id
-        return {
-          key: tmdbIdToKey(item.id, TMDB_MEDIA_TYPE.MOVIE),
-          reason: item.reason,
-          timestamp: item.timestamp
-        };
-      });
+      );
 
       return {
         dislikedMediaKeys,
@@ -99,9 +110,9 @@ function saveToStorage(preferences: UserPreferences): void {
 }
 
 class UserPreferencesStore {
-  private dislikedMediaKeys = $state<string[]>([]);
-  private likedMediaKeys = $state<string[]>([]);
-  private alreadyRecommendedMediaKeys = $state<string[]>([]);
+  private dislikedMediaKeys = $state<MediaKey[]>([]);
+  private likedMediaKeys = $state<MediaKey[]>([]);
+  private alreadyRecommendedMediaKeys = $state<MediaKey[]>([]);
   private maxAlreadyRecommendedMediaKeys = 500;
   watchlist = $state<WatchlistItem[]>([]);
 
@@ -113,36 +124,44 @@ class UserPreferencesStore {
     this.watchlist = stored.watchlist;
   }
 
-  get dislikedKeys(): string[] {
+  get dislikedKeys(): MediaKey[] {
     return this.dislikedMediaKeys;
   }
 
-  get likedKeys(): string[] {
+  get likedKeys(): MediaKey[] {
     return this.likedMediaKeys;
   }
 
-  get alreadyRecommendedKeys(): string[] {
+  get alreadyRecommendedKeys(): MediaKey[] {
     return this.alreadyRecommendedMediaKeys;
   }
 
   // Backward compatibility: check if media ID is disliked (checks all media types)
   isDisliked(mediaId: number): boolean {
-    return this.dislikedMediaKeys.some(key => key.includes(`__${mediaId}`));
+    return this.dislikedMediaKeys.some((key) => key.includes(`__${mediaId}`));
   }
 
   isLiked(mediaId: number): boolean {
-    return this.likedMediaKeys.some(key => key.includes(`__${mediaId}`));
+    return this.likedMediaKeys.some((key) => key.includes(`__${mediaId}`));
   }
 
   isAlreadyRecommended(mediaId: number): boolean {
-    return this.alreadyRecommendedMediaKeys.some(key => key.includes(`__${mediaId}`));
+    return this.alreadyRecommendedMediaKeys.some((key) =>
+      key.includes(`__${mediaId}`)
+    );
   }
 
-  addDisliked(mediaId: number, mediaType: TMDB_MEDIA_TYPE, save: boolean = true): void {
+  addDisliked(
+    mediaId: number,
+    mediaType: TMDB_MEDIA_TYPE,
+    save: boolean = true
+  ): void {
     const key = tmdbIdToKey(mediaId, mediaType);
 
     // Remove from liked list if it exists there
-    const likedIndex = this.likedMediaKeys.findIndex(k => k.includes(`__${mediaId}`));
+    const likedIndex = this.likedMediaKeys.findIndex((k) =>
+      k.includes(`__${mediaId}`)
+    );
     if (likedIndex > -1) {
       this.likedMediaKeys.splice(likedIndex, 1);
     }
@@ -155,11 +174,17 @@ class UserPreferencesStore {
     }
   }
 
-  addLiked(mediaId: number, mediaType: TMDB_MEDIA_TYPE, save: boolean = true): void {
+  addLiked(
+    mediaId: number,
+    mediaType: TMDB_MEDIA_TYPE,
+    save: boolean = true
+  ): void {
     const key = tmdbIdToKey(mediaId, mediaType);
 
     // Remove from disliked list if it exists there
-    const dislikedIndex = this.dislikedMediaKeys.findIndex(k => k.includes(`__${mediaId}`));
+    const dislikedIndex = this.dislikedMediaKeys.findIndex((k) =>
+      k.includes(`__${mediaId}`)
+    );
     if (dislikedIndex > -1) {
       this.dislikedMediaKeys.splice(dislikedIndex, 1);
     }
@@ -174,7 +199,9 @@ class UserPreferencesStore {
   }
 
   removeDisliked(mediaId: number): void {
-    const index = this.dislikedMediaKeys.findIndex(k => k.includes(`__${mediaId}`));
+    const index = this.dislikedMediaKeys.findIndex((k) =>
+      k.includes(`__${mediaId}`)
+    );
     if (index > -1) {
       this.dislikedMediaKeys.splice(index, 1);
       this.save();
@@ -182,7 +209,9 @@ class UserPreferencesStore {
   }
 
   removeLiked(mediaId: number): void {
-    const index = this.likedMediaKeys.findIndex(k => k.includes(`__${mediaId}`));
+    const index = this.likedMediaKeys.findIndex((k) =>
+      k.includes(`__${mediaId}`)
+    );
     if (index > -1) {
       this.likedMediaKeys.splice(index, 1);
       this.save();
@@ -201,7 +230,11 @@ class UserPreferencesStore {
     this.save();
   }
 
-  addToWatchlist(mediaId: number, mediaType: TMDB_MEDIA_TYPE, reason: string): void {
+  addToWatchlist(
+    mediaId: number,
+    mediaType: TMDB_MEDIA_TYPE,
+    reason: string
+  ): void {
     const key = tmdbIdToKey(mediaId, mediaType);
 
     // Check if already in watchlist
@@ -235,7 +268,9 @@ class UserPreferencesStore {
   }
 
   removeFromWatchlist(mediaId: number): void {
-    const index = this.watchlist.findIndex((h) => h.key.includes(`__${mediaId}`));
+    const index = this.watchlist.findIndex((h) =>
+      h.key.includes(`__${mediaId}`)
+    );
     if (index > -1) {
       this.watchlist.splice(index, 1);
       this.save();

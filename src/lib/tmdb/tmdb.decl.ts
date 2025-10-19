@@ -1,3 +1,7 @@
+export type MediaKey =
+  | `${TMDB_MEDIA_TYPE.MOVIE}__${number}`
+  | `${TMDB_MEDIA_TYPE.SHOW}__${number}`;
+
 export enum TMDB_MEDIA_TYPE {
   SHOW = "tv",
   MOVIE = "movie",

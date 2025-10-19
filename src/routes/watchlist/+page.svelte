@@ -3,7 +3,7 @@
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import { fetchMediaById } from "$lib/tmdb/tmdb";
   import type { MediaEnriched } from "../../stores/recommendationsStore.svelte";
-  import MediasList from "../../components/RecommendPage/MediasList.svelte";
+  import MediasList from "../../components/RecommendPage/MediasCardsList.svelte";
   import * as m from "$lib/paraglide/messages.js";
   import { tmdbKeyToId } from "../../helpers/media.helpers";
   import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";

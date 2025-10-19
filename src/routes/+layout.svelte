@@ -14,10 +14,12 @@
 <Toasts />
 
 <main
-  class="flex flex-col w-full max-w-[500px] h-full max-h-[1000px] mx-auto bg-background overflow-auto overflow-x-hidden"
+  class="flex flex-col w-full max-w-[500px] h-full max-h-[1000px] mx-auto bg-background"
 >
   <Header />
-  <div class="flex-1 min-h-0">
+  <div
+    class="main-scroll-container flex-1 min-h-0 overflow-auto overflow-x-hidden"
+  >
     {@render children?.()}
   </div>
 </main>

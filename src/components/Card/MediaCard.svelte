@@ -1,6 +1,6 @@
 <script lang="ts">
   import MovieCard from "./MovieCard.svelte";
-  import SeriesCard from "./SeriesCard.svelte";
+  import SeriesCard from "./ShowCard.svelte";
   import type { MediaEnriched } from "../../stores/recommendationsStore.svelte";
   import type { MovieTMDB, ShowTMDB } from "$lib/tmdb/tmdb.decl";
 

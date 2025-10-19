@@ -7,9 +7,12 @@ import {
   type MovieTMDB,
   type ShowTMDB,
   type SearchResultTMDB,
-  TMDB_MEDIA_TYPE
+  TMDB_MEDIA_TYPE,
+  type MediaKey,
+  type MediaTMDB
 } from "./tmdb.decl";
 import { getLocale } from "$lib/paraglide/runtime.js";
+import { isTruthy } from "../../helpers/types.helpers";
 
 const tmdbQueue = new PQueue({
   intervalCap: 40,
@@ -309,3 +312,24 @@ export async function fetchMediaById(
 
   return null;
 }
+
+export async function fetchMediasByKeys(
+  keys: MediaKey[]
+): Promise<(MovieTMDB | ShowTMDB)[]> {
+  const medias = await Promise.all(
+    keys.map(async (key) => {
+      const [mediaType, id] = key.split("__");
+      const idNumber = parseInt(id, 10);
+      if (mediaType === TMDB_MEDIA_TYPE.MOVIE) {
+        return fetchMovieById(idNumber);
+      }
+      return fetchShowById(idNumber);
+    })
+  );
+  return medias.filter(isTruthy);
+}
+
+export const isMovie = (media: MediaTMDB): media is MovieTMDB =>
+  "title" in media;
+
+export const isShow = (media: MediaTMDB): media is ShowTMDB => "name" in media;
