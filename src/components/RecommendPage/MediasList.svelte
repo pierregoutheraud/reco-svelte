@@ -14,6 +14,7 @@
   import type { MediaEnriched } from "../../stores/recommendationsStore.svelte";
   import type { MovieTMDB, ShowTMDB } from "$lib/tmdb/tmdb.decl";
   import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
+  import { toasts } from "../../stores/toasts.store";
 
   interface Props {
     medias: MediaEnriched[];
@@ -47,9 +48,9 @@
   const isCurrentMediaDisliked = $derived(
     currentMedia && userPreferences.isDisliked(currentMedia.id)
   );
-  const isCurrentMediaInWatchLater = $derived(
+  const isCurrentMediaInWatchlist = $derived(
     currentMedia &&
-      userPreferences.getWatchLaterByMediaId(currentMedia.id) !== undefined
+      userPreferences.getWatchlistByMediaId(currentMedia.id) !== undefined
   );
 
   // Update the bindable currentMovieId when current media changes
@@ -60,7 +61,7 @@
   });
 
   // $inspect({
-  //   watchLater: userPreferences.watchLater,
+  //   watchlist: userPreferences.watchlist,
   //   liked: userPreferences.liked,
   //   disliked: userPreferences.disliked,
   //   alreadyRecommended: userPreferences.alreadyRecommended
@@ -100,15 +101,17 @@
     goToPreviousMedia();
   }
 
-  function handleClickWatchLater() {
-    if (isCurrentMediaInWatchLater) {
-      userPreferences.removeFromWatchLater(currentMedia.id);
+  function handleClickWatchlist() {
+    if (isCurrentMediaInWatchlist) {
+      userPreferences.removeFromWatchlist(currentMedia.id);
+      toasts.success("Media removed from your watchlist.");
     } else {
-      userPreferences.addToWatchLater(
+      userPreferences.addToWatchlist(
         currentMedia.id,
         currentMediaType,
         currentMedia.reason
       );
+      toasts.success("Media added to your watchlist.");
     }
   }
 </script>
@@ -147,9 +150,9 @@
           icon={BookmarkSimple}
           mode="ghost"
           size={24}
-          weight={isCurrentMediaInWatchLater ? "fill" : "regular"}
+          weight={isCurrentMediaInWatchlist ? "fill" : "regular"}
           onclick={() => {
-            handleClickWatchLater();
+            handleClickWatchlist();
           }}
         />
       </div>

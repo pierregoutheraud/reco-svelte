@@ -35,18 +35,18 @@
   {/if}
 
   <div class="flex relative">
-    <!-- {#if userPreferences.watchLater.length > 0}
+    <!-- {#if userPreferences.watchlist.length > 0}
       <span
         class="absolute z-50 top-0 right-[0px] size-5 text-center text-sm bg-teal-500"
       >
-        {userPreferences.watchLater.length}
+        {userPreferences.watchlist.length}
       </span>
     {/if} -->
     <IconButton
       icon={Bookmarks}
-      mode={page.url.pathname === "/watchlater" ? "default" : "ghost"}
+      mode={page.url.pathname === "/watchlist" ? "default" : "ghost"}
       onclick={() => {
-        goto("/watchlater");
+        goto("/watchlist");
       }}
     />
   </div>

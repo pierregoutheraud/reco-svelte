@@ -13,25 +13,25 @@
   let currentMediaId = $state<number | undefined>(undefined);
 
   onMount(async () => {
-    await loadWatchLater();
+    await loadWatchlist();
   });
 
-  async function loadWatchLater() {
+  async function loadWatchlist() {
     loading = true;
 
-    // Get watch later media with reasons
-    const watchLaterWithReasons = userPreferences.watchLater;
+    // Get watchlist media with reasons
+    const watchlistWithReasons = userPreferences.watchlist;
 
     // Fetch media data from TMDB
-    const mediaPromises = watchLaterWithReasons.map(async (watchLaterEntry) => {
-      const { tmdbId, mediaType } = tmdbKeyToId(watchLaterEntry.key);
+    const mediaPromises = watchlistWithReasons.map(async (watchlistEntry) => {
+      const { tmdbId, mediaType } = tmdbKeyToId(watchlistEntry.key);
 
       const media = await fetchMediaById(tmdbId, mediaType);
       if (!media) return null;
 
       return {
         ...media,
-        reason: watchLaterEntry.reason
+        reason: watchlistEntry.reason
       };
     });
 
@@ -40,23 +40,23 @@
 
     // Sort by most recent
     medias = validMedias.sort((a, b) => {
-      const aWatchLater = userPreferences.getWatchLaterByMediaId(a.id);
-      const bWatchLater = userPreferences.getWatchLaterByMediaId(b.id);
-      return (bWatchLater?.timestamp ?? 0) - (aWatchLater?.timestamp ?? 0);
+      const aWatchlist = userPreferences.getWatchlistByMediaId(a.id);
+      const bWatchlist = userPreferences.getWatchlistByMediaId(b.id);
+      return (bWatchlist?.timestamp ?? 0) - (aWatchlist?.timestamp ?? 0);
     });
 
     loading = false;
   }
 
   function handleComplete() {
-    // When user finishes reviewing watch later, just reload
-    loadWatchLater();
+    // When user finishes reviewing watchlist, just reload
+    loadWatchlist();
   }
 
   function clearCurrentMedia() {
     if (!currentMediaId) return;
 
-    userPreferences.removeFromWatchLater(currentMediaId);
+    userPreferences.removeFromWatchlist(currentMediaId);
     medias = medias.filter((media) => media.id !== currentMediaId);
   }
 </script>

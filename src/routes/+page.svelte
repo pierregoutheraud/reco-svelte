@@ -5,7 +5,7 @@
   import { userPreferences } from "../stores/userPreferences.svelte";
   import * as m from "$lib/paraglide/messages.js";
 
-  // const hasWatchLater = $derived(userPreferences.watchLater.length > 0);
+  // const hasWatchlist = $derived(userPreferences.watchlist.length > 0);
 
   function handleStart() {
     goto("/form");
@@ -26,8 +26,8 @@
   <Button onclick={handleStart}>{m.home_start_button()}</Button>
 
   <!-- <p class="text-sm text-gray-500">{m.home_or()}</p>
-  <Link href="/watchlater" class="text-base text-center">
-    {m.home_watch_later_link()} ({userPreferences.watchLater.length})
+  <Link href="/watchlist" class="text-base text-center">
+    {m.home_watch_later_link()} ({userPreferences.watchlist.length})
   </Link> -->
 
   <p class="text-sm text-center text-gray-500">
