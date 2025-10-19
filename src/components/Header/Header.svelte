@@ -34,17 +34,19 @@
     }}
   />
 
-  {#if recommendationsStore.hasRecommendations() || recommendationsStore.loading || page.url.pathname === "/recommendations"}
-    <IconButton
-      icon={Popcorn}
-      mode={["/recommendations"].includes(page.url.pathname)
-        ? "default"
-        : "ghost"}
-      onclick={() => {
-        goto("/recommendations");
-      }}
-    />
-  {/if}
+  <!-- {#if recommendationsStore.hasRecommendations() || recommendationsStore.loading || page.url.pathname === "/recommendations"} -->
+  <IconButton
+    icon={Popcorn}
+    mode={["/recommendations"].includes(page.url.pathname)
+      ? "default"
+      : "ghost"}
+    onclick={() => {
+      goto("/recommendations");
+    }}
+    disabled={!recommendationsStore.hasRecommendations() &&
+      !recommendationsStore.loading}
+  />
+  <!-- {/if} -->
 
   <div class="flex relative">
     <!-- {#if userPreferences.watchlist.length > 0}
