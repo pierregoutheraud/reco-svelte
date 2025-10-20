@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { isMovie, isShow } from "$lib/tmdb/tmdb";
-  import { TMDB_MEDIA_TYPE, type MediaTMDB } from "$lib/tmdb/tmdb.decl";
   import PosterTmdb from "../Poster/PosterTmdb.svelte";
 
   type Props = {
@@ -14,7 +12,7 @@
 </script>
 
 <div
-  class="flex items-center gap-4 p-4 hover:bg-gray-800 cursor-pointer"
+  class="flex items-center gap-4 p-2 px-4 hover:bg-gray-800 cursor-pointer"
   {onclick}
 >
   {#if posterPath}
