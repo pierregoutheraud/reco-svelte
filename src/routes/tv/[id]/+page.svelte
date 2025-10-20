@@ -5,7 +5,8 @@
   import MediaCard from "../../../components/Card/MediaCard.svelte";
   import type { MediaEnriched } from "../../../stores/recommendationsStore.svelte";
 
-  const id = $derived(page.params.id);
+  // Use page.params.id for normal navigation, fallback to page.state.mediaId for modal
+  const id = $derived(page.params.id || page.state.mediaId);
 
   const mediaPromise = $derived(
     fetchMediaById(Number(id), TMDB_MEDIA_TYPE.SHOW).then((media) => {

@@ -13,7 +13,7 @@
     subtitle: Snippet;
     id: number;
     mediaType: TMDB_MEDIA_TYPE;
-    reason: string;
+    reason: string | null;
     overview: string;
   }
 
@@ -35,10 +35,12 @@
 
   <div class="flex flex-col gap-2">
     <MediaRatings mediaId={id} {mediaType} />
-    <div class="flex flex-col gap-1 bg-indigo-950 p-4">
-      <p class="font-semibold text-base">{m.movie_card_why_recommend()}</p>
-      <p class="text-sm">{reason}</p>
-    </div>
+    {#if reason}
+      <div class="flex flex-col gap-1 bg-indigo-950 p-4">
+        <p class="font-semibold text-base">{m.movie_card_why_recommend()}</p>
+        <p class="text-sm">{reason}</p>
+      </div>
+    {/if}
   </div>
 
   <div class="flex flex-col gap-1">

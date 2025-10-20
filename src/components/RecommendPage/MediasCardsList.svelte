@@ -60,13 +60,6 @@
     }
   });
 
-  // $inspect({
-  //   watchlist: userPreferences.watchlist,
-  //   liked: userPreferences.liked,
-  //   disliked: userPreferences.disliked,
-  //   alreadyRecommended: userPreferences.alreadyRecommended
-  // });
-
   function goToNextMedia() {
     // Mark this media as already recommended (shown to user)
     userPreferences.addAlreadyRecommended(currentMedia.id, currentMediaType);
@@ -109,7 +102,7 @@
       userPreferences.addToWatchlist(
         currentMedia.id,
         currentMediaType,
-        currentMedia.reason
+        currentMedia.reason ?? "No reason provided."
       );
       toasts.success("Media added to your watchlist.");
     }

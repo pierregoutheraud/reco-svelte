@@ -17,7 +17,7 @@ import type { MediasFormData } from "../components/MediasForm/MediasForm.svelte"
 import { TMDB_MEDIA_TYPE as MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
 
 export type MediaEnriched = MediaTMDB & {
-  reason: string;
+  reason: string | null;
 };
 
 class RecommendationsStore {

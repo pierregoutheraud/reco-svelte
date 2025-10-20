@@ -45,13 +45,6 @@
     typeof question === "function" ? question(formContext) : question
   );
 
-  // $inspect({
-  //   title,
-  //   isActive,
-  //   stepIndex,
-  //   currentStepIndex: formContext.currentStepIndex
-  // });
-
   onMount(() => {
     stepIndex = formContext.registerStep(id);
   });

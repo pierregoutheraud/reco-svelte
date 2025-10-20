@@ -10,12 +10,10 @@
   import { page } from "$app/state";
   import IconButton from "../Button/IconButton.svelte";
   import { recommendationsStore } from "../../stores/recommendationsStore.svelte";
-
-  $inspect(page.url.pathname);
 </script>
 
 <header class="w-full flex p-2 justify-center gap-4">
-  {#if page.url.pathname.includes("/movie/") || page.url.pathname.includes("/tv/")}
+  <!-- {#if page.url.pathname.includes("/movie/") || page.url.pathname.includes("/tv/")}
     <IconButton
       class="absolute left-2"
       icon={ArrowLeft}
@@ -24,7 +22,7 @@
         window.history.back();
       }}
     />
-  {/if}
+  {/if} -->
 
   <IconButton
     icon={Sparkle}
