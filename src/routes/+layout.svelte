@@ -18,7 +18,7 @@
 <Toasts />
 
 <main
-  class="flex flex-col w-full max-w-[500px] h-full max-h-[1000px] mx-auto bg-background relative"
+  class="flex flex-col w-full max-w-[500px] h-full max-h-[1000px] mx-auto bg-background relative overflow-hidden"
 >
   {#if page.state.showModal}
     <Modal onclose={() => history.back()}>

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { fade, fly } from "svelte/transition";
+  import { fly } from "svelte/transition";
+  import { cubicOut } from "svelte/easing";
   import { X } from "phosphor-svelte";
   import IconButton from "../Button/IconButton.svelte";
 
@@ -27,20 +28,20 @@
 
 <!-- Backdrop -->
 <div
-  class="absolute top-0 left-0 bottom-0 bg-background z-50 overflow-y-auto"
+  class="absolute inset-0 bg-background z-50 overflow-y-auto"
   onclick={handleBackdropClick}
   onkeydown={(e) => e.key === "Enter" && handleBackdropClick(e)}
-  transition:fade={{ duration: 200 }}
+  transition:fly={{
+    y: "100%",
+    duration: 500,
+    opacity: 1,
+    easing: cubicOut
+  }}
   role="dialog"
   aria-modal="true"
   tabindex="-1"
 >
-  <!-- Modal Content -->
-  <div
-    class="relative h-full w-full max-w-4xl shadow-xl"
-    transition:fly={{ y: 50, duration: 300 }}
-  >
-    <!-- Close Button -->
+  <div class="relative h-full w-full max-w-4xl shadow-xl">
     <IconButton
       icon={X}
       onclick={onclose}
