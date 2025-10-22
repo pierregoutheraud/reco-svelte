@@ -6,6 +6,7 @@
   import * as m from "$lib/paraglide/messages.js";
   import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
   import type { Snippet } from "svelte";
+  import { getMiruUrl } from "../../helpers/miru.helpers";
 
   interface Props {
     posterPath: string | null;
@@ -52,7 +53,7 @@
     icon={ArrowSquareOut}
     class="!bg-miru !text-black"
     onclick={() => {
-      window.open(`https://www.miru.live/${mediaType}/${id}`, "_blank");
+      window.open(getMiruUrl(mediaType, id), "_blank");
     }}
   >
     {m.media_card_view_movie()}

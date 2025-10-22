@@ -17,7 +17,6 @@
   onMount(() => {
     // Only load if we need to (no data or formData changed)
     if (recommendationsStore.shouldReload(data)) {
-      console.log("shouldReload - loading recommendations");
       loadRecommendations();
     }
   });

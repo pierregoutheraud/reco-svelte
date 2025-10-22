@@ -1,20 +1,13 @@
 <script lang="ts">
   import MediaCard from "../Card/MediaCard.svelte";
-  import {
-    ArrowLeft,
-    ArrowRight,
-    ArrowsClockwise,
-    BookmarkSimple,
-    ListPlus,
-    ThumbsDown,
-    ThumbsUp
-  } from "phosphor-svelte";
+  import { ArrowLeft, ArrowRight, ArrowsClockwise } from "phosphor-svelte";
   import { userPreferences } from "../../stores/userPreferences.svelte";
   import IconButton from "../Button/IconButton.svelte";
   import type { MediaEnriched } from "../../stores/recommendationsStore.svelte";
-  import type { MovieTMDB, ShowTMDB } from "$lib/tmdb/tmdb.decl";
-  import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
+  import type { MovieTMDB } from "$lib/tmdb/tmdb.decl";
   import { toasts } from "../../stores/toasts.store";
+  import { getMediaType } from "$lib/tmdb/tmdb";
+  import MediaActions from "../MediaActions/MediaActions.svelte";
 
   interface Props {
     medias: MediaEnriched[];
@@ -33,13 +26,7 @@
     "title" in m;
 
   // Get current media type
-  const currentMediaType = $derived(
-    currentMedia
-      ? isMovie(currentMedia)
-        ? TMDB_MEDIA_TYPE.MOVIE
-        : TMDB_MEDIA_TYPE.SHOW
-      : TMDB_MEDIA_TYPE.MOVIE
-  );
+  const currentMediaType = $derived(getMediaType(currentMedia));
 
   // Check if the current media is already liked or disliked
   const isCurrentMediaLiked = $derived(
@@ -78,34 +65,12 @@
     currentMovieIndex--;
   }
 
-  function handleDisliked() {
-    userPreferences.addDisliked(currentMedia.id, currentMediaType);
-  }
-
-  function handleLiked() {
-    userPreferences.addLiked(currentMedia.id, currentMediaType);
-  }
-
   function handleNextMedia() {
     goToNextMedia();
   }
 
   function handlePreviousMedia() {
     goToPreviousMedia();
-  }
-
-  function handleClickWatchlist() {
-    if (isCurrentMediaInWatchlist) {
-      userPreferences.removeFromWatchlist(currentMedia.id);
-      toasts.success("Media removed from your watchlist.");
-    } else {
-      userPreferences.addToWatchlist(
-        currentMedia.id,
-        currentMediaType,
-        currentMedia.reason ?? "No reason provided."
-      );
-      toasts.success("Media added to your watchlist.");
-    }
   }
 </script>
 
@@ -115,68 +80,36 @@
       <MediaCard media={currentMedia} />
     </div>
 
-    <div class="flex p-3 px-4 gap-2 justify-between bg-background">
-      <div class="flex gap-2">
-        <IconButton
-          icon={ThumbsDown}
-          class="text-rose-500"
-          mode="ghost"
-          size={24}
-          weight={isCurrentMediaDisliked ? "fill" : "regular"}
-          onclick={() => {
-            handleDisliked();
-          }}
-        />
+    <MediaActions media={currentMedia}>
+      {#snippet right()}
+        <div class="flex gap-3 items-center">
+          <IconButton
+            icon={ArrowLeft}
+            mode="ghost"
+            size={24}
+            disabled={currentMovieIndex === 0}
+            onclick={() => {
+              handlePreviousMedia();
+            }}
+          />
 
-        <IconButton
-          icon={ThumbsUp}
-          class="text-teal-500"
-          mode="ghost"
-          size={24}
-          weight={isCurrentMediaLiked ? "fill" : "regular"}
-          onclick={() => {
-            handleLiked();
-          }}
-        />
+          <p class="flex gap-0 items-baseline">
+            <span class="font-semibold">{currentMovieIndex + 1}</span>
+            <span class="text-sm text-gray-400">/{medias.length}</span>
+          </p>
 
-        <IconButton
-          icon={BookmarkSimple}
-          mode="ghost"
-          size={24}
-          weight={isCurrentMediaInWatchlist ? "fill" : "regular"}
-          onclick={() => {
-            handleClickWatchlist();
-          }}
-        />
-      </div>
-
-      <div class="flex gap-3 items-center">
-        <IconButton
-          icon={ArrowLeft}
-          mode="ghost"
-          size={24}
-          disabled={currentMovieIndex === 0}
-          onclick={() => {
-            handlePreviousMedia();
-          }}
-        />
-
-        <p class="flex gap-0 items-baseline">
-          <span class="font-semibold">{currentMovieIndex + 1}</span>
-          <span class="text-sm text-gray-400">/{medias.length}</span>
-        </p>
-
-        <IconButton
-          mode="ghost"
-          icon={currentMovieIndex === medias.length - 1
-            ? ArrowsClockwise
-            : ArrowRight}
-          size={24}
-          onclick={() => {
-            handleNextMedia();
-          }}
-        />
-      </div>
-    </div>
+          <IconButton
+            mode="ghost"
+            icon={currentMovieIndex === medias.length - 1
+              ? ArrowsClockwise
+              : ArrowRight}
+            size={24}
+            onclick={() => {
+              handleNextMedia();
+            }}
+          />
+        </div>
+      {/snippet}
+    </MediaActions>
   </div>
 {/if}

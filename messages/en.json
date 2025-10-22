@@ -4,6 +4,7 @@
   "home_subtitle": "This process will take<br />less than 2 minutes.",
   "home_start_button": "Start",
   "home_or": "or",
+  "home_history_link": "Your recommendation history",
   "home_powered_by": "Powered by",
   "form_era_title": "Era",
   "form_era_question": "Which era of movies do you want to dive into?",
@@ -73,5 +74,8 @@
   "media_card_view_series": "More details on Miru",
   "media_card_season": "season",
   "media_card_seasons": "seasons",
-  "media_card_episodes": "episodes"
+  "media_card_episodes": "episodes",
+  "media_watchlist_added": "Media added to your watchlist.",
+  "media_watchlist_removed": "Media removed from your watchlist.",
+  "ratings_loading": "Loading ratings"
 }

@@ -3,6 +3,7 @@
   import { fetchMediaById } from "$lib/tmdb/tmdb";
   import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
   import MediaCard from "../../../components/Card/MediaCard.svelte";
+  import MediaActions from "../../../components/MediaActions/MediaActions.svelte";
   import type { MediaEnriched } from "../../../stores/recommendationsStore.svelte";
 
   // Use page.params.id for normal navigation, fallback to page.state.mediaId for modal
@@ -20,5 +21,10 @@
 </script>
 
 {#await mediaPromise then media}
-  <MediaCard {media} />
+  <div class="flex flex-col h-full">
+    <div class="flex-1 overflow-y-auto">
+      <MediaCard {media} />
+    </div>
+    <MediaActions {media} />
+  </div>
 {/await}

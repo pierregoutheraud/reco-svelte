@@ -16,7 +16,7 @@
   let currentOffset = $state(0);
   let hasMore = $state(true);
 
-  let allKeys = $derived(userPreferences.alreadyRecommendedKeys);
+  let allKeys = $derived(userPreferences.alreadyRecommendedKeys.toReversed());
 
   async function loadMoreItems() {
     if (isLoading || !hasMore) return;

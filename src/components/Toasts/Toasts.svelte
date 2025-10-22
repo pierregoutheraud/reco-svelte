@@ -28,7 +28,7 @@
   <div class="flex flex-col gap-1.5 p-4 w-full">
     {#each $toasts.messages as message (message.id)}
       <div
-        class="flex items-center gap-2.5 text-white font-normal p-[15px] bg-gray-900 cursor-pointer"
+        class="flex items-center gap-4 text-white font-normal p-4 bg-gray-900 cursor-pointer"
         role="button"
         tabindex="0"
         in:fly={{ x: -100, duration: 400 }}
@@ -51,7 +51,7 @@
         {:else if message.type === TOAST_TYPES.INFO}
           <Info size={24} />
         {/if}
-        <p class="text-center flex-1">{message.content}</p>
+        <p class="flex-1 text-sm">{message.content}</p>
         {#if message.settings.link}
           <a
             class="text-indigo-500 underline underline-offset-2"

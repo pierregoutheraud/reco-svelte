@@ -5,6 +5,7 @@
   import Ratings from "./Ratings.svelte";
   import { watch } from "runed";
   import AnimatedDots from "../AnimatedDots/AnimatedDots.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
     mediaId: number;
@@ -63,7 +64,7 @@
 
 {#if loading}
   <div class="flex justify-center items-center h-[44px]">
-    <p class="text-gray-400 text-sm">Loading ratings<AnimatedDots /></p>
+    <p class="text-gray-400 text-sm">{m.ratings_loading()}<AnimatedDots /></p>
   </div>
 {:else if ratings}
   <Ratings {ratings} />

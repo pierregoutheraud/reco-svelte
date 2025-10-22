@@ -5,7 +5,7 @@ const STORAGE_KEY = "USER_PREFERENCES";
 
 export interface WatchlistItem {
   key: string; // Format: "movie__123" or "tv__456"
-  reason: string;
+  reason: string | null;
   timestamp: number;
 }
 
@@ -233,7 +233,7 @@ class UserPreferencesStore {
   addToWatchlist(
     mediaId: number,
     mediaType: TMDB_MEDIA_TYPE,
-    reason: string
+    reason: WatchlistItem["reason"]
   ): void {
     const key = tmdbIdToKey(mediaId, mediaType);
 

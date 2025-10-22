@@ -150,6 +150,10 @@ class RecommendationsStore {
   }
 
   shouldReload(formData: MediasFormData): boolean {
+    if (this.loading) {
+      return false;
+    }
+
     // Check if we need to reload recommendations
     // Reload if: no current data, or formData changed
     if (

@@ -333,3 +333,6 @@ export const isMovie = (media: MediaTMDB): media is MovieTMDB =>
   "title" in media;
 
 export const isShow = (media: MediaTMDB): media is ShowTMDB => "name" in media;
+
+export const getMediaType = (media: MediaTMDB): TMDB_MEDIA_TYPE =>
+  isMovie(media) ? TMDB_MEDIA_TYPE.MOVIE : TMDB_MEDIA_TYPE.SHOW;

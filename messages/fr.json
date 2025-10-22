@@ -74,5 +74,8 @@
   "media_card_view_series": "Plus d'infos sur Miru",
   "media_card_season": "saison",
   "media_card_seasons": "saisons",
-  "media_card_episodes": "épisodes"
+  "media_card_episodes": "épisodes",
+  "media_watchlist_added": "Média ajouté à ta watchlist.",
+  "media_watchlist_removed": "Média retiré de ta watchlist.",
+  "ratings_loading": "Chargement des notes"
 }
