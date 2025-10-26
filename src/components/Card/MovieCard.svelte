@@ -24,6 +24,7 @@
   id={media.id}
   mediaType={TMDB_MEDIA_TYPE.MOVIE}
   posterPath={media.poster_path}
+  backdropPath={media.backdrop_path}
   title={media.title}
   reason={media.reason}
   overview={media.overview}

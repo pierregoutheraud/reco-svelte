@@ -33,6 +33,7 @@
   id={media.id}
   mediaType={TMDB_MEDIA_TYPE.SHOW}
   posterPath={media.poster_path}
+  backdropPath={media.backdrop_path}
   title={media.name}
   reason={media.reason}
   overview={media.overview}
