@@ -16,11 +16,17 @@
   const progressPerStep = maxProgress / totalSteps;
 
   // Calculate initial progress based on elapsed time
-  const initialProgress = Math.min((startFrom / duration) * maxProgress, maxProgress);
+  const initialProgress = Math.min(
+    (startFrom / duration) * maxProgress,
+    maxProgress
+  );
 
   // Calculate which text to show based on elapsed time
   const textDuration = duration / texts.length;
-  const initialTextIndex = Math.min(Math.floor(startFrom / textDuration), texts.length - 1);
+  const initialTextIndex = Math.min(
+    Math.floor(startFrom / textDuration),
+    texts.length - 1
+  );
 
   let progress = $state(initialProgress);
   let currentTextIndex = $state(initialTextIndex);

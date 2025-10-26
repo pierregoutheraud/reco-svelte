@@ -103,7 +103,9 @@
       type="text"
       class="w-full bg-white text-black p-3 outline-none placeholder:text-gray-400"
       autofocus
-      placeholder={isMovie ? m.form_search_placeholder_movies() : m.form_search_placeholder_series()}
+      placeholder={isMovie
+        ? m.form_search_placeholder_movies()
+        : m.form_search_placeholder_series()}
       value={searchQuery}
       oninput={(e) => onSearchInput(e.currentTarget.value)}
     />

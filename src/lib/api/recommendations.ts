@@ -2,7 +2,6 @@ import type {
   RecommendationRequest,
   RecommendationResponse
 } from "$lib/api/recommendations.decl";
-import { BASE_API_URL } from "../../constants/api.constants";
 
 /**
  * Fetch movie recommendations from the API (non-streaming)
@@ -15,7 +14,8 @@ export async function fetchAiRecommendations(
     return fetchAiRecommendationsMock();
   }
 
-  const response = await fetch(`${BASE_API_URL}/recommend`, {
+  // Call local SvelteKit API proxy instead of backend directly
+  const response = await fetch("/api/recommend", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -38,7 +38,8 @@ export async function streamAiRecommendations(
   request: RecommendationRequest,
   onUpdate: (recommendations: RecommendationResponse["recommendations"]) => void
 ): Promise<void> {
-  const response = await fetch(`${BASE_API_URL}/recommend/stream`, {
+  // Call local SvelteKit API proxy instead of backend directly
+  const response = await fetch("/api/recommend/stream", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

@@ -1,5 +1,4 @@
 import { TMDB_MEDIA_TYPE } from "$lib/tmdb/tmdb.decl";
-import { BASE_API_URL } from "../../constants/api.constants";
 import type { CrawlerRatings, RatingsResponse } from "./ratings.decl";
 
 class MongoApi {
@@ -9,7 +8,8 @@ class MongoApi {
         "Content-Type": "application/json"
       };
 
-      const res = await fetch(`${BASE_API_URL}${endpoint}`, { headers });
+      // Call local SvelteKit API proxy instead of backend directly
+      const res = await fetch(`/api${endpoint}`, { headers });
 
       if (!res.ok) {
         // Log error details, especially for CSRF failures
