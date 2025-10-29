@@ -67,7 +67,7 @@
   });
 </script>
 
-<div class="flex flex-col pt-2">
+<div class="flex flex-col py-2">
   {#each medias as media, index (media.id)}
     {@const mediaType = "title" in media ? "movie" : "tv"}
     {#if index === medias.length - TRIGGER_OFFSET}
